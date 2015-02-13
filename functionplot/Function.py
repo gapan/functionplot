@@ -51,7 +51,7 @@ class Function:
         # add "np." prefix to trig functions
         expr = expr.replace('sin(', 'np.sin(')
         expr = expr.replace('cos(', 'np.cos(')
-        expr = expr.replace('tan(', 'np.tan(')
+        expr = expr.replace('tan(', 'nxp.tan(')
         expr = expr.replace('cot(', '1/np.tan(') # no cot in numpy
         expr = expr.replace('sec(', '1/np.cos(') # no sec or csc either
         expr = expr.replace('csc(', '1/np.sin(')
@@ -72,6 +72,7 @@ class Function:
         expr = expr.replace('^', '**')
         return expr
 
+    # FIXME: actuall implement this
     def _get_mathtex_expr(self, expr):
         return expr
 
