@@ -2,8 +2,8 @@
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
 import gtk
+import sys
 import matplotlib.ticker
-
 from matplotlib.figure import Figure
 # alternative GTK/GTKAgg/GTKCairo backends
 # Agg and Cairo have much improved rendering
@@ -13,8 +13,10 @@ from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg \
     as FigureCanvas
 #from matplotlib.backends.backend_gtkcairo import FigureCanvasGTKCairo \
 #    as FigureCanvas
-
 from FunctionGraph import FunctionGraph
+
+import logging
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 class CenteredFormatter(matplotlib.ticker.ScalarFormatter):
     """Acts exactly like the default Scalar Formatter, but yields an empty 
@@ -50,6 +52,7 @@ class GUI:
         if iter is not None:
             index = self.ls_functions.get_value(iter, 3)
             self.fg.functions.pop(index)
+            self.fg.calc_intercepts()
             self.update_function_list()
             self.graph_update()
 
@@ -203,6 +206,14 @@ class GUI:
                     yp.append(p.y)
                 self.ax.scatter(xp, yp, s=80, c=color, linewidths=0)
                 legend.append(f.mathtex_expr)
+        xp = []
+        yp = []
+        # add function intercepts POI
+        for p in self.fg.poi:
+            xp.append(p.x)
+            yp.append(p.y)
+        self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
+                linewidths=0)
         if self.fg.show_legend:
             self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1))
         self.ax.figure.canvas.draw()

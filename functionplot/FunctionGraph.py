@@ -2,8 +2,11 @@
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
 from __future__ import division
-from Function import Function
 import numpy as np
+from sympy import solve
+from Function import Function
+from PointOfInterest import PointOfInterest as POI
+from logging import debug
 
 class FunctionGraph:
 
@@ -72,21 +75,63 @@ class FunctionGraph:
                     self.y_min, self.y_max])
 
     def add_function(self, expr):
+        debug('Adding function: '+expr)
         xylimits = [self.x_min, self.x_max, self.y_min, self.y_max]
         f = Function(expr, xylimits)
         if f.valid:
             self.functions.append(f)
+            self.calc_intercepts()
+            #FIXME: see 6 lines below
+            #self.update_poi()
             return True
         else:
             return False
-        self.update_poi()
 
+
+    #FIXME: I probably don't need this. POIs are calculated for each
+    # function in the Function class...
     def update_poi(self):
         self.poi = []
         for f in self.functions:
             if f.visible:
                 for p in f.poi:
                     self.poi.append(p)
+
+    def calc_intercepts(self):
+        # we're using plist as a helper list for checking if
+        # a point is already in
+        plist = []
+        self.poi = []
+        l = len(self.functions)
+        for i in range(0, l-1):
+            f = self.functions[i]
+            for j in range(i+1, l):
+                g = self.functions[j]
+                debug('Looking for intercepts between '+f.expr+\
+                        ' and '+g.expr+'.')
+                d = f.simp_expr+'-('+g.simp_expr+')'
+                try:
+                    x = np.array(solve(d, 'x'), dtype=float)
+                except TypeError:
+                    x = np.array(solve(d, 'x'))
+                y = eval(f.np_expr)
+                for i in range(0,len(x)):
+                    try:
+                        xc = float(x[i])
+                        yc = float(y[i])
+                        pc = [xc, yc]
+                        p = POI(xc, yc, 0)
+                        if pc not in plist:
+                            plist.append(pc)
+                            self.poi.append(p)
+                            debug('New intercept point: ('+\
+                                    str(x[i])+','+str(y[i])+')')
+                    except TypeError:
+                        debug('('+str(x[i])+','+str(y[i])+')'\
+                                ' is probably a complex solution for '+\
+                                'intercepting '+f.simp_expr+' and '+\
+                                g.simp_expr+'. Not adding intercept.')
+
 
     def clear(self):
         self.x_min = -1.2

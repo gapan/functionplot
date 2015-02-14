@@ -3,8 +3,9 @@
 
 from __future__ import division
 import numpy as np
-from sympy import diff, solve
+from sympy import diff, solve, simplify
 from PointOfInterest import PointOfInterest as POI
+from logging import debug
 
 class Function:
     
@@ -19,8 +20,17 @@ class Function:
         # no need to calculate values that are off the displayed scale
         # this fixes some trouble with asymptotes like in tan(x)
         # FIXME: unfortunately there is more trouble with asymptotes
-        y[y>y_max] = np.inf
-        y[y<y_min] = np.inf
+        try:
+            y[y>y_max] = np.inf
+            y[y<y_min] = np.inf
+        # if f(x)=a, make sure that y is an array with the same size as x and
+        # with a constant value.
+        except TypeError:
+            debug('Probably a constant function: '+self.np_expr)
+            l = len(x)
+            yarr = np.ndarray([l,])
+            yarr[yarr!=y]=y
+            y = yarr
         self.graph_points = x, y
         return True
 
@@ -36,7 +46,7 @@ class Function:
         expr = expr.replace('}', ')')
         expr = expr.replace('[', '(')
         expr = expr.replace(']', ')')
-        # turn greek notation to english
+        # turn greek (unicode) notation to english
         expr = expr.replace('\xce\xb7\xce\xbc(', 'sin(')
         expr = expr.replace('\xcf\x83\xcf\x85\xce\xbd(', 'cos(')
         expr = expr.replace('\xce\xb5\xcf\x86(', 'tan(')
@@ -46,24 +56,23 @@ class Function:
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
         # FIXME: provide for implied multiplication symbol
+        # examples: 2x -> 2*x, x(x+1) -> x*(x+1) etc
         return expr
 
     def _get_np_expr(self, expr):
-
         # add "np." prefix to trig functions
         expr = expr.replace('sin(', 'np.sin(')
         expr = expr.replace('cos(', 'np.cos(')
-        expr = expr.replace('tan(', 'nxp.tan(')
+        expr = expr.replace('tan(', 'np.tan(')
         expr = expr.replace('cot(', '1/np.tan(') # no cot in numpy
         expr = expr.replace('sec(', '1/np.cos(') # no sec or csc either
         expr = expr.replace('csc(', '1/np.sin(')
         # correct log functions
         expr = expr.replace('log(', 'np.log10(')
-        expr = expr.replace('ln(', 'np.log(')
+        expr = expr.replace('log2(', 'np.log2(')
         expr = expr.replace('loge(', 'np.log(')
-        expr = expr.replace('log2(', 'np.log(')
-        # just in case someone misspells sqrt
-        expr = expr.replace('sqr(', 'sqrt(')
+        expr = expr.replace('ln(', 'np.log(')
+        # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
         # absolute value
         expr = expr.replace('abs(', 'np.abs(')
@@ -73,6 +82,18 @@ class Function:
         # powers
         expr = expr.replace('^', '**')
         return expr
+    
+    def _simplify_expr(self, expr):
+        # don't simplify if it a log function is included
+        if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
+                'log2' in expr:
+            debug(expr+' is a log function. Not simplifying.')
+            return expr
+        else:
+            simp_expr = str(simplify(expr))
+            debug(expr+' has been simplified to '+simp_expr)
+            return simp_expr
+
 
     # FIXME: actually implement this
     # sympy printing to LaTeX can probably do it
@@ -80,68 +101,97 @@ class Function:
         return expr
 
     def calc_poi(self):
-        # POI types:
-        # 1: x intercept
-        # 2: y intercept
-        # 3: local min/max
+        expr = self.simp_expr
+        np_expr = self.np_expr
+        
         self.poi = []
+        #
         # x intercepts
+        #
         try:
-            x = solve(self.expr, 'x')
+            x = solve(expr, 'x')
             for i in x:
-                self.poi.append(POI(i, 0, 0))
+                try:
+                    xc = float(i)
+                    self.poi.append(POI(xc, 0, 1))
+                # TypeError is thrown for complex solutions during casting
+                # to float. We only want real solutions.
+                except TypeError:
+                    debug(str(i)+' is probably a complex solution for '+\
+                            expr+'. Skipping.')
         except NotImplementedError:
-            print 'NotImplementedError for solving',self.expr,
-            print 'x intercepts not calculated'
+            debug('NotImplementedError for solving '+self.expr+\
+                    '. x intercepts not calculated')
+        #
         # y intercept
+        #
         x = 0
         try:
-            y = eval(self.np_expr)
-            print x,y
-            self.poi.append(POI(x, y, 1))
+            y = eval(np_expr)
+            try:
+                xc = float(x)
+                yc = float(y)
+                self.poi.append(POI(xc, yc, 2))
+                # TypeError is thrown for complex solutions during casting
+                # to float. We only want real solutions.
+            except TypeError:
+                debug(str(x)+' and/or '+str(y)+\
+                        ' are probably complex solutions for '+\
+                        expr+'. Skipping')
         except ZeroDivisionError:
-            print 'ZeroDivisionError for evaluating:', self.np_expr,
-            print 'y intercept not calculated'
+            debug('ZeroDivisionError for evaluating '+self.expr+\
+                    '. y intercept not calculated.')
+        #
         # min/max
-        f1 = diff(self.expr, 'x')
+        #
+        f1 = diff(expr, 'x')
         try:
-            x = np.array(solve(f1, 'x'))
+            x = np.array(solve(f1, 'x'), dtype=float)
             x2 = solve(f1, 'x')
             try:
-                y = eval(self.np_expr)
+                y = eval(np_expr)
                 for i in range(0,len(x)):
-                    self.poi.append(POI(x[i], y[i], 3))
+                    try:
+                        xc = float(x[i])
+                        yc = float(y[i])
+                        self.poi.append(POI(xc, yc, 3))
+                    # TypeError is thrown for complex solutions during casting
+                    # to float. We only want real solutions.
+                    except TypeError:
+                        debug('('+str(x[i])+','+str(y[i])+')'\
+                                ' is probably a complex solution for '+\
+                                expr+'. Min/max not calculated.')
             # throws error with periodic functions
             except AttributeError:
-                print 'AttributeError for evaluating:',self.np_expr,
-                print 'min/max values not calculated'
+                debug('AttributeError for evaluating: '+self.np_expr+\
+                    '. Function is probably periodic. '+\
+                    ' Min/max values not calculated')
         except NotImplementedError:
-            print 'NotImplementedError for solving 1st deriv. of',self.expr,
-            print 'min/max values not calculated'
-            
+            debug('NotImplementedError for soliving 1st derivative of '+\
+                    self.expr+'. Min/max values not calculated')
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
         # function
         self.resolution = 1000
-        
-        self.expr = self._get_expr(expr)
         self.visible = True
-
-        # expression as used by numpy
-        self.np_expr = self._get_np_expr(self.expr)
-        # FIXME: mathtex expr should be in LaTeX format
-        self.mathtex_expr = self._get_mathtex_expr(self.expr)
-
-        self.valid = self.update_graph_points(xylimits)
+        self.valid = True
+        self.expr = self._get_expr(expr)
+       
+        # simplifying helps with functions like y=x^2/x which is
+        # actually just y=x. Doesn't hurt in any case.
+        # Also throws an error in case there are syntax problems
+        try:
+            self.simp_expr = self._simplify_expr(self.expr)
+            # expression as used by numpy
+            self.np_expr = self._get_np_expr(self.simp_expr)
+            self.valid = self.update_graph_points(xylimits)
+        except:
+            self.valid = False
         self.poi = []
+
         if self.valid:
+            # FIXME: mathtex expr should be in LaTeX format
+            self.mathtex_expr = self._get_mathtex_expr(self.expr)
             self.calc_poi()
-
-    def __call__(self, val):
-        print val
-        for v in val:
-            print v
-
-
 
