@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
+from __future__ import division
 import numpy as np
+from sympy import diff, solve
 from PointOfInterest import PointOfInterest as POI
 
 class Function:
     
     def update_graph_points(self, xylimits):
         x_min, x_max, y_min, y_max = xylimits
-        x = np.arange(x_min, x_max, float(x_max-x_min)/self.resolution)
+        x = np.arange(x_min, x_max, (x_max-x_min)/self.resolution)
         # if it doesn't evaluate, the expression is wrong
         try:
             y = eval(self.np_expr)
@@ -72,10 +74,51 @@ class Function:
         expr = expr.replace('^', '**')
         return expr
 
-    # FIXME: actuall implement this
+    # FIXME: actually implement this
+    # sympy printing to LaTeX can probably do it
     def _get_mathtex_expr(self, expr):
         return expr
 
+    def calc_poi(self):
+        # POI types:
+        # 1: x intercept
+        # 2: y intercept
+        # 3: local min/max
+        self.poi = []
+        # x intercepts
+        try:
+            x = solve(self.expr, 'x')
+            for i in x:
+                self.poi.append(POI(i, 0, 0))
+        except NotImplementedError:
+            print 'NotImplementedError for solving',self.expr,
+            print 'x intercepts not calculated'
+        # y intercept
+        x = 0
+        try:
+            y = eval(self.np_expr)
+            print x,y
+            self.poi.append(POI(x, y, 1))
+        except ZeroDivisionError:
+            print 'ZeroDivisionError for evaluating:', self.np_expr,
+            print 'y intercept not calculated'
+        # min/max
+        f1 = diff(self.expr, 'x')
+        try:
+            x = np.array(solve(f1, 'x'))
+            x2 = solve(f1, 'x')
+            try:
+                y = eval(self.np_expr)
+                for i in range(0,len(x)):
+                    self.poi.append(POI(x[i], y[i], 3))
+            # throws error with periodic functions
+            except AttributeError:
+                print 'AttributeError for evaluating:',self.np_expr,
+                print 'min/max values not calculated'
+        except NotImplementedError:
+            print 'NotImplementedError for solving 1st deriv. of',self.expr,
+            print 'min/max values not calculated'
+            
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
@@ -91,6 +134,14 @@ class Function:
         self.mathtex_expr = self._get_mathtex_expr(self.expr)
 
         self.valid = self.update_graph_points(xylimits)
+        self.poi = []
+        if self.valid:
+            self.calc_poi()
+
+    def __call__(self, val):
+        print val
+        for v in val:
+            print v
 
 
 

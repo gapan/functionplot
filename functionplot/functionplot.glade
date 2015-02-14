@@ -93,6 +93,11 @@
       <action-widget response="0">button_add_error_close</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-floppy</property>
+  </object>
   <object class="GtkListStore" id="liststore_functions">
     <columns>
       <!-- column-name visible -->
@@ -1066,10 +1071,5 @@
       <action-widget response="0">button_addf_cancel</action-widget>
       <action-widget response="0">button_addf_ok</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-floppy</property>
   </object>
 </interface>

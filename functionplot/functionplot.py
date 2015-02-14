@@ -143,37 +143,37 @@ class GUI:
         if x_min < 0 and x_max >0:
             self.ax.spines['left'].set_color('black')
             self.ax.spines['left'].set_position(('data', 0))
-            self.ax.spines['left'].set_smart_bounds(True)
+            self.ax.spines['left'].set_smart_bounds(False)
             self.ax.spines['right'].set_color('none')
             self.ax.yaxis.set_ticks_position('left')
         elif x_min >= 0:
             self.ax.spines['left'].set_color('black')
             self.ax.spines['left'].set_position(('data', x_min))
-            self.ax.spines['left'].set_smart_bounds(True)
+            self.ax.spines['left'].set_smart_bounds(False)
             self.ax.spines['right'].set_color('none')
             self.ax.yaxis.set_ticks_position('left')
         else:
             self.ax.spines['right'].set_color('black')
             self.ax.spines['right'].set_position(('data', x_max))
-            self.ax.spines['right'].set_smart_bounds(True)
+            self.ax.spines['right'].set_smart_bounds(False)
             self.ax.spines['left'].set_color('none')
             self.ax.yaxis.set_ticks_position('right')
         if y_min < 0 and y_max >0:
             self.ax.spines['bottom'].set_color('black')
             self.ax.spines['bottom'].set_position(('data', 0))
-            self.ax.spines['bottom'].set_smart_bounds(True)
+            self.ax.spines['bottom'].set_smart_bounds(False)
             self.ax.spines['top'].set_color('none')
             self.ax.xaxis.set_ticks_position('bottom')
         elif y_min >= 0:
             self.ax.spines['bottom'].set_color('black')
             self.ax.spines['bottom'].set_position(('data', y_min))
-            self.ax.spines['bottom'].set_smart_bounds(True)
+            self.ax.spines['bottom'].set_smart_bounds(False)
             self.ax.spines['top'].set_color('none')
             self.ax.xaxis.set_ticks_position('bottom')
         else:
             self.ax.spines['top'].set_color('black')
             self.ax.spines['top'].set_position(('data', y_max))
-            self.ax.spines['top'].set_smart_bounds(True)
+            self.ax.spines['top'].set_smart_bounds(False)
             self.ax.spines['bottom'].set_color('none')
             self.ax.xaxis.set_ticks_position('top')
 
@@ -193,8 +193,15 @@ class GUI:
         for f in self.fg.functions:
             x, y = f.graph_points
             if f.visible:
-                self.ax.plot(x, y, linewidth=2,
-                        color=self.color[len(legend) % len(self.color)])
+                color=self.color[len(legend) % len(self.color)]
+                self.ax.plot(x, y, linewidth=2, color=color)
+                xp = []
+                yp = []
+                for p in f.poi:
+                    #FIXME: if point type enabled
+                    xp.append(p.x)
+                    yp.append(p.y)
+                self.ax.scatter(xp, yp, s=80, c=color, linewidths=0)
                 legend.append(f.mathtex_expr)
         if self.fg.show_legend:
             self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1))
@@ -210,8 +217,8 @@ class GUI:
                 visible_functions += 1
             else:
                 color = '#999999'
-            self.ls_functions.append([f.visible, f.expr, gtk.gdk.Color(color),
-                index])
+            self.ls_functions.append([f.visible, f.expr+'',
+                gtk.gdk.Color(color), index])
             index += 1
 
     def gtk_main_quit(self, widget, data=None):

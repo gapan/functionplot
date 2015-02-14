@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
+from __future__ import division
 from Function import Function
 import numpy as np
 
@@ -43,22 +44,22 @@ class FunctionGraph:
             sf = self.scale_factor
         else:
             sf = 1.0/self.scale_factor
-        x_center = float(self.x_max + self.x_min)/2
+        x_center = (self.x_max + self.x_min)/2
         x_range = self.x_max - self.x_min
         new_x_range = x_range*sf
-        self.x_min = x_center - float(new_x_range)/2
-        self.x_max = x_center + float(new_x_range)/2
+        self.x_min = x_center - new_x_range/2
+        self.x_max = x_center + new_x_range/2
     
     def _zoom_y(self, zoom_out=False):
         if zoom_out:
             sf = self.scale_factor
         else:
             sf = 1.0/self.scale_factor
-        y_center = float(self.y_max + self.y_min)/2
+        y_center = (self.y_max + self.y_min)/2
         y_range = self.y_max - self.y_min
         new_y_range = y_range*sf
-        self.y_min = y_center - float(new_y_range)/2
-        self.y_max = y_center + float(new_y_range)/2
+        self.y_min = y_center - new_y_range/2
+        self.y_max = y_center + new_y_range/2
    
     def _zoom(self, zoom_out=False):
         self._zoom_x(zoom_out)
@@ -78,6 +79,14 @@ class FunctionGraph:
             return True
         else:
             return False
+        self.update_poi()
+
+    def update_poi(self):
+        self.poi = []
+        for f in self.functions:
+            if f.visible:
+                for p in f.poi:
+                    self.poi.append(p)
 
     def clear(self):
         self.x_min = -1.2
@@ -93,26 +102,28 @@ class FunctionGraph:
         self.visible = True
         self.show_legend = True
         self.functions = []
-
+        self.poi = []
         self.clear()
-        
-        xylimits = [self.x_min, self.x_max, self.y_min, self.y_max]
-        f = Function('2*sin(pi*x)', xylimits)
-        self.functions.append(f)
-        f = Function('2*x', xylimits)
-        self.functions.append(f)
-        f = Function('sin(pi*x)', xylimits)
-        self.functions.append(f)
-        f = Function('x**2', xylimits)
-        self.functions.append(f)
-        f = Function('-x**2+2', xylimits)
-        self.functions.append(f)
-        f = Function('-x', xylimits)
-        self.functions.append(f)
-        f = Function('x+1', xylimits)
-        self.functions.append(f)
-        f = Function('-x-2', xylimits)
-        self.functions.append(f)
+       
+        if False:
+        #if True:
+            xylimits = [self.x_min, self.x_max, self.y_min, self.y_max]
+            f = Function('2*sin(pi*x)', xylimits)
+            self.functions.append(f)
+            f = Function('x^2+x^3-3*x^2', xylimits)
+            self.functions.append(f)
+            f = Function('sin(pi*x)', xylimits)
+            self.functions.append(f)
+            f = Function('x**2', xylimits)
+            self.functions.append(f)
+            f = Function('-x**2+2', xylimits)
+            self.functions.append(f)
+            f = Function('-x**3', xylimits)
+            self.functions.append(f)
+            f = Function('x+1', xylimits)
+            self.functions.append(f)
+            f = Function('-x-2', xylimits)
+            self.functions.append(f)
 
 
 
