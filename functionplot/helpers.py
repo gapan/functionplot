@@ -61,7 +61,7 @@ def fsolve(expr):
     try:
         x = solve(expr, 'x')
         for i in x:
-            xc = real_from_complex(i)
+            xc = rfc(i)
             if xc is not None:
                 xl.append(xc)
                 debug('Found solution: '+str(xc))
@@ -69,8 +69,9 @@ def fsolve(expr):
         debug('NotImplementedError for solving "'+str(expr)+'"')
     return xl
 
-def real_from_complex(x):
+def rfc(x):
     '''
+    rfc - Real From Complex
     This tries to detect if a complex number as given by sympy is actually
     a real number. If it is, then it returns the real part as a float.
     '''
