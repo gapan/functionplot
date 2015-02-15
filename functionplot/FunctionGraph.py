@@ -6,7 +6,7 @@ import numpy as np
 from sympy import simplify
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve
+from helpers import fsolve, rfc
 from logging import debug
 
 class FunctionGraph:
@@ -116,15 +116,16 @@ class FunctionGraph:
                 x = fsolve(ds)
                 for i in x:
                     y = f.simp_expr.subs('x', i)
-                    xc = float(i)
-                    yc = float(y)
-                    pc = [xc, yc]
-                    p = POI(xc, yc, 1)
-                    if pc not in plist:
-                        plist.append(pc)
-                        self.poi.append(p)
-                        debug('New intercept point: ('+\
-                                str(xc)+','+str(yc)+')')
+                    xc = rfc(i)
+                    yc = rfc(y)
+                    if xc is not None and yc is not None:
+                        pc = [xc, yc]
+                        p = POI(xc, yc, 1)
+                        if pc not in plist:
+                            plist.append(pc)
+                            self.poi.append(p)
+                            debug('New intercept point: ('+\
+                                    str(xc)+','+str(yc)+')')
 
     def clear(self):
         self.x_min = -1.2
