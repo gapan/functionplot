@@ -82,6 +82,6 @@ def fsolve(expr):
                     debug(str(i.evalf())+' is probably a complex solution '+\
                             'for "'+str(expr)+'". Skipping.')
     except NotImplementedError:
-        debug('NotImplementedError for solving "'+str(expr)+'"'
+        debug('NotImplementedError for solving "'+str(expr)+'"')
     return xl
 
