@@ -5,7 +5,7 @@ from __future__ import division
 import numpy as np
 from sympy import diff, simplify
 from PointOfInterest import PointOfInterest as POI
-from helpers import pod, fsolve
+from helpers import pod, fsolve, rfc
 from logging import debug
 
 class Function:
@@ -110,8 +110,7 @@ class Function:
         #
         debug('Looking for x intercepts for: '+str(expr))
         x = fsolve(expr)
-        for i in x:
-            xc = float(i)
+        for xc in x:
             self.poi.append(POI(xc, 0, 2))
             debug('Added x intercept at ('+str(xc)+',0)')
         #
@@ -119,35 +118,36 @@ class Function:
         #
         debug('Looking for the y intercept for: '+str(expr))
         y = expr.subs('x', 0)
-        yc = float(y)
-        self.poi.append(POI(0, yc, 3))
-        debug('Added y intercept at (0,'+str(yc)+')')
+        yc = rfc(y)
+        if yc is not None:
+            self.poi.append(POI(0, yc, 3))
+            debug('Added y intercept at (0,'+str(yc)+')')
         #
         # min/max
         #
         debug('Looking for local min/max for: '+str(expr))
         f1 = diff(expr, 'x')
         x = fsolve(f1)
-        for i in x:
-            y = expr.subs('x', i)
-            xc = float(i)
-            yc = float(y)
-            self.poi.append(POI(xc, yc, 4))
-            debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
+        for xc in x:
+            y = expr.subs('x', xc)
+            yc = rfc(y)
+            if yc is not None:
+                self.poi.append(POI(xc, yc, 4))
+                debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
         #
         # inflection points
         #
         debug('Looking for inflection points for: '+str(expr))
         f2 = diff(f1, 'x')
         x = fsolve(f2)
-        for i in x:
-            y = expr.subs('x', i)
-            xc = float(i)
-            yc = float(y)
-            self.poi.append(POI(xc, yc, 5))
-            debug('Added inflection point at ('+str(xc)+','+str(yc)+')')
+        for xc in x:
+            y = expr.subs('x', xc)
+            yc = rfc(y)
+            if yc is not None:
+                self.poi.append(POI(xc, yc, 5))
+                debug('Added inflection point at ('+str(xc)+','+str(yc)+')')
         #
-        # discontinouity points
+        # discontinuity points
         #
         debug('Looking for discontinuity points for: '+str(expr))
         dp = pod(expr, 'x')

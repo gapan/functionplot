@@ -85,14 +85,25 @@ def rfc(x):
         # for example: 2.45009658902771 - 1.32348898008484e-23*I
         # so in cases where the imaginary part is really small,
         # keep only the real part as a solution
-        debug('Checking if this is a complex number: '+str(x.evalf()))
-        real = re(x.evalf())
-        img = im(x.evalf())
-        if abs(img) < 0.00000000000000001:
-            debug(str(real)+' is actually a real.')
-            xc = float(real)
-        else:
-            debug('Yes, it is probably a complex.')
-            xc = None
+        xe = x.evalf()
+        debug('Checking if this is a complex number: '+str(xe))
+        real = re(xe)
+        img = im(xe)
+        try:
+            if abs(img) < 0.00000000000000001:
+                debug(str(real)+' is actually a real.')
+                xc = float(real)
+            else:
+                debug('Yes, it is probably a complex.')
+                xc = None
+        # another TypeError is raised if we have a function with abs()
+        # this is a hack but appears to work
+        except TypeError:
+            try:
+                xc = eval(str(xe))
+                debug('Looks like a solution for an abs() function: '+str(xc))
+            except NameError:
+                debug('Cannot really tell. I give up.')
+                xc = None
     return xc
     
