@@ -108,8 +108,8 @@ class FunctionGraph:
             f = self.functions[i]
             for j in range(i+1, l):
                 g = self.functions[j]
-                debug('Looking for intercepts between '+f.expr+\
-                        ' and '+g.expr+'.')
+                debug('Looking for intercepts between "'+f.expr+\
+                        '" and "'+g.expr+'".')
                 #FIXME: maybe I can do away with simplify here?
                 d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
                 ds = simplify(d)
