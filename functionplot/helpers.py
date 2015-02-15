@@ -92,7 +92,7 @@ def rfc(x):
             debug(str(real)+' is actually a real.')
             xc = float(real)
         else:
-            debug(str(x.evalf())+' is probably a complex.')
+            debug('Yes, it is probably a complex.')
             xc = None
     return xc
     
