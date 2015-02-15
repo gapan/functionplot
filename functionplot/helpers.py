@@ -61,28 +61,37 @@ def fsolve(expr):
     try:
         x = solve(expr, 'x')
         for i in x:
-            try:
-                xc = float(i)
+            xc = real_from_complex(i)
+            if xc is not None:
                 xl.append(xc)
                 debug('Found solution: '+str(xc))
-            # TypeError is thrown for complex solutions during casting
-            # to float. We only want real solutions.
-            except TypeError:
-                # But, there are times that a real solution is calculated
-                # as a complex solution, with a really small imaginary part,
-                # for example: 2.45009658902771 - 1.32348898008484e-23*I
-                # so in cases where the imaginary part is really small,
-                # keep only the real part as a solution
-                debug('Found complex solution: '+str(i.evalf()))
-                real = re(i.evalf())
-                img = im(i.evalf())
-                if abs(img) < 0.00000000000000001:
-                    debug(str(real)+' is actually a real solution.')
-                    xl.append(real)
-                else:
-                    debug(str(i.evalf())+' is probably a complex solution '+\
-                            'for "'+str(expr)+'". Skipping.')
     except NotImplementedError:
         debug('NotImplementedError for solving "'+str(expr)+'"')
     return xl
 
+def real_from_complex(x):
+    '''
+    This tries to detect if a complex number as given by sympy is actually
+    a real number. If it is, then it returns the real part as a float.
+    '''
+    try:
+        xc = float(x)
+    # TypeError is thrown for complex solutions during casting
+    # to float. We only want real solutions.
+    except TypeError:
+        # But, there are times that a real solution is calculated
+        # as a complex solution, with a really small imaginary part,
+        # for example: 2.45009658902771 - 1.32348898008484e-23*I
+        # so in cases where the imaginary part is really small,
+        # keep only the real part as a solution
+        debug('Checking if this is a complex number: '+str(x.evalf()))
+        real = re(x.evalf())
+        img = im(x.evalf())
+        if abs(img) < 0.00000000000000001:
+            debug(str(real)+' is actually a real.')
+            xc = float(real)
+        else:
+            debug(str(x.evalf())+' is probably a complex.')
+            xc = None
+    return xc
+    
