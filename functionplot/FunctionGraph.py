@@ -142,26 +142,3 @@ class FunctionGraph:
         self.functions = []
         self.poi = []
         self.clear()
-       
-        if False:
-        #if True:
-            xylimits = [self.x_min, self.x_max, self.y_min, self.y_max]
-            f = Function('2*sin(pi*x)', xylimits)
-            self.functions.append(f)
-            f = Function('x^2+x^3-3*x^2', xylimits)
-            self.functions.append(f)
-            f = Function('sin(pi*x)', xylimits)
-            self.functions.append(f)
-            f = Function('x**2', xylimits)
-            self.functions.append(f)
-            f = Function('-x**2+2', xylimits)
-            self.functions.append(f)
-            f = Function('-x**3', xylimits)
-            self.functions.append(f)
-            f = Function('x+1', xylimits)
-            self.functions.append(f)
-            f = Function('-x-2', xylimits)
-            self.functions.append(f)
-
-
-
