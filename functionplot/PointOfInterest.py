@@ -11,9 +11,10 @@ class PointOfInterest:
         self.y = y
 
         # POI types:
-        # 0: function 
-        # 1: x intercept
-        # 2: y intercept
-        # 3: local min/max
+        # 0: stantard axis points {(0,0), (0,1), (1,0)}
+        # 1: function intercepts
+        # 2: x intercept
+        # 3: y intercept
+        # 4: local min/max
         self.point_type = point_type
 
