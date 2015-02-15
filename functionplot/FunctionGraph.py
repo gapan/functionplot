@@ -3,9 +3,10 @@
 
 from __future__ import division
 import numpy as np
-from sympy import solve
+from sympy import simplify
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
+from helpers import fsolve
 from logging import debug
 
 class FunctionGraph:
@@ -109,31 +110,21 @@ class FunctionGraph:
                 g = self.functions[j]
                 debug('Looking for intercepts between '+f.expr+\
                         ' and '+g.expr+'.')
-                d = f.simp_expr+'-('+g.simp_expr+')'
-                try:
-                    x = np.array(solve(d, 'x'), dtype=float)
-                except TypeError:
-                    debug('float calculation failed for finding intercepts.'+\
-                    ' Trying dtype=object.')
-                    x = np.array(solve(d, 'x'))
-                y = eval(f.np_expr)
-                for i in range(0,len(x)):
-                    try:
-                        xc = float(x[i])
-                        yc = float(y[i])
-                        pc = [xc, yc]
-                        p = POI(xc, yc, 0)
-                        if pc not in plist:
-                            plist.append(pc)
-                            self.poi.append(p)
-                            debug('New intercept point: ('+\
-                                    str(x[i])+','+str(y[i])+')')
-                    except TypeError:
-                        debug('('+str(x[i])+','+str(y[i])+')'\
-                                ' is probably a complex solution for '+\
-                                'intercepting '+f.simp_expr+' and '+\
-                                g.simp_expr+'. Not adding intercept.')
-
+                #FIXME: maybe I can do away with simplify here?
+                d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
+                ds = simplify(d)
+                x = fsolve(ds)
+                for i in x:
+                    y = f.simp_expr.subs('x', i)
+                    xc = float(i)
+                    yc = float(y)
+                    pc = [xc, yc]
+                    p = POI(xc, yc, 1)
+                    if pc not in plist:
+                        plist.append(pc)
+                        self.poi.append(p)
+                        debug('New intercept point: ('+\
+                                str(xc)+','+str(yc)+')')
 
     def clear(self):
         self.x_min = -1.2
