@@ -119,13 +119,9 @@ class Function:
         #
         debug('Looking for the y intercept for: '+str(expr))
         y = expr.subs('x', 0)
-        try:
-            yc = float(y)
-            self.poi.append(POI(0, yc, 3))
-            debug('Added y intercept at (0,'+str(yc)+')')
-        except TypeError:
-            debug(str(y)+' is probably a complex y intercept for "'+\
-                    str(expr)+'". Not adding y intercept.')
+        yc = float(y)
+        self.poi.append(POI(0, yc, 3))
+        debug('Added y intercept at (0,'+str(yc)+')')
         #
         # min/max
         #
@@ -153,14 +149,14 @@ class Function:
         #
         # discontinouity points
         #
-        # FIXME: Sometimes this returns an inflection point as a discontinuity
-        # point.
         debug('Looking for discontinuity points for: '+str(expr))
         dp = pod(expr, 'x')
-        for i in x:
+        for i in dp:
             y = expr.subs('x', i)
             xc = float(i)
-            yc = float(y)
+            #yc = float(y) # this returns inf.
+            # we'll just put discontinuity points on the x axis
+            yc = 0
             self.poi.append(POI(xc, yc, 6))
             debug('Added discontinuity point at ('+str(xc)+','+\
                     str(yc)+')')
