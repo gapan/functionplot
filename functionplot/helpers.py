@@ -106,4 +106,3 @@ def rfc(x):
                 debug('Cannot really tell. I give up.')
                 xc = None
     return xc
-    
