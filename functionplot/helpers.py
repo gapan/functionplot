@@ -74,10 +74,11 @@ def fsolve(expr):
                 # so in cases where the imaginary part is really small,
                 # keep only the real part as a solution
                 debug('Found complex solution: '+str(i.evalf()))
-                r = re(i.evalf())
-                i = im(i.evalf())
-                if abs(i) < 0.00000000000000001:
-                    xl.append(r)
+                real = re(i.evalf())
+                img = im(i.evalf())
+                if abs(img) < 0.00000000000000001:
+                    debug(str(real)+' is actually a real solution.')
+                    xl.append(real)
                 else:
                     debug(str(i.evalf())+' is probably a complex solution '+\
                             'for "'+str(expr)+'". Skipping.')
