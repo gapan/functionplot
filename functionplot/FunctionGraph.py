@@ -113,6 +113,8 @@ class FunctionGraph:
                 try:
                     x = np.array(solve(d, 'x'), dtype=float)
                 except TypeError:
+                    debug('float calculation failed for finding intercepts.'+\
+                    ' Trying dtype=object.')
                     x = np.array(solve(d, 'x'))
                 y = eval(f.np_expr)
                 for i in range(0,len(x)):
