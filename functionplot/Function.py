@@ -87,11 +87,11 @@ class Function:
         # don't simplify if it a log function is included
         if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
                 'log2' in expr:
-            debug(expr+' is a log function. Not simplifying.')
+            debug('"'+expr+'" is a log function. Not simplifying.')
             return expr
         else:
-            simp_expr = str(simplify(expr))
-            debug(expr+' has been simplified to '+simp_expr)
+            simp_expr = simplify(expr)
+            debug('"'+expr+'" has been simplified to "'+str(simp_expr)+'"')
             return simp_expr
 
 
@@ -101,6 +101,101 @@ class Function:
         return expr
 
     def calc_poi(self):
+        expr = self.simp_expr
+        
+        self.poi = []
+        #
+        # x intercepts
+        #
+        try:
+            x = solve(expr, 'x')
+            for i in x:
+                try:
+                    xc = float(i)
+                    self.poi.append(POI(xc, 0, 2))
+                    debug('Added x intercept at ('+str(xc)+',0)')
+                # TypeError is thrown for complex solutions during casting
+                # to float. We only want real solutions.
+                except TypeError:
+                    debug(str(i)+' is probably a complex solution for "'+\
+                            str(expr)+'". Skipping.')
+        except NotImplementedError:
+            debug('NotImplementedError for solving "'+str(expr)+\
+                    '". x intercepts not calculated')
+        #
+        # y intercept
+        #
+        y = expr.subs('x', 0)
+        try:
+            yc = float(y)
+            self.poi.append(POI(0, yc, 3))
+            debug('Added y intercept at (0,'+str(yc)+')')
+        except TypeError:
+            debug(str(y)+' is probably a complex y intercept for "'+\
+                    str(expr)+'". Not adding y intercept.')
+        #
+        # min/max
+        #
+        f1 = diff(expr, 'x')
+        try:
+            x = solve(f1, 'x')
+            for i in x:
+                y = expr.subs('x', i)
+                try:
+                    xc = float(i)
+                    xy = float(y)
+                    self.poi.append(POI(xc, xy, 4))
+                    debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
+                # TypeError is thrown for complex solutions during casting
+                # to float. We only want real solutions.
+                except TypeError:
+                    debug(str(i)+' is probably a complex solution for '+\
+                            '1st derivative of "'+\
+                            str(expr)+'". Skipping.')
+        except NotImplementedError:
+            debug('NotImplementedError for solving 1st derivative of "'+\
+                    str(expr)+'" = "'+str(f1)+\
+                    '". Min/max points not calculated.')
+
+        # throws error with periodic functions
+        except AttributeError:
+            debug('AttributeError for evaluating: '+str(expr)+\
+                '. Function is probably periodic. '+\
+                ' Min/max values not calculated')
+
+        #
+        # inflection points
+        #
+        f2 = diff(f1, 'x')
+        try:
+            x = solve(f2, 'x')
+            for i in x:
+                y = expr.subs('x', i)
+                try:
+                    xc = float(i)
+                    xy = float(y)
+                    self.poi.append(POI(xc, xy, 5))
+                    debug('Added inflection point at ('+str(xc)+','+\
+                            str(yc)+')')
+                # TypeError is thrown for complex solutions during casting
+                # to float. We only want real solutions.
+                except TypeError:
+                    debug(str(i)+' is probably a complex solution for '+\
+                            '2nd derivative of "'+\
+                            str(expr)+'". Skipping.')
+        except NotImplementedError:
+            debug('NotImplementedError for solving 2nd derivative of "'+\
+                    str(expr)+'" = "'+str(f1)+\
+                    '". Inflection points not calculated.')
+
+        # throws error with periodic functions
+        except AttributeError:
+            debug('AttributeError for evaluating 2nd derivative of "'+\
+                    str(expr)+'". Function is probably periodic. '+\
+                    'Inflection values not calculated')
+
+
+    def calc_poi2(self):
         expr = self.simp_expr
         np_expr = self.np_expr
         
@@ -113,7 +208,7 @@ class Function:
             for i in x:
                 try:
                     xc = float(i)
-                    self.poi.append(POI(xc, 0, 1))
+                    self.poi.append(POI(xc, 0, 2))
                 # TypeError is thrown for complex solutions during casting
                 # to float. We only want real solutions.
                 except TypeError:
@@ -125,13 +220,14 @@ class Function:
         #
         # y intercept
         #
+        #FIXME: I think the next is superfluous. There is only one y intercept
         x = 0
         try:
             y = eval(np_expr)
             try:
                 xc = float(x)
                 yc = float(y)
-                self.poi.append(POI(xc, yc, 2))
+                self.poi.append(POI(xc, yc, 3))
                 # TypeError is thrown for complex solutions during casting
                 # to float. We only want real solutions.
             except TypeError:
@@ -154,7 +250,7 @@ class Function:
                     try:
                         xc = float(x[i])
                         yc = float(y[i])
-                        self.poi.append(POI(xc, yc, 3))
+                        self.poi.append(POI(xc, yc, 4))
                     # TypeError is thrown for complex solutions during casting
                     # to float. We only want real solutions.
                     except TypeError:
@@ -169,6 +265,10 @@ class Function:
         except NotImplementedError:
             debug('NotImplementedError for soliving 1st derivative of '+\
                     self.expr+'. Min/max values not calculated')
+        #
+        # inflection points
+        #
+        f2 = diff(f1, 'x')
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
@@ -184,7 +284,7 @@ class Function:
         try:
             self.simp_expr = self._simplify_expr(self.expr)
             # expression as used by numpy
-            self.np_expr = self._get_np_expr(self.simp_expr)
+            self.np_expr = self._get_np_expr(str(self.simp_expr))
             self.valid = self.update_graph_points(xylimits)
         except:
             self.valid = False
