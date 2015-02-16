@@ -317,7 +317,7 @@ class GUI:
         self.dialog_add_error.hide()
 
     def __init__(self):
-        # 9 colors defined. Hard to find more that will stand out.
+        # Only a few colors defined. Hard to find more that will stand out.
         # If there are more functions, colors will cycle from the start
         # colors were taken from http://latexcolor.com/
         self.color = ['#4F81BD', # blue
@@ -328,7 +328,11 @@ class GUI:
                 '#00B7EB',# cyan
                 '#3B444B',# charcoal
                 '#F0E130',# yellow
-                '#DE5D83']# pink (blush)
+                '#DE5D83',# pink (blush)
+                '#B87333',# copper
+                '#0047AB',# cobalt
+                '#614051',# eggplant
+                ]
         
         # create a FunctionGraph object
         self.fg = FunctionGraph()
