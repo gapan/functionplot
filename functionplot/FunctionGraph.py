@@ -121,33 +121,44 @@ class FunctionGraph:
                 y_q1 = percentile(yl, 25)
                 y_q3 = percentile(yl, 75)
                 y_iqr = y_q3 - y_q1
+                # This looks like a nice value. Decrease to make it easier for
+                # a value to become an outlier, increase to make it harder.
                 k = 9
+                # if outliers are detected, replace their values with the
+                # median. That way it's easier to just set the axis limits to
+                # the min/max of the remaining values.
                 xm = percentile(xl, 50)
                 ym = percentile(yl, 50)
                 x_min_lim = x_q1 - k*x_iqr
                 x_max_lim = x_q3 + k*x_iqr
-                debug('X axis: Any x<'+str(x_min_lim)+' or x>'+str(x_max_lim)+\
-                        ' are not taken into account.')
-                for i in range(0,len(xl)):
-                    if xl[i] < x_min_lim or xl[i] > x_max_lim:
-                        xl[i] = xm
+                if x_min_lim < x_max_lim:
+                    debug('X axis: Any x<'+str(x_min_lim)+' or x>'+\
+                            str(x_max_lim)+' are outliers.')
+                    for i in range(0,len(xl)):
+                        if xl[i] < x_min_lim or xl[i] > x_max_lim:
+                            debug('Found outlier on X axis: '+str(xl[i]))
+                            xl[i] = xm
                 y_min_lim = y_q1 - k*y_iqr
                 y_max_lim = y_q3 + k*y_iqr
-                debug('Y axis: Any y<'+str(y_min_lim)+' or y>'+str(y_max_lim)+\
-                        ' are not taken into account.')
-                for i in range(0,len(yl)):
-                    if yl[i] < y_min_lim or yl[i] > y_max_lim:
-                        yl[i] = ym
+                if y_min_lim < y_max_lim:
+                    debug('Y axis: Any y<'+str(y_min_lim)+' or y>'+\
+                            str(y_max_lim)+' are outliers.')
+                    for i in range(0,len(yl)):
+                        if yl[i] < y_min_lim or yl[i] > y_max_lim:
+                            debug('Found outlier on Y axis: '+str(yl[i]))
+                            yl[i] = ym
             x_min = min(xl)
             x_max = max(xl)
             y_min = min(yl)
             y_max = max(yl)
+            # take care of edge cases, where all poi in an axis have the same
+            # coordinate.
             if x_min == x_max:
-                x_min = -1
-                x_max = 1
+                x_min = x_min-1
+                x_max = x_min+1
             if y_min == y_max:
-                y_min = -1
-                y_max = 1
+                y_min = y_min-1
+                y_max = y_min+1
             debug('Setting X limits to '+str(x_min)+' and '+str(x_max))
             debug('Setting Y limits to '+str(y_min)+' and '+str(y_max))
             self.x_min = x_min
