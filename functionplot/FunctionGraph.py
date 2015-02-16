@@ -6,7 +6,7 @@ import numpy as np
 from sympy import simplify
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve, rfc, percentile
+from helpers import fsolve, rfc, remove_outliers
 from logging import debug
 
 class FunctionGraph:
@@ -97,16 +97,21 @@ class FunctionGraph:
             xl = []
             yl = []
             points = []
+            # add function specific POIs
             for f in self.functions:
                 if f.visible:
                     for p in f.poi:
-                        point = [p.x, p.y]
-                        if point not in points:
-                            points.append([p.x, p.y])
+                        # don't add discontinuity points here
+                        if p.point_type < 6:
+                            point = [p.x, p.y]
+                            if point not in points:
+                                points.append([p.x, p.y])
+            # add graph POIs (function intercepts)
             for p in self.poi:
                 point = [p.x, p.y]
                 if point not in points:
                     points.append([p.x, p.y])
+            # add default POIs (origin (0,0) etc)
             for p in self.poi_defaults:
                 point = [p.x, p.y]
                 if point not in points:
@@ -114,43 +119,34 @@ class FunctionGraph:
             for point in points:
                 xl.append(point[0])
                 yl.append(point[1])
+            # remove outliers
             if not self.outliers:
-                x_q1 = percentile(xl, 25)
-                x_q3 = percentile(xl, 75)
-                x_iqr = x_q3 - x_q1
-                y_q1 = percentile(yl, 25)
-                y_q3 = percentile(yl, 75)
-                y_iqr = y_q3 - y_q1
-                # This looks like a nice value. Decrease to make it easier for
-                # a value to become an outlier, increase to make it harder.
-                k = 9
-                # if outliers are detected, replace their values with the
-                # median. That way it's easier to just set the axis limits to
-                # the min/max of the remaining values.
-                xm = percentile(xl, 50)
-                ym = percentile(yl, 50)
-                x_min_lim = x_q1 - k*x_iqr
-                x_max_lim = x_q3 + k*x_iqr
-                if x_min_lim < x_max_lim:
-                    debug('X axis: Any x<'+str(x_min_lim)+' or x>'+\
-                            str(x_max_lim)+' are outliers.')
-                    for i in range(0,len(xl)):
-                        if xl[i] < x_min_lim or xl[i] > x_max_lim:
-                            debug('Found outlier on X axis: '+str(xl[i]))
-                            xl[i] = xm
-                y_min_lim = y_q1 - k*y_iqr
-                y_max_lim = y_q3 + k*y_iqr
-                if y_min_lim < y_max_lim:
-                    debug('Y axis: Any y<'+str(y_min_lim)+' or y>'+\
-                            str(y_max_lim)+' are outliers.')
-                    for i in range(0,len(yl)):
-                        if yl[i] < y_min_lim or yl[i] > y_max_lim:
-                            debug('Found outlier on Y axis: '+str(yl[i]))
-                            yl[i] = ym
+                # we need at least 7 points to detect outliers
+                if len(xl) > 6:
+                    debug('Trying to find outliers in X axis.')
+                    xl = remove_outliers(xl)
+                    debug('Trying to find outliers in Y axis.')
+                    yl = remove_outliers(yl)
             x_min = min(xl)
             x_max = max(xl)
+            x_range = x_max - x_min
             y_min = min(yl)
             y_max = max(yl)
+            y_range = y_max - y_min
+            # discontinuity points
+            # we need a trick to put discontinuity points far away, but also
+            # show them on the x axis. So, if there are any discontinuity
+            # points, we increase the size of the y axis 2 times.
+            discontinuities = False
+            for f in self.functions:
+                if f.visible:
+                    for p in f.poi:
+                        if p.point_type == 6:
+                            y_min = y_min - y_range
+                            y_max = y_max + y_range
+                            #point = [p.x, p.y]
+                            #if point not in points:
+                            #    points.append([p.x, p.y])
             # take care of edge cases, where all poi in an axis have the same
             # coordinate.
             if x_min == x_max:

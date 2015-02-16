@@ -70,7 +70,6 @@ class Function:
         expr = expr.replace('csc(', '1/np.sin(')
         # correct log functions
         expr = expr.replace('log(', 'np.log10(')
-        expr = expr.replace('log2(', 'np.log2(')
         expr = expr.replace('loge(', 'np.log(')
         expr = expr.replace('ln(', 'np.log(')
         # square root
@@ -86,8 +85,9 @@ class Function:
     
     def _simplify_expr(self, expr):
         # don't simplify if it a log function is included
-        if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
-                'log2' in expr:
+        if False:
+        #if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
+        #        'log2' in expr:
             debug('"'+expr+'" is a log function. Not simplifying.')
             return expr
         else:
@@ -147,7 +147,7 @@ class Function:
                 self.poi.append(POI(xc, yc, 5))
                 debug('Added inflection point at ('+str(xc)+','+str(yc)+')')
         #
-        # discontinuity points
+        # discontinuity points (vertival asymptotes)
         #
         debug('Looking for discontinuity points for: '+str(expr))
         dp = pod(expr, 'x')

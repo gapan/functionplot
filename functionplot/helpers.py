@@ -69,6 +69,8 @@ def fsolve(expr):
                 debug('Found solution: '+str(xc))
     except NotImplementedError:
         debug('NotImplementedError for solving "'+str(expr)+'"')
+    #except TypeError:
+    #    debug('This was not supposed to happen. Probably a bug in sympy')
     return xl
 
 def rfc(x):
@@ -120,3 +122,28 @@ def percentile(plist, perc):
     a = pos-k
     p = x[k-1]+a*(x[k]-x[k-1])
     return p
+
+def remove_outliers(plist):
+    q1 = percentile(plist, 25)
+    q3 = percentile(plist, 75)
+    iqr = q3 - q1
+    # This looks like a nice value. Decrease to make it easier for
+    # a value to become an outlier, increase to make it harder.
+    k = 9
+    # this is the median
+    m = percentile(plist, 50)
+    # these are the limits we don't allow values to go under/over
+    min_lim = q1 - k*iqr
+    max_lim = q3 + k*iqr
+    if min_lim < max_lim:
+        debug('Any values<'+str(min_lim)+' or >'+\
+                str(max_lim)+' are outliers.')
+        for i in range(0,len(plist)):
+            if plist[i] < min_lim or plist[i] > max_lim:
+                debug('Found outlier: '+str(plist[i]))
+                # if outliers are detected, replace their values with the
+                # median. That way it's easier to just set the axis limits to
+                # the min/max of the remaining values.
+                plist[i] = m
+    return plist
+
