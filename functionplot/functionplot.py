@@ -261,6 +261,51 @@ class GUI:
         self.entry_function.grab_focus()
         self.entry_function.set_position(l)
 
+    def on_button_1_clicked(self, widget):
+        self._entry_function_append_text('1')
+
+    def on_button_2_clicked(self, widget):
+        self._entry_function_append_text('2')
+
+    def on_button_3_clicked(self, widget):
+        self._entry_function_append_text('3')
+
+    def on_button_4_clicked(self, widget):
+        self._entry_function_append_text('4')
+
+    def on_button_5_clicked(self, widget):
+        self._entry_function_append_text('5')
+
+    def on_button_6_clicked(self, widget):
+        self._entry_function_append_text('6')
+
+    def on_button_7_clicked(self, widget):
+        self._entry_function_append_text('7')
+
+    def on_button_8_clicked(self, widget):
+        self._entry_function_append_text('8')
+
+    def on_button_9_clicked(self, widget):
+        self._entry_function_append_text('9')
+
+    def on_button_0_clicked(self, widget):
+        self._entry_function_append_text('0')
+
+    def on_button_x_clicked(self, widget):
+        self._entry_function_append_text('x')
+
+    def on_button_plus_clicked(self, widget):
+        self._entry_function_append_text('+')
+
+    def on_button_minus_clicked(self, widget):
+        self._entry_function_append_text('-')
+
+    def on_button_times_clicked(self, widget):
+        self._entry_function_append_text('*')
+
+    def on_button_div_clicked(self, widget):
+        self._entry_function_append_text('/')
+
     def on_button_sin_clicked(self, widget):
         self._entry_function_append_text('sin(x)')
 
@@ -285,9 +330,12 @@ class GUI:
     def on_button_ln_clicked(self, widget):
         self._entry_function_append_text('ln(x)')
 
-    def on_button_log2_clicked(self, widget):
-        self._entry_function_append_text('log2(x)')
-   
+    def on_button_10p_x_clicked(self, widget):
+        self._entry_function_append_text('10^x')
+
+    def on_button_ep_x_clicked(self, widget):
+        self._entry_function_append_text('e^x')
+
     def on_button_sqrt_clicked(self, widget):
         self._entry_function_append_text('sqrt(x)')
 
