@@ -161,6 +161,8 @@ class FunctionGraph:
             self.x_max = x_max
             self.y_min = y_min
             self.y_max = y_max
+            # zoom out twice, gives better output
+            self._zoom(zoom_out=True)
             self._zoom(zoom_out=True)
 
     def calc_intercepts(self):
