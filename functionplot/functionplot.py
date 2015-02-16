@@ -3,6 +3,7 @@
 
 import gtk
 import sys
+import threading
 import matplotlib.ticker
 from matplotlib.figure import Figure
 # alternative GTK/GTKAgg/GTKCairo backends
@@ -17,6 +18,15 @@ from FunctionGraph import FunctionGraph
 
 import logging
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+#Initializing the gtk's thread engine
+gtk.gdk.threads_init()
+
+def threaded(f):
+    def wrapper(*args):
+        t = threading.Thread(target=f, args=args)
+        t.start()
+    return wrapper
 
 class CenteredFormatter(matplotlib.ticker.ScalarFormatter):
     """Acts exactly like the default Scalar Formatter, but yields an empty 
@@ -369,15 +379,25 @@ class GUI:
     def on_button_addf_cancel_clicked(self, widget):
         self.dialog_add_function.hide()
 
+    @threaded
     def on_button_addf_ok_clicked(self, widget):
+        gtk.gdk.threads_enter()
+        self.window_calculating.show()
+        gtk.gdk.threads_leave()
         expr = self.entry_function.get_text()
         f = self.fg.add_function(expr)
         if f:
+            gtk.gdk.threads_enter()
             self.dialog_add_function.hide()
+            self.window_calculating.hide()
             self.update_function_list()
             self.graph_update()
+            gtk.gdk.threads_leave()
         else:
+            gtk.gdk.threads_enter()
+            self.window_calculating.hide()
             self.dialog_add_error.show()
+            gtk.gdk.threads_leave()
 
     # Error while adding function dialog
     def on_dialog_add_error_delete_event(self, widget, event):
@@ -456,6 +476,8 @@ class GUI:
         self.dialog_add_function = builder.get_object('dialog_add_function')
         self.entry_function = builder.get_object('entry_function')
         self.dialog_add_error = builder.get_object('dialog_add_error')
+        # Calculating... window
+        self.window_calculating = builder.get_object('window_calculating')
 
         # Connect all signals
         builder.connect_signals(self)
