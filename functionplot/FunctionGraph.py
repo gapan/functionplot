@@ -6,7 +6,7 @@ import numpy as np
 from sympy import simplify
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve, rfc
+from helpers import fsolve, rfc, percentile
 from logging import debug
 
 class FunctionGraph:
@@ -15,33 +15,36 @@ class FunctionGraph:
     # it will eventually autoadjust to functions
     def zoom_default(self):
         self.clear()
-        # FIXME: set these in the calculated values
-        #self.x_min, self.x_max, self.y_min, self.y_max
+        self.auto = True
         self.update_graph_points()
 
     def zoom_x_in(self):
+        self.auto = False
         self._zoom_x(zoom_out=False)
         self.update_graph_points()
     
     def zoom_x_out(self):
+        self.auto = False
         self._zoom_x(zoom_out=True)
         self.update_graph_points()
 
     def zoom_y_in(self):
+        self.auto = False
         self._zoom_y(zoom_out=False)
         self.update_graph_points()
 
     def zoom_y_out(self):
+        self.auto = False
         self._zoom_y(zoom_out=True)
         self.update_graph_points()
 
     def zoom_in(self):
+        self.auto = False
         self._zoom(zoom_out=False)
-        self.update_graph_points()
 
     def zoom_out(self):
+        self.auto = False
         self._zoom(zoom_out=True)
-        self.update_graph_points()
 
     def _zoom_x(self, zoom_out=False):
         if zoom_out:
@@ -68,6 +71,7 @@ class FunctionGraph:
     def _zoom(self, zoom_out=False):
         self._zoom_x(zoom_out)
         self._zoom_y(zoom_out)
+        self.update_graph_points()
 
     def update_graph_points(self):
         for f in self.functions:
@@ -82,21 +86,75 @@ class FunctionGraph:
         if f.valid:
             self.functions.append(f)
             self.calc_intercepts()
-            #FIXME: see 6 lines below
-            #self.update_poi()
+            self.update_xylimits()
             return True
         else:
             return False
 
-
-    #FIXME: I probably don't need this. POIs are calculated for each
-    # function in the Function class...
-    def update_poi(self):
-        self.poi = []
-        for f in self.functions:
-            if f.visible:
-                for p in f.poi:
-                    self.poi.append(p)
+    def update_xylimits(self):
+        if self.auto:
+            debug('Calculating xylimits.')
+            xl = []
+            yl = []
+            points = []
+            for f in self.functions:
+                if f.visible:
+                    for p in f.poi:
+                        point = [p.x, p.y]
+                        if point not in points:
+                            points.append([p.x, p.y])
+            for p in self.poi:
+                point = [p.x, p.y]
+                if point not in points:
+                    points.append([p.x, p.y])
+            for p in self.poi_defaults:
+                point = [p.x, p.y]
+                if point not in points:
+                    points.append([p.x, p.y])
+            for point in points:
+                xl.append(point[0])
+                yl.append(point[1])
+            if not self.outliers:
+                x_q1 = percentile(xl, 25)
+                x_q3 = percentile(xl, 75)
+                x_iqr = x_q3 - x_q1
+                y_q1 = percentile(yl, 25)
+                y_q3 = percentile(yl, 75)
+                y_iqr = y_q3 - y_q1
+                k = 9
+                xm = percentile(xl, 50)
+                ym = percentile(yl, 50)
+                x_min_lim = x_q1 - k*x_iqr
+                x_max_lim = x_q3 + k*x_iqr
+                debug('X axis: Any x<'+str(x_min_lim)+' or x>'+str(x_max_lim)+\
+                        ' are not taken into account.')
+                for i in range(0,len(xl)):
+                    if xl[i] < x_min_lim or xl[i] > x_max_lim:
+                        xl[i] = xm
+                y_min_lim = y_q1 - k*y_iqr
+                y_max_lim = y_q3 + k*y_iqr
+                debug('Y axis: Any y<'+str(y_min_lim)+' or y>'+str(y_max_lim)+\
+                        ' are not taken into account.')
+                for i in range(0,len(yl)):
+                    if yl[i] < y_min_lim or yl[i] > y_max_lim:
+                        yl[i] = ym
+            x_min = min(xl)
+            x_max = max(xl)
+            y_min = min(yl)
+            y_max = max(yl)
+            if x_min == x_max:
+                x_min = -1
+                x_max = 1
+            if y_min == y_max:
+                y_min = -1
+                y_max = 1
+            debug('Setting X limits to '+str(x_min)+' and '+str(x_max))
+            debug('Setting Y limits to '+str(y_min)+' and '+str(y_max))
+            self.x_min = x_min
+            self.x_max = x_max
+            self.y_min = y_min
+            self.y_max = y_max
+            self._zoom(zoom_out=True)
 
     def calc_intercepts(self):
         # we're using plist as a helper list for checking if
@@ -140,6 +198,15 @@ class FunctionGraph:
         self.scale_factor = 1.2
         self.visible = True
         self.show_legend = True
+        
+        self.outliers = False
+        
         self.functions = []
         self.poi = []
+        self.poi_defaults = []
+        self.poi_defaults.append(POI(0, 0, 0))
+        self.poi_defaults.append(POI(0, 1, 0))
+        self.poi_defaults.append(POI(0, -1, 0))
+        self.poi_defaults.append(POI(1, 0, 0))
+        self.poi_defaults.append(POI(-1, 0, 0))
         self.clear()

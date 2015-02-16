@@ -39,6 +39,11 @@ class GUI:
     def on_checkmenuitem_legend_toggled(self, widget):
         self.fg.show_legend = self.checkmenuitem_legend.get_active()
         self.graph_update()
+    
+    def on_checkmenuitem_outliers_toggled(self, widget):
+        self.fg.outliers = self.checkmenuitem_outliers.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
 
     # toolbar button activation signals
     def on_btn_add_clicked(self, widget):
@@ -80,9 +85,11 @@ class GUI:
         self.fg.zoom_out()
         self.graph_update()
    
-    def on_btn_zoomdef_clicked(self, widget):
-        self.fg.zoom_default()
-        self.graph_update()
+    def on_btn_auto_toggled(self, widget):
+        self.fg.auto = self.btn_auto.get_active()
+        if self.fg.auto:
+            self.fg.zoom_default()
+            self.graph_update()
 
     # toggle visibility in function list
     def on_cr_toggle_visible_toggled(self, widget, event):
@@ -136,7 +143,9 @@ class GUI:
     # update the graph
     def graph_update(self):
         self.ax.clear()
-
+        
+        if self.fg.auto:
+            self.fg.update_xylimits()
         x_min, x_max = self.fg.x_min, self.fg.x_max
         y_min, y_max = self.fg.y_min, self.fg.y_max
        
@@ -217,6 +226,8 @@ class GUI:
         if self.fg.show_legend:
             self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1))
         self.ax.figure.canvas.draw()
+        # check/uncheck the toolbutton for auto-adjustment
+        self.btn_auto.set_active(self.fg.auto)
 
     def update_function_list(self):
         self.ls_functions.clear()
@@ -354,6 +365,12 @@ class GUI:
             builder.get_object('imagemenuitem_quit')
         self.checkmenuitem_legend = builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
+        # main toolbar
+        self.btn_auto = builder.get_object('btn_auto')
+        self.btn_auto.set_active(self.fg.auto)
+        self.checkmenuitem_outliers = \
+            builder.get_object('checkmenuitem_outliers')
+        self.checkmenuitem_outliers.set_active(self.fg.outliers)
         # graph in main window
         self.table = builder.get_object('table_graph')
         self.fig = Figure(facecolor='w', tight_layout=True)

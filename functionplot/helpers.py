@@ -5,7 +5,9 @@
 # future sympy release:
 # https://github.com/hargup/sympy/blob/e8d07985635bc4d7ee42c22534073ac9433231c3/sympy/calculus/discontinuity.py
 
+from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
+from math import floor
 from logging import debug
 
 def pod(expr, sym):
@@ -106,3 +108,15 @@ def rfc(x):
                 debug('Cannot really tell. I give up.')
                 xc = None
     return xc
+
+def percentile(plist, perc):
+    '''
+    returns the perc (range 0-100) percentile of plist
+    '''
+    x = sorted(plist)
+    n = len(x)
+    pos = (n+1)*perc/100
+    k = int(floor(pos))
+    a = pos-k
+    p = x[k-1]+a*(x[k]-x[k-1])
+    return p
