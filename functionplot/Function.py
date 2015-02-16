@@ -153,14 +153,14 @@ class Function:
         dp = pod(expr, 'x')
         for i in dp:
             y = expr.subs('x', i)
-            xc = float(i)
+            xc = rfc(i)
             #yc = float(y) # this returns inf.
             # we'll just put discontinuity points on the x axis
-            yc = 0
-            self.poi.append(POI(xc, yc, 6))
-            debug('Added discontinuity point at ('+str(xc)+','+\
-                    str(yc)+')')
-
+            if xc is not None:
+                yc = 0
+                self.poi.append(POI(xc, yc, 6))
+                debug('Added discontinuity point at ('+str(xc)+','+\
+                        str(yc)+')')
         #
         # asymptotes
         #
