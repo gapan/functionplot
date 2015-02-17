@@ -4,6 +4,7 @@
 import gtk
 import sys
 import threading
+import pickle
 import matplotlib.ticker
 from matplotlib.figure import Figure
 # alternative GTK/GTKAgg/GTKCairo backends
@@ -43,6 +44,7 @@ class GUI:
     #
 
     # menu item activation signals
+
     def on_imagemenuitem_quit_activate(self, widget):
         gtk.main_quit()
 
@@ -56,6 +58,15 @@ class GUI:
         self.graph_update()
 
     # toolbar button activation signals
+    def on_btn_new_clicked(self, widget):
+        print 'new'
+
+    def on_btn_open_clicked(self, widget):
+        self.fcdialog_open.show()
+
+    def on_btn_save_clicked(self, widget):
+        self.fcdialog_save.show()
+    
     def on_btn_add_clicked(self, widget):
         self.entry_function.set_text('')
         self.dialog_add_function.show()
@@ -414,6 +425,51 @@ class GUI:
     def on_button_add_error_close_clicked(self, widget):
         self.dialog_add_error.hide()
 
+    #
+    # file open/save dialogs
+    #
+    def on_button_fileopen_open_clicked(self, widget):
+        filename = self.fcdialog_open.get_filename()
+        folder = self.fcdialog_open.get_current_folder()
+        logging.debug('Loading file: '+filename)
+        try:
+            filehandler = open(filename, "rb")
+            try:
+                self.fg = pickle.load(filehandler)
+                filehandler.close()
+                self.fg.update_xylimits()
+                self.graph_update()
+                self.fcdialog_open.hide()
+            except:
+                logging.debug('File does not look like a FunctionPlot file.')
+        except:
+            logging.debug('Error opening file.')
+    
+    def on_button_fileopen_cancel_clicked(self, widget):
+        self.fcdialog_open.hide()
+
+    def on_filechooserdialog_open_delete_event(self, widget, event):
+        self.fcdialog_open.hide()
+        return True
+
+    def on_button_filesave_save_clicked(self, widget):
+        filename = self.fcdialog_save.get_filename()
+        if not filename.lower().endswith('.fgh'):
+            filename = filename+'.fgh'
+        folder = self.fcdialog_open.get_current_folder()
+        logging.debug('Saving file: '+filename)
+        filehandler = open(filename, "wb")
+        pickle.dump(self.fg, filehandler)
+        filehandler.close()
+        self.fcdialog_save.hide()
+
+    def on_button_filesave_cancel_clicked(self, widget):
+        self.fcdialog_save.hide()
+
+    def on_filechooserdialog_save_delete_event(self, widget, event):
+        self.fcdialog_save.hide()
+        return True
+
     def __init__(self):
         # Only a few colors defined. Hard to find more that will stand out.
         # If there are more functions, colors will cycle from the start
@@ -476,7 +532,18 @@ class GUI:
         self.canvas.mpl_connect('button_release_event', self.pan_release)
         self.canvas.mpl_connect('motion_notify_event', self.pan_motion)
         self.graph_update()
-        
+
+        #
+        # file open/save dialogs
+        #
+        self.fcdialog_open = builder.get_object('filechooserdialog_open')
+        self.fcdialog_save = builder.get_object('filechooserdialog_save')
+        filefilter = gtk.FileFilter()
+        filefilter.set_name(_('FunctionPlot files'))
+        filefilter.add_pattern('*.fgh')
+        filefilter.add_pattern('*.FGH')
+        self.fcdialog_open.add_filter(filefilter)
+        self.fcdialog_save.add_filter(filefilter)
         #
         # Add function dialog
         #
