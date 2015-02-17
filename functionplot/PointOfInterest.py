@@ -17,6 +17,8 @@ class PointOfInterest:
         # 3: y intercept
         # 4: local min/max
         # 5: inflection points
-        # 6: discontinuity points
+        # 6: discontinuity points (vertical asymptotes)
+        # 7: horizontal asymptotes
+
         self.point_type = point_type
 

@@ -3,7 +3,7 @@
 
 from __future__ import division
 import numpy as np
-from sympy import diff, simplify
+from sympy import diff, limit, simplify
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
 from logging import debug
@@ -147,7 +147,7 @@ class Function:
                 self.poi.append(POI(xc, yc, 5))
                 debug('Added inflection point at ('+str(xc)+','+str(yc)+')')
         #
-        # discontinuity points (vertival asymptotes)
+        # discontinuity points (vertical asymptotes)
         #
         debug('Looking for discontinuity points for: '+str(expr))
         dp = pod(expr, 'x')
@@ -162,9 +162,25 @@ class Function:
                 debug('Added discontinuity point at ('+str(xc)+','+\
                         str(yc)+')')
         #
-        # asymptotes
+        # horizontal asymptotes
         #
         #FIXME: implement this
+        # if the limit(x->+oo)=a, or limit(x->-oo)=a, then y=a is a horizontal
+        # asymptote.
+        # sympy: limit(expr, x, oo)
+        debug('Looking for horizontal asymptotes for: '+str(expr))
+        lr = limit(expr, 'x', 'oo')
+        ll = limit(expr, 'x', '-oo')
+        if 'oo' not in str(lr):
+            debug('Found a horizontal asymptote at y='+str(lr)+' as x->+oo.')
+            self.poi.append(POI(0, lr, 7))
+        if 'oo' not in str(ll):
+            if ll == lr:
+                debug('Same horizontal asymptote as x->-oo.')
+            else:
+                debug('Found a horizontal asymptote at y='+str(ll)+\
+                        ' as x->-oo')
+                self.poi.append(POI(0, ll, 7))
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the

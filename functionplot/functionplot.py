@@ -220,21 +220,28 @@ class GUI:
                 xp = []
                 yp = []
                 for p in f.poi:
-                    # don't plot discontinuity points here
+                    # don't plot vertical or horizontal asymptotes here
                     if p.point_type < 6:
                         #FIXME: if point type enabled
                         xp.append(p.x)
                         yp.append(p.y)
                     self.ax.scatter(xp, yp, s=80, c=color, linewidths=0)
-                # plot discontinuity points now
+                # plot asymptotes now
                 xp = []
                 yp = []
                 for p in f.poi:
                     if p.point_type == 6:
                         xp.append(p.x)
                         yp.append(p.y)
-                    self.ax.scatter(xp, yp, s=80, marker='x', c=color, 
-                            linewidths=2)
+                        # vertical asymptotes are plotted as 'x'
+                        self.ax.scatter(xp, yp, s=80, marker='x', c=color, 
+                                linewidths=2)
+                    if p.point_type == 7:
+                        xp.append(p.x)
+                        yp.append(p.y)
+                        # horizontal asymptotes are plotted as '+'
+                        self.ax.scatter(xp, yp, s=80, marker='+', c=color, 
+                                linewidths=2)
                 # add function to legend
                 legend.append(f.mathtex_expr)
         xp = []
