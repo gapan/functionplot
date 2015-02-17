@@ -451,9 +451,12 @@ class GUI:
                 self.graph_update()
                 self.fcdialog_open.hide()
             except:
-                logging.debug('File does not look like a FunctionPlot file.')
+                self.label_open_error.\
+                    set_text(_("File doesn't look like a FunctionPlot file."))
+                self.dialog_file_open_error.show()
         except:
-            logging.debug('Error opening file.')
+            self.label_open_error.set_text(_('Error reading file.'))
+            self.dialog_file_open_error.show()
     
     def on_button_fileopen_cancel_clicked(self, widget):
         self.fcdialog_open.hide()
@@ -462,22 +465,39 @@ class GUI:
         self.fcdialog_open.hide()
         return True
 
+    def on_button_file_open_error_close_clicked(self, widget):
+        self.dialog_file_open_error.hide()
+
+    def on_dialog_file_open_error_delete_event(self, widget, event):
+        self.dialog_file_open_error.hide()
+        return True
+
     def on_button_filesave_save_clicked(self, widget):
         filename = self.fcdialog_save.get_filename()
         if not filename.lower().endswith('.fgh'):
             filename = filename+'.fgh'
         folder = self.fcdialog_open.get_current_folder()
         logging.debug('Saving file: '+filename)
-        filehandler = open(filename, "wb")
-        pickle.dump(self.fg, filehandler)
-        filehandler.close()
-        self.fcdialog_save.hide()
+        try:
+            filehandler = open(filename, "wb")
+            pickle.dump(self.fg, filehandler)
+            filehandler.close()
+            self.fcdialog_save.hide()
+        except:
+            self.dialog_file_save_error.show()
 
     def on_button_filesave_cancel_clicked(self, widget):
         self.fcdialog_save.hide()
 
     def on_filechooserdialog_save_delete_event(self, widget, event):
         self.fcdialog_save.hide()
+        return True
+    
+    def on_button_save_error_close_clicked(self, widget):
+        self.dialog_file_save_error.hide()
+
+    def on_dialog_file_save_error_delete_event(self, widget, event):
+        self.dialog_file_save_error.hide()
         return True
 
     def __init__(self):
@@ -554,6 +574,11 @@ class GUI:
         filefilter.add_pattern('*.FGH')
         self.fcdialog_open.add_filter(filefilter)
         self.fcdialog_save.add_filter(filefilter)
+        self.dialog_file_open_error = \
+            builder.get_object('dialog_file_open_error')
+        self.label_open_error = builder.get_object('label_open_error')
+        self.dialog_file_save_error = \
+            builder.get_object('dialog_file_save_error')
         #
         # Add function dialog
         #
