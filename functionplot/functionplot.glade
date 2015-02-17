@@ -132,6 +132,9 @@
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkButton" id="button_1">
                     <property name="label">1</property>
                     <property name="visible">True</property>
@@ -324,9 +327,6 @@
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -701,23 +701,6 @@
       <action-widget response="0">button_add_error_close</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-floppy</property>
-  </object>
-  <object class="GtkListStore" id="liststore_functions">
-    <columns>
-      <!-- column-name visible -->
-      <column type="gboolean"/>
-      <!-- column-name function -->
-      <column type="gchararray"/>
-      <!-- column-name color -->
-      <column type="GdkColor"/>
-      <!-- column-name index -->
-      <column type="gint"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="functionplot">
     <property name="width_request">750</property>
     <property name="height_request">500</property>
@@ -748,6 +731,7 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_btn_new_clicked" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -757,6 +741,7 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_btn_open_clicked" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -766,6 +751,7 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_btn_save_clicked" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -943,6 +929,61 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
+              <object class="GtkToolButton" id="btn_new">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">New graph</property>
+                <property name="label" translatable="yes">New</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-new</property>
+                <signal name="clicked" handler="on_btn_new_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="btn_open">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Open graph</property>
+                <property name="label" translatable="yes">Open</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-open</property>
+                <signal name="clicked" handler="on_btn_open_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="btn_save">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Save graph</property>
+                <property name="label" translatable="yes">Save</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-save</property>
+                <signal name="clicked" handler="on_btn_save_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="separator1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="btn_add">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -961,6 +1002,7 @@
               <object class="GtkToolButton" id="btn_remove">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Remove function</property>
                 <property name="label" translatable="yes">Remove function</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-remove</property>
@@ -972,7 +1014,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="separator1">
+              <object class="GtkSeparatorToolItem" id="separator2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -985,6 +1027,7 @@
               <object class="GtkToolButton" id="btn_zoomin">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Zoom in</property>
                 <property name="label" translatable="yes">Zoom in</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-in</property>
@@ -999,6 +1042,7 @@
               <object class="GtkToolButton" id="btn_zoomout">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Zoom out</property>
                 <property name="label" translatable="yes">Zoom out</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-out</property>
@@ -1025,7 +1069,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="separator2">
+              <object class="GtkSeparatorToolItem" id="separator3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -1206,6 +1250,12 @@
                 <child>
                   <placeholder/>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1222,6 +1272,163 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="filechooserdialog_open">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Open...</property>
+    <property name="role">GtkFileChooserDialog</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">document-open</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">functionplot</property>
+    <signal name="delete-event" handler="on_filechooserdialog_open_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_fileopen_cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_fileopen_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_fileopen_open">
+                <property name="label">gtk-open</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_fileopen_open_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_fileopen_cancel</action-widget>
+      <action-widget response="0">button_fileopen_open</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkFileChooserDialog" id="filechooserdialog_save">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Save as...</property>
+    <property name="role">GtkFileChooserDialog</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">document-save</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">functionplot</property>
+    <signal name="delete-event" handler="on_filechooserdialog_save_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_filesave_cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_filesave_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_filesave_save">
+                <property name="label">gtk-save</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_filesave_save_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_filesave_cancel</action-widget>
+      <action-widget response="0">button_filesave_save</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-floppy</property>
+  </object>
+  <object class="GtkListStore" id="liststore_functions">
+    <columns>
+      <!-- column-name visible -->
+      <column type="gboolean"/>
+      <!-- column-name function -->
+      <column type="gchararray"/>
+      <!-- column-name color -->
+      <column type="GdkColor"/>
+      <!-- column-name index -->
+      <column type="gint"/>
+    </columns>
   </object>
   <object class="GtkWindow" id="window_calculating">
     <property name="can_focus">False</property>
