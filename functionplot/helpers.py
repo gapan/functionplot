@@ -7,8 +7,10 @@
 
 from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
-from math import floor
+#from math import floor
 from logging import debug
+import numpy as np
+import random
 
 def pod(expr, sym):
     # pod: Points of discontinuty, (will replace with a better name)
@@ -118,12 +120,16 @@ def percentile(plist, perc):
     x = sorted(plist)
     n = len(x)
     pos = (n+1)*perc/100
-    k = int(floor(pos))
+    k = int(np.floor(pos))
     a = pos-k
     p = x[k-1]+a*(x[k]-x[k-1])
     return p
 
 def remove_outliers(plist):
+    '''
+    This function takes a list (of floats/ints) and returns the list, having
+    replaced any outliers with the median value of the list.
+    '''
     q1 = percentile(plist, 25)
     q3 = percentile(plist, 75)
     iqr = q3 - q1
@@ -147,3 +153,40 @@ def remove_outliers(plist):
                 plist[i] = m
     return plist
 
+def periodic(npf):
+    '''
+    Checks if a function is periodic. npf should be a function formatted for
+    calculations with numpy.
+    '''
+    factor = 210
+    small = np.pi/factor
+    large = factor*np.pi
+    cycles = 4
+    n = 100
+    fuzz = 0.1
+    val = []
+    periodic = False
+    # create n random numbers from -20 to 20
+    for i in range(0,n):
+        x = random.uniform(0,20)
+        val.append(eval(npf))
+    q1 = percentile(val, 25)
+    q3 = percentile(val, 75)
+    delta = (q3-q1)*fuzz
+    period = small
+    print 'small:',small
+    print 'large:',large
+    while period < large:
+        print period
+        for x in np.arange(small, large, period):
+            fa = eval(npf)
+            periodic = True
+            for i in range(1, cycles):
+                fb = eval(npf.replace('x', '(x+i*period)'))
+                fc = eval(npf.replace('x', '(x+i*period + period/2)'))
+                if abs(fb - fa) > delta or abs(fc - fa) < delta:
+                    periodic = False
+            if periodic:
+                break
+        period = period + delta
+    return periodic
