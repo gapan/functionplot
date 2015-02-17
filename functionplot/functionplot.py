@@ -20,6 +20,16 @@ from FunctionGraph import FunctionGraph
 import logging
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
+# Internationalization
+import locale
+import gettext
+import gtk.glade
+gettext.bindtextdomain("functionplot", "/usr/share/locale")
+gettext.textdomain("functionplot")
+gettext.install("functionplot", "/usr/share/locale", unicode=1)
+gtk.glade.bindtextdomain("functionplot", "/usr/share/locale")
+gtk.glade.textdomain("functionplot")
+
 #Initializing the gtk's thread engine
 gtk.gdk.threads_init()
 
