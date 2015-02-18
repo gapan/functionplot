@@ -527,8 +527,8 @@ class GUI:
             self.fcdialog_save.set_current_folder(filename)
             self.folder = filename
         else:
-            if not filename.lower().endswith('.fgh'):
-                filename = filename+'.fgh'
+            if not filename.lower().endswith('.functionplot'):
+                filename = filename+'.functionplot'
             folder = self.fcdialog_save.get_current_folder()
             self.filename = filename
             self.folder = folder
@@ -665,8 +665,8 @@ class GUI:
         self.fcdialog_save = builder.get_object('filechooserdialog_save')
         filefilter = gtk.FileFilter()
         filefilter.set_name(_('FunctionPlot files'))
-        filefilter.add_pattern('*.fgh')
-        filefilter.add_pattern('*.FGH')
+        filefilter.add_pattern('*.functionplot')
+        filefilter.add_pattern('*.FUNCTIONPLOT')
         self.fcdialog_open.add_filter(filefilter)
         self.fcdialog_save.add_filter(filefilter)
         self.dialog_file_open_error = \
