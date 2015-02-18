@@ -5,6 +5,7 @@ import gtk
 import sys
 import threading
 import pickle
+import os
 import matplotlib.ticker
 from matplotlib.figure import Figure
 # alternative GTK/GTKAgg/GTKCairo backends
@@ -55,6 +56,10 @@ class GUI:
 
     # menu item activation signals
 
+    def on_imagemenuitem_file_save_as_activate(self, widget):
+        self.fcdialog_save.set_current_folder(self.folder)
+        self.fcdialog_save.show()
+
     def on_imagemenuitem_quit_activate(self, widget):
         gtk.main_quit()
 
@@ -69,15 +74,31 @@ class GUI:
 
     # toolbar button activation signals
     def on_btn_new_clicked(self, widget):
-        print 'new'
-
+        if self.changed:
+            self.dialog_confirm_new.show()
+        else:
+            self.changed = False
+            self.filename = None
+            self.fg.new()
+            self.graph_update()
+    
     def on_btn_open_clicked(self, widget):
-        self.fcdialog_open.show()
+        if self.changed:
+            self.dialog_confirm_open.show()
+        else:
+            self.fcdialog_open.set_current_folder(self.folder)
+            self.fcdialog_open.show()
 
     def on_btn_save_clicked(self, widget):
-        self.fcdialog_save.show()
+        if self.filename is None:
+            self.fcdialog_save.set_current_folder(self.folder)
+            self.fcdialog_save.show()
+        else:
+            self._save()
+            self.changed = False
     
     def on_btn_add_clicked(self, widget):
+        self.changed = True
         self.entry_function.set_text('')
         self.dialog_add_function.show()
         self.entry_function.grab_focus()
@@ -91,32 +112,40 @@ class GUI:
             self.fg.calc_intercepts()
             self.update_function_list()
             self.graph_update()
+            self.changed = True
 
     def on_btn_zoom_x_in_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_x_in()
         self.graph_update()
     
     def on_btn_zoom_x_out_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_x_out()
         self.graph_update()
 
     def on_btn_zoom_y_in_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_y_in()
         self.graph_update()
     
     def on_btn_zoom_y_out_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_y_out()
         self.graph_update()
     
     def on_btn_zoomin_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_in()
         self.graph_update()
 
     def on_btn_zoomout_clicked(self, widget):
+        self.changed = True
         self.fg.zoom_out()
         self.graph_update()
    
     def on_btn_auto_toggled(self, widget):
+        self.changed = True
         self.fg.auto = self.btn_auto.get_active()
         if self.fg.auto:
             self.fg.zoom_default()
@@ -124,6 +153,7 @@ class GUI:
 
     # toggle visibility in function list
     def on_cr_toggle_visible_toggled(self, widget, event):
+        self.changed = True
         i = int(event)
         visible = self.fg.functions[i].visible
         if visible:
@@ -135,6 +165,7 @@ class GUI:
 
     # zoom in/out with the mouse wheel
     def wheel_zoom(self, event):
+        self.changed = True
         if event.button == 'down':
             self.fg.zoom_out()
         elif event.button == 'up':
@@ -144,6 +175,7 @@ class GUI:
     # when pressing down the mouse button on the graph, record
     # the current mouse coordinates
     def pan_press(self, event):
+        self.changed = True
         if event.inaxes != self.ax: return
         self.mousebutton_press = event.xdata, event.ydata
 
@@ -436,8 +468,22 @@ class GUI:
         self.dialog_add_error.hide()
 
     #
-    # file open/save dialogs
+    # file new/open/save dialogs
     #
+    def on_button_confirm_new_yes_clicked(self, widget):
+        self.dialog_confirm_new.hide()
+        self.changed = False
+        self.filename = None
+        self.fg.new()
+        self.graph_update()
+
+    def on_button_confirm_new_cancel_clicked(self, widget):
+        self.dialog_confirm_new.hide()
+
+    def on_dialog_confirm_new_delete_event(self, widget, event):
+        self.dialog_confirm_new.hide()
+        return True
+
     def on_button_fileopen_open_clicked(self, widget):
         filename = self.fcdialog_open.get_filename()
         folder = self.fcdialog_open.get_current_folder()
@@ -447,9 +493,12 @@ class GUI:
             try:
                 self.fg = pickle.load(filehandler)
                 filehandler.close()
+                self.folder = folder
                 self.fg.update_xylimits()
                 self.graph_update()
                 self.fcdialog_open.hide()
+                self.changed = False
+                self.filename = filename
             except:
                 self.label_open_error.\
                     set_text(_("File doesn't look like a FunctionPlot file."))
@@ -474,17 +523,20 @@ class GUI:
 
     def on_button_filesave_save_clicked(self, widget):
         filename = self.fcdialog_save.get_filename()
-        if not filename.lower().endswith('.fgh'):
-            filename = filename+'.fgh'
-        folder = self.fcdialog_open.get_current_folder()
-        logging.debug('Saving file: '+filename)
-        try:
-            filehandler = open(filename, "wb")
-            pickle.dump(self.fg, filehandler)
-            filehandler.close()
-            self.fcdialog_save.hide()
-        except:
-            self.dialog_file_save_error.show()
+        if os.path.isdir(filename):
+            self.fcdialog_save.set_current_folder(filename)
+            self.folder = filename
+        else:
+            if not filename.lower().endswith('.fgh'):
+                filename = filename+'.fgh'
+            folder = self.fcdialog_save.get_current_folder()
+            self.filename = filename
+            self.folder = folder
+            if os.path.isfile(filename):
+                logging.debug('File already exists: '+filename)
+                self.dialog_overwrite.show()
+            else:
+                saved = self._save()
 
     def on_button_filesave_cancel_clicked(self, widget):
         self.fcdialog_save.hide()
@@ -499,6 +551,47 @@ class GUI:
     def on_dialog_file_save_error_delete_event(self, widget, event):
         self.dialog_file_save_error.hide()
         return True
+
+    def on_button_overwrite_yes_clicked(self, widget):
+        self.dialog_overwrite.hide()
+        self._save()
+
+    def on_button_overwrite_cancel_clicked(self, widget):
+        self.dialog_overwrite.hide()
+        self.fcdialog_save.hide()
+
+    def on_button_overwrite_no_clicked(self, widget):
+        self.dialog_overwrite.hide()
+
+    def on_dialog_overwrite_delete_event(self, widget, event):
+        self.dialog_overwrite.hide()
+        return True
+
+    def on_button_confirm_open_yes_clicked(self, widget):
+        self.fcdialog_open.set_current_folder(self.folder)
+        self.dialog_confirm_open.hide()
+        self.fcdialog_open.show()
+
+    def on_button_confirm_open_cancel_clicked(self, widget):
+        self.dialog_confirm_open.hide()
+
+    def on_dialog_confirm_open_delete_event(self, widget, event):
+        self.dialog_confirm_open.hide()
+        return True
+
+    # save the graph
+    def _save(self):
+        try:
+            filehandler = open(self.filename, "wb")
+            pickle.dump(self.fg, filehandler)
+            filehandler.close()
+            logging.debug('File saved: '+self.filename)
+            self.fg.saved = True
+            self.fcdialog_save.hide()
+            return True
+        except:
+            self.dialog_file_save_error.show()
+            return False
 
     def __init__(self):
         # Only a few colors defined. Hard to find more that will stand out.
@@ -517,10 +610,12 @@ class GUI:
                 '#0047AB',# cobalt
                 '#614051',# eggplant
                 ]
-        
+        # filename to save to/open from
+        self.filename = None
         # create a FunctionGraph object
         self.fg = FunctionGraph()
-       
+        # we need this to keep track if the file has changed since last save
+        self.changed = False 
         # we'll need this for panning
         self.mousebutton_press = None
         
@@ -579,6 +674,14 @@ class GUI:
         self.label_open_error = builder.get_object('label_open_error')
         self.dialog_file_save_error = \
             builder.get_object('dialog_file_save_error')
+        self.folder = os.path.expanduser("~")
+        # overwrite dialog
+        self.dialog_overwrite = builder.get_object('dialog_overwrite')
+        self.label_overwrite = builder.get_object('label_overwrite')
+        # confirm open dialog
+        self.dialog_confirm_open = builder.get_object('dialog_confirm_open')
+        # confirm new dialog
+        self.dialog_confirm_new = builder.get_object('dialog_confirm_new')
         #
         # Add function dialog
         #

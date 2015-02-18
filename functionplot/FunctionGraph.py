@@ -20,30 +20,36 @@ class FunctionGraph:
 
     def zoom_x_in(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom_x(zoom_out=False)
         self.update_graph_points()
     
     def zoom_x_out(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom_x(zoom_out=True)
         self.update_graph_points()
 
     def zoom_y_in(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom_y(zoom_out=False)
         self.update_graph_points()
 
     def zoom_y_out(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom_y(zoom_out=True)
         self.update_graph_points()
 
     def zoom_in(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom(zoom_out=False)
 
     def zoom_out(self):
         self.auto = False
+        self.update_graph_points()
         self._zoom(zoom_out=True)
 
     def _zoom_x(self, zoom_out=False):
@@ -202,9 +208,7 @@ class FunctionGraph:
         self.axis_type = 'linear'
         self.auto = True
 
-
-    def __init__(self):
-        self.scale_factor = 1.2
+    def new(self):
         self.visible = True
         self.show_legend = True
         
@@ -219,3 +223,8 @@ class FunctionGraph:
         self.poi_defaults.append(POI(1, 0, 0))
         self.poi_defaults.append(POI(-1, 0, 0))
         self.clear()
+
+
+    def __init__(self):
+        self.scale_factor = 1.2
+        self.new()
