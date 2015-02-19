@@ -60,6 +60,10 @@ class GUI:
         self.fcdialog_save.set_current_folder(self.folder)
         self.fcdialog_save.show()
 
+    def on_imagemenuitem_export_activate(self, widget):
+        self.fcdialog_export.set_current_folder(self.folder)
+        self.fcdialog_export.show()
+
     def on_imagemenuitem_quit_activate(self, widget):
         gtk.main_quit()
 
@@ -582,6 +586,29 @@ class GUI:
         self.dialog_confirm_open.hide()
         return True
 
+    def on_button_export_yes_clicked(self, widget):
+        filename = self.fcdialog_export.get_filename()
+        if os.path.isdir(filename):
+            self.fcdialog_export.set_current_folder(filename)
+            self.folder = filename
+        else:
+            if not filename.lower().endswith('.png'):
+                filename = filename+'.png'
+            folder = self.fcdialog_export.get_current_folder()
+            self.folder = folder
+            if os.path.isfile(filename):
+                logging.debug('File already exists: '+filename)
+            else:
+                saved = self._export()
+
+
+    def on_button_export_cancel_clicked(self, widget):
+        self.fcdialog_export.hide()
+
+    def on_filechooserdialog_export_delete_event(self, widget, event):
+        self.fcdialog_export.hide()
+        return True
+
     # save the graph
     def _save(self):
         try:
@@ -595,6 +622,15 @@ class GUI:
         except:
             self.dialog_file_save_error.show()
             return False
+
+    # export the graph to png
+    def _export(self):
+        try:
+            filename = self.fcdialog_export.get_filename()
+            self.fig.savefig(filename, dpi=300)
+            self.fcdialog_export.hide()
+        except:
+            self.dialog_export_error.show()
 
     def __init__(self):
         # Only a few colors defined. Hard to find more that will stand out.
@@ -685,6 +721,8 @@ class GUI:
         self.dialog_confirm_open = builder.get_object('dialog_confirm_open')
         # confirm new dialog
         self.dialog_confirm_new = builder.get_object('dialog_confirm_new')
+        # export dialogs
+        self.fcdialog_export = builder.get_object('filechooserdialog_export')
         #
         # Add function dialog
         #
