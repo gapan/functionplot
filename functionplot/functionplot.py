@@ -723,6 +723,11 @@ class GUI:
         self.dialog_confirm_new = builder.get_object('dialog_confirm_new')
         # export dialogs
         self.fcdialog_export = builder.get_object('filechooserdialog_export')
+        exportfilter = gtk.FileFilter()
+        exportfilter.set_name(_('PNG image files'))
+        exportfilter.add_pattern('*.png')
+        exportfilter.add_pattern('*.PNG')
+        self.fcdialog_export.add_filter(exportfilter)
         #
         # Add function dialog
         #
