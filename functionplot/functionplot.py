@@ -80,6 +80,7 @@ class GUI:
             self.changed = False
             self.filename = None
             self.fg.new()
+            self.update_function_list()
             self.graph_update()
     
     def on_btn_open_clicked(self, widget):
@@ -475,6 +476,7 @@ class GUI:
         self.changed = False
         self.filename = None
         self.fg.new()
+        self.update_function_list()
         self.graph_update()
 
     def on_button_confirm_new_cancel_clicked(self, widget):
@@ -495,6 +497,7 @@ class GUI:
                 filehandler.close()
                 self.folder = folder
                 self.fg.update_xylimits()
+                self.update_function_list()
                 self.graph_update()
                 self.fcdialog_open.hide()
                 self.changed = False
@@ -586,7 +589,7 @@ class GUI:
             pickle.dump(self.fg, filehandler)
             filehandler.close()
             logging.debug('File saved: '+self.filename)
-            self.fg.saved = True
+            self.changed = False
             self.fcdialog_save.hide()
             return True
         except:
