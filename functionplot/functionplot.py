@@ -327,7 +327,7 @@ class GUI:
                 visible_functions += 1
             else:
                 color = '#999999'
-            self.ls_functions.append([f.visible, f.expr+'',
+            self.ls_functions.append([f.visible, f.expr.lower()+'',
                 gtk.gdk.Color(color), index])
             index += 1
 

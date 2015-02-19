@@ -37,7 +37,10 @@ def pod(expr, sym):
     if expr.is_polynomial():
         return []
     pods = []
-    pods = pods + solve(simplify(1/expr), sym)
+    try:
+        pods = pods + solve(simplify(1/expr), sym)
+    except NotImplementedError:
+        return []
     p = Wild("p")
     q = Wild("q")
     r = Wild("r")

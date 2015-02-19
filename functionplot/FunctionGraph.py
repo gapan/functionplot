@@ -4,6 +4,7 @@
 from __future__ import division
 import numpy as np
 from sympy import simplify
+from sympy.functions import Abs
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
 from helpers import fsolve, rfc, remove_outliers

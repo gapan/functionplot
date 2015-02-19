@@ -4,6 +4,7 @@
 from __future__ import division
 import numpy as np
 from sympy import diff, limit, simplify
+from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
 from logging import debug
@@ -56,6 +57,9 @@ class Function:
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
+        # FIXME: abs?
+        expr = expr.replace('abs(', 'Abs(')
+
         # FIXME: provide for implied multiplication symbol
         # examples: 2x -> 2*x, x(x+1) -> x*(x+1) etc
         return expr
@@ -75,7 +79,7 @@ class Function:
         # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
         # absolute value
-        expr = expr.replace('abs(', 'np.abs(')
+        expr = expr.replace('Abs(', 'np.abs(')
         # pi and e
         expr = expr.replace('pi', 'np.pi')
         expr = expr.replace('e', 'np.e')
@@ -84,6 +88,7 @@ class Function:
         return expr
     
     def _simplify_expr(self, expr):
+        #FIXME
         # don't simplify if it a log function is included
         if False:
         #if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
