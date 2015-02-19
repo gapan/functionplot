@@ -83,6 +83,7 @@ class GUI:
         else:
             self.changed = False
             self.filename = None
+            self.export_filename = None
             self.fg.new()
             self.update_function_list()
             self.graph_update()
@@ -530,20 +531,25 @@ class GUI:
 
     def on_button_filesave_save_clicked(self, widget):
         filename = self.fcdialog_save.get_filename()
-        if os.path.isdir(filename):
-            self.fcdialog_save.set_current_folder(filename)
-            self.folder = filename
-        else:
-            if not filename.lower().endswith('.functionplot'):
-                filename = filename+'.functionplot'
-            folder = self.fcdialog_save.get_current_folder()
-            self.filename = filename
-            self.folder = folder
-            if os.path.isfile(filename):
-                logging.debug('File already exists: '+filename)
-                self.dialog_overwrite.show()
+        try:
+            if os.path.isdir(filename):
+                self.fcdialog_save.set_current_folder(filename)
+                self.folder = filename
             else:
-                saved = self._save()
+                if not filename.lower().endswith('.functionplot'):
+                    filename = filename+'.functionplot'
+                folder = self.fcdialog_save.get_current_folder()
+                self.filename = filename
+                self.folder = folder
+                if os.path.isfile(filename):
+                    logging.debug('File already exists: '+filename)
+                    self.dialog_overwrite.show()
+                else:
+                    saved = self._save()
+        # TypeError is raised if the filename is empty, or only spaces, or has
+        # invalid characters.
+        except TypeError:
+            pass
 
     def on_button_filesave_cancel_clicked(self, widget):
         self.fcdialog_save.hide()
@@ -588,18 +594,25 @@ class GUI:
 
     def on_button_export_yes_clicked(self, widget):
         filename = self.fcdialog_export.get_filename()
-        if os.path.isdir(filename):
-            self.fcdialog_export.set_current_folder(filename)
-            self.folder = filename
-        else:
-            if not filename.lower().endswith('.png'):
-                filename = filename+'.png'
-            folder = self.fcdialog_export.get_current_folder()
-            self.folder = folder
-            if os.path.isfile(filename):
-                logging.debug('File already exists: '+filename)
+        try:
+            if os.path.isdir(filename):
+                self.fcdialog_export.set_current_folder(filename)
+                self.folder = filename
             else:
-                saved = self._export()
+                if not filename.lower().endswith('.png'):
+                    filename = filename+'.png'
+                self.export_filename = filename
+                folder = self.fcdialog_export.get_current_folder()
+                self.folder = folder
+                if os.path.isfile(filename):
+                    logging.debug('File already exists: '+filename)
+                    self.dialog_export_overwrite.show()
+                else:
+                    saved = self._export()
+        # TypeError is raised if the filename is empty, or only spaces, or has
+        # invalid characters.
+        except TypeError:
+            pass
 
 
     def on_button_export_cancel_clicked(self, widget):
@@ -607,6 +620,28 @@ class GUI:
 
     def on_filechooserdialog_export_delete_event(self, widget, event):
         self.fcdialog_export.hide()
+        return True
+
+    def on_button_export_overwrite_yes_clicked(self, widget):
+        self.dialog_export_overwrite.hide()
+        self._export()
+
+    def on_button_export_overwrite_cancel_clicked(self, widget):
+        self.dialog_export_overwrite.hide()
+        self.fcdialog_export.hide()
+
+    def on_button_export_overwrite_no_clicked(self, widget):
+        self.dialog_export_overwrite.hide()
+
+    def on_dialog_export_overwrite_delete_event(self, widget, event):
+        self.dialog_export_overwrite.hide()
+        return True
+
+    def on_button_export_error_close_clicked(self, widget):
+        self.dialog_file_export_error.hide()
+
+    def on_dialog_file_export_error_delete_event(self, widget, event):
+        self.dialog_file_export_error.hide()
         return True
 
     # save the graph
@@ -626,11 +661,11 @@ class GUI:
     # export the graph to png
     def _export(self):
         try:
-            filename = self.fcdialog_export.get_filename()
+            filename = self.export_filename
             self.fig.savefig(filename, dpi=300)
             self.fcdialog_export.hide()
         except:
-            self.dialog_export_error.show()
+            self.dialog_file_export_error.show()
 
     def __init__(self):
         # Only a few colors defined. Hard to find more that will stand out.
@@ -649,8 +684,9 @@ class GUI:
                 '#0047AB',# cobalt
                 '#614051',# eggplant
                 ]
-        # filename to save to/open from
+        # filenames to save to/open from and export to
         self.filename = None
+        self.export_filename = None
         # create a FunctionGraph object
         self.fg = FunctionGraph()
         # we need this to keep track if the file has changed since last save
@@ -728,6 +764,10 @@ class GUI:
         exportfilter.add_pattern('*.png')
         exportfilter.add_pattern('*.PNG')
         self.fcdialog_export.add_filter(exportfilter)
+        self.dialog_export_overwrite = \
+            builder.get_object('dialog_export_overwrite')
+        self.dialog_file_export_error = \
+            builder.get_object('dialog_file_export_error')
         #
         # Add function dialog
         #
