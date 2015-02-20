@@ -57,7 +57,8 @@ class Function:
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
-        # FIXME: abs?
+        # sympy.functions.Abs is imported as Abs so we're using it that way
+        # with sympy
         expr = expr.replace('abs(', 'Abs(')
 
         # FIXME: provide for implied multiplication symbol
@@ -78,7 +79,7 @@ class Function:
         expr = expr.replace('ln(', 'np.log(')
         # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
-        # absolute value
+        # absolute value. For numpy, turn the sympy Abs function to np.abs
         expr = expr.replace('Abs(', 'np.abs(')
         # pi and e
         expr = expr.replace('pi', 'np.pi')
