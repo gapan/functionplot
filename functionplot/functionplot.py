@@ -291,12 +291,15 @@ class GUI:
                 for p in f.poi:
                     if p.point_type == 6:
                         xp.append(p.x)
-                        yp.append(p.y)
+                        yp.append(0)
                         # vertical asymptotes are plotted as 'x'
                         self.ax.scatter(xp, yp, s=80, marker='x', c=color, 
                                 linewidths=2)
+                xp = []
+                yp = []
+                for p in f.poi:
                     if p.point_type == 7:
-                        xp.append(p.x)
+                        xp.append(0)
                         yp.append(p.y)
                         # horizontal asymptotes are plotted as '+'
                         self.ax.scatter(xp, yp, s=80, marker='+', c=color, 
