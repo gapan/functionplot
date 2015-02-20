@@ -3,7 +3,7 @@
 
 from __future__ import division
 import numpy as np
-from sympy import diff, limit, simplify
+from sympy import diff, limit, simplify, latex
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
@@ -57,9 +57,6 @@ class Function:
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
-        # sympy.functions.Abs is imported as Abs so we're using it that way
-        # with sympy
-        expr = expr.replace('abs(', 'Abs(')
 
         # FIXME: provide for implied multiplication symbol
         # examples: 2x -> 2*x, x(x+1) -> x*(x+1) etc
@@ -74,9 +71,7 @@ class Function:
         expr = expr.replace('sec(', '1/np.cos(') # no sec or csc either
         expr = expr.replace('csc(', '1/np.sin(')
         # correct log functions
-        expr = expr.replace('log(', 'np.log10(')
-        expr = expr.replace('loge(', 'np.log(')
-        expr = expr.replace('ln(', 'np.log(')
+        expr = expr.replace('log(', 'np.log(')
         # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
         # absolute value. For numpy, turn the sympy Abs function to np.abs
@@ -89,23 +84,37 @@ class Function:
         return expr
     
     def _simplify_expr(self, expr):
-        #FIXME
-        # don't simplify if it a log function is included
-        if False:
-        #if 'log(' in expr or 'ln(' in expr or 'loge(' in expr or \
-        #        'log2' in expr:
-            debug('"'+expr+'" is a log function. Not simplifying.')
-            return expr
-        else:
-            simp_expr = simplify(expr)
-            debug('"'+expr+'" has been simplified to "'+str(simp_expr)+'"')
-            return simp_expr
+        # sympy.functions.Abs is imported as Abs so we're using it that way
+        # with sympy
+        expr = expr.replace('abs(', 'Abs(')
+        # sympy only supports natural logarithms and log(x) = ln(x). For log
+        # base 10, we'll do the convertion manually:
+        # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 = 0.4342944819*ln(x)
+        # The number of decimal points is restricted to 4, otherwise
+        # calculations could take a really long time. 4 is good enough in any
+        # case. Example for f(x) = log(x)-1:
+        # - 3 decimals: 152ms
+        # - 4 decimals: 228ms
+        # - 5 decimals: 301ms
+        # - 6 decimals: 561ms
+        # - 7 decimals: 3.89s
+        expr = expr.replace('log(', '0.4343*ln(')
+        simp_expr = simplify(expr)
+        debug('"'+expr+'" has been simplified to "'+str(simp_expr)+'"')
+        return simp_expr
 
 
-    # FIXME: actually implement this
-    # sympy printing to LaTeX can probably do it
     def _get_mathtex_expr(self, expr):
-        return expr
+        # expr is a simplified sympy expression. Creates a LaTeX string from
+        # the expression using sympy latex printing.
+        e = latex(expr)
+        e = e.replace('0.4343 \\log{', '\\log10{')
+        e = e.replace('log{', 'ln{')
+        e = e.replace('log10', 'log')
+        e = e.replace('\\lvert', '|')
+        e = e.replace('\\rvert', '|')
+        e = '$'+e+'$'
+        return e
 
     def calc_poi(self):
         expr = self.simp_expr
@@ -175,18 +184,21 @@ class Function:
         # asymptote.
         # sympy: limit(expr, x, oo)
         debug('Looking for horizontal asymptotes for: '+str(expr))
-        lr = limit(expr, 'x', 'oo')
-        ll = limit(expr, 'x', '-oo')
-        if 'oo' not in str(lr):
-            debug('Found a horizontal asymptote at y='+str(lr)+' as x->+oo.')
-            self.poi.append(POI(0, lr, 7))
-        if 'oo' not in str(ll):
-            if ll == lr:
-                debug('Same horizontal asymptote as x->-oo.')
-            else:
-                debug('Found a horizontal asymptote at y='+str(ll)+\
-                        ' as x->-oo')
-                self.poi.append(POI(0, ll, 7))
+        try:
+            lr = limit(expr, 'x', 'oo')
+            ll = limit(expr, 'x', '-oo')
+            if 'oo' not in str(lr):
+                debug('Found a horizontal asymptote at y='+str(lr)+' as x->+oo.')
+                self.poi.append(POI(0, lr, 7))
+            if 'oo' not in str(ll):
+                if ll == lr:
+                    debug('Same horizontal asymptote as x->-oo.')
+                else:
+                    debug('Found a horizontal asymptote at y='+str(ll)+\
+                            ' as x->-oo')
+                    self.poi.append(POI(0, ll, 7))
+        except NotImplementedError:
+            debug('NotImplementedError for finding limit of "'+str(expr)+'"')
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
@@ -210,6 +222,6 @@ class Function:
 
         if self.valid:
             # FIXME: mathtex expr should be in LaTeX format
-            self.mathtex_expr = self._get_mathtex_expr(self.expr)
+            self.mathtex_expr = self._get_mathtex_expr(self.simp_expr)
             self.calc_poi()
 

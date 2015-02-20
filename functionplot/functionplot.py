@@ -34,6 +34,10 @@ gtk.glade.textdomain("functionplot")
 #Initializing the gtk's thread engine
 gtk.gdk.threads_init()
 
+# Use the stix fonts for matplotlib mathtext. They blend better with Times New
+# Roman.
+matplotlib.rcParams['mathtext.fontset'] = 'stix'
+
 def threaded(f):
     def wrapper(*args):
         t = threading.Thread(target=f, args=args)
@@ -315,7 +319,8 @@ class GUI:
         self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
                 linewidths=0)
         if self.fg.show_legend:
-            self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1))
+            self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1),
+                    fontsize=18)
         self.ax.figure.canvas.draw()
         # check/uncheck the toolbutton for auto-adjustment
         self.btn_auto.set_active(self.fg.auto)
