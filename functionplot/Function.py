@@ -8,6 +8,7 @@ from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
 from logging import debug
+import re
 
 class Function:
     
@@ -57,9 +58,13 @@ class Function:
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
-
-        # FIXME: provide for implied multiplication symbol
-        # examples: 2x -> 2*x, x(x+1) -> x*(x+1) etc
+        # implied multiplication
+        expr = re.sub('([0-9])([a-z\(])', '\\1*\\2', expr)
+        expr = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
+        expr = re.sub('(pi)([a-z\(])', '\\1*\\2', expr)
+        expr = re.sub('([a-z\)])(pi)', '\\1*\\2', expr)
+        expr = re.sub('(\))([a-z]\()', '\\1*\\2', expr)
+        expr = re.sub('(x)([a-z]\()', '\\1*\\2', expr)
         return expr
 
     def _get_np_expr(self, expr):
