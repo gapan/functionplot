@@ -4,7 +4,6 @@
 from __future__ import division
 import numpy as np
 from sympy import diff, limit, simplify, latex
-from sympy.parsing.mathematica import parse
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
@@ -40,6 +39,8 @@ class Function:
     def _get_expr(self, expr):
         # caps to lowercase
         expr = expr.lower()
+        # remove all spaces
+        expr = expr.replace(' ', '')
         # replace commas with decimals
         expr = expr.replace(',', '.')
         # braces and bracets to parens
@@ -56,9 +57,9 @@ class Function:
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
-        # parse() comes from sympy and fixes implied multiplication, see:
-        # http://docs.sympy.org/latest/_modules/sympy/parsing/mathematica.html
-        expr = parse(expr)
+
+        # FIXME: provide for implied multiplication symbol
+        # examples: 2x -> 2*x, x(x+1) -> x*(x+1) etc
         return expr
 
     def _get_np_expr(self, expr):
