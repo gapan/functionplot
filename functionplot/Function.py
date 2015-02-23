@@ -226,7 +226,6 @@ class Function:
         self.poi = []
 
         if self.valid:
-            # FIXME: mathtex expr should be in LaTeX format
             self.mathtex_expr = self._get_mathtex_expr(self.simp_expr)
             self.calc_poi()
 
