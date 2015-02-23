@@ -29,7 +29,8 @@ class Function:
         # if f(x)=a, make sure that y is an array with the same size as x and
         # with a constant value.
         except TypeError:
-            debug('Probably a constant function: '+self.np_expr)
+            debug('This looks like a constant function: '+self.np_expr)
+            self.constant = True
             l = len(x)
             yarr = np.ndarray([l,])
             yarr[yarr!=y]=y
@@ -126,14 +127,6 @@ class Function:
         
         self.poi = []
         #
-        # x intercepts
-        #
-        debug('Looking for x intercepts for: '+str(expr))
-        x = fsolve(expr)
-        for xc in x:
-            self.poi.append(POI(xc, 0, 2))
-            debug('Added x intercept at ('+str(xc)+',0)')
-        #
         # y intercept
         #
         debug('Looking for the y intercept for: '+str(expr))
@@ -142,74 +135,88 @@ class Function:
         if yc is not None:
             self.poi.append(POI(0, yc, 3))
             debug('Added y intercept at (0,'+str(yc)+')')
-        #
-        # min/max
-        #
-        debug('Looking for local min/max for: '+str(expr))
-        f1 = diff(expr, 'x')
-        x = fsolve(f1)
-        for xc in x:
-            y = expr.subs('x', xc)
-            yc = rfc(y)
-            if yc is not None:
-                self.poi.append(POI(xc, yc, 4))
-                debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
-        #
-        # inflection points
-        #
-        debug('Looking for inflection points for: '+str(expr))
-        f2 = diff(f1, 'x')
-        x = fsolve(f2)
-        for xc in x:
-            y = expr.subs('x', xc)
-            yc = rfc(y)
-            if yc is not None:
-                self.poi.append(POI(xc, yc, 5))
-                debug('Added inflection point at ('+str(xc)+','+str(yc)+')')
-        #
-        # discontinuity points (vertical asymptotes)
-        #
-        debug('Looking for discontinuity points for: '+str(expr))
-        dp = pod(expr, 'x')
-        for i in dp:
-            y = expr.subs('x', i)
-            xc = rfc(i)
-            #yc = float(y) # this returns inf.
-            # we'll just put discontinuity points on the x axis
-            if xc is not None:
-                yc = 0
-                self.poi.append(POI(xc, yc, 6))
-                debug('Added discontinuity point at ('+str(xc)+','+\
-                        str(yc)+')')
-        #
-        # horizontal asymptotes
-        #
-        #FIXME: implement this
-        # if the limit(x->+oo)=a, or limit(x->-oo)=a, then y=a is a horizontal
-        # asymptote.
-        # sympy: limit(expr, x, oo)
-        debug('Looking for horizontal asymptotes for: '+str(expr))
-        try:
-            lr = limit(expr, 'x', 'oo')
-            ll = limit(expr, 'x', '-oo')
-            if 'oo' not in str(lr):
-                debug('Found a horizontal asymptote at y='+str(lr)+' as x->+oo.')
-                self.poi.append(POI(0, lr, 7))
-            if 'oo' not in str(ll):
-                if ll == lr:
-                    debug('Same horizontal asymptote as x->-oo.')
-                else:
-                    debug('Found a horizontal asymptote at y='+str(ll)+\
-                            ' as x->-oo')
-                    self.poi.append(POI(0, ll, 7))
-        except NotImplementedError:
-            debug('NotImplementedError for finding limit of "'+str(expr)+'"')
+        if not self.constant:
+            #
+            # x intercepts
+            #
+            debug('Looking for x intercepts for: '+str(expr))
+            x = fsolve(expr)
+            for xc in x:
+                self.poi.append(POI(xc, 0, 2))
+                debug('Added x intercept at ('+str(xc)+',0)')
+
+            #
+            # min/max
+            #
+            debug('Looking for local min/max for: '+str(expr))
+            f1 = diff(expr, 'x')
+            x = fsolve(f1)
+            for xc in x:
+                y = expr.subs('x', xc)
+                yc = rfc(y)
+                if yc is not None:
+                    self.poi.append(POI(xc, yc, 4))
+                    debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
+            #
+            # inflection points
+            #
+            debug('Looking for inflection points for: '+str(expr))
+            f2 = diff(f1, 'x')
+            x = fsolve(f2)
+            for xc in x:
+                y = expr.subs('x', xc)
+                yc = rfc(y)
+                if yc is not None:
+                    self.poi.append(POI(xc, yc, 5))
+                    debug('Added inflection point at ('+\
+                            str(xc)+','+str(yc)+')')
+            #
+            # discontinuity points (vertical asymptotes)
+            #
+            debug('Looking for discontinuity points for: '+str(expr))
+            dp = pod(expr, 'x')
+            for i in dp:
+                y = expr.subs('x', i)
+                xc = rfc(i)
+                #yc = float(y) # this returns inf.
+                # we'll just put discontinuity points on the x axis
+                if xc is not None:
+                    yc = 0
+                    self.poi.append(POI(xc, yc, 6))
+                    debug('Added discontinuity point at ('+str(xc)+','+\
+                            str(yc)+')')
+            #
+            # horizontal asymptotes
+            #
+            #FIXME: implement this
+            # if the limit(x->+oo)=a, or limit(x->-oo)=a, then y=a is a
+            # horizontal asymptote.
+            # sympy: limit(expr, x, oo)
+            debug('Looking for horizontal asymptotes for: '+str(expr))
+            try:
+                lr = limit(expr, 'x', 'oo')
+                ll = limit(expr, 'x', '-oo')
+                if 'oo' not in str(lr):
+                    debug('Found a horizontal asymptote at y='+str(lr)+\
+                            ' as x->+oo.')
+                    self.poi.append(POI(0, lr, 7))
+                if 'oo' not in str(ll):
+                    if ll == lr:
+                        debug('Same horizontal asymptote as x->-oo.')
+                    else:
+                        debug('Found a horizontal asymptote at y='+str(ll)+\
+                                ' as x->-oo')
+                        self.poi.append(POI(0, ll, 7))
+            except NotImplementedError:
+                debug('NotImplementedError for finding limit of "'+\
+                        str(expr)+'"')
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
         # function
         self.resolution = 1000
         self.visible = True
+        self.constant = False
         self.valid = True
         self.expr = self._get_expr(expr)
        
