@@ -7,7 +7,6 @@
 
 from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
-#from math import floor
 from logging import debug
 import numpy as np
 import random
