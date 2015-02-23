@@ -93,6 +93,11 @@ class Function:
         # sympy.functions.Abs is imported as Abs so we're using it that way
         # with sympy
         expr = expr.replace('abs(', 'Abs(')
+        # we need to convert e to a float value. Since sec() is the only
+        # function that also includes an "e", we'll remove that temporarily
+        expr = expr.replace('sec(', 'sc(')
+        expr = expr.replace('e', '2.7183')
+        expr = expr.replace('sc(', 'sec(')
         # sympy only supports natural logarithms and log(x) = ln(x). For log
         # base 10, we'll do the convertion manually:
         # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 = 0.4342944819*ln(x)
@@ -119,6 +124,8 @@ class Function:
         e = e.replace('log10', 'log')
         e = e.replace('\\lvert', '|')
         e = e.replace('\\rvert', '|')
+        # translate e value back to e symbol
+        e = e.replace('2.7183', 'e')
         e = '$'+e+'$'
         return e
 
