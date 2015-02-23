@@ -144,6 +144,7 @@ class FunctionGraph:
             # we need a trick to put discontinuity points far away, but also
             # show them on the x axis. So, if there are any discontinuity
             # points, we increase the size of the y axis 2 times.
+            # FIXME: there should be a better way to do this
             discontinuities = False
             for f in self.functions:
                 if f.visible:
