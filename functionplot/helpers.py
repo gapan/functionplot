@@ -12,7 +12,6 @@ import numpy as np
 import random
 
 def pod(expr, sym):
-    # pod: Points of discontinuty, (will replace with a better name)
     """
     Find the points of Discontinuity of a real univariate function
 
@@ -155,6 +154,7 @@ def remove_outliers(plist):
                 plist[i] = m
     return plist
 
+# this doesn't work all that well after all. It will probably not be used.
 def periodic(npf):
     '''
     Checks if a function is periodic. npf should be a function formatted for
