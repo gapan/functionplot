@@ -108,7 +108,7 @@ class FunctionGraph:
             for f in self.functions:
                 if f.visible:
                     for p in f.poi:
-                        # don't add discontinuity points here
+                        # don't add vertical or horizontal asymptotes here
                         if p.point_type < 6:
                             point = [p.x, p.y]
                             if point not in points:
@@ -140,10 +140,10 @@ class FunctionGraph:
             y_min = min(yl)
             y_max = max(yl)
             y_range = y_max - y_min
-            # discontinuity points
-            # we need a trick to put discontinuity points far away, but also
-            # show them on the x axis. So, if there are any discontinuity
-            # points, we increase the size of the y axis 2 times.
+            # vertical asymptotes
+            # we need a trick to put vertical asymptotes far away, but also
+            # show them on the x axis. So, if there are any vertical
+            # asymptotes, we increase the size of the y axis 2 times.
             # FIXME: there should be a better way to do this
             for f in self.functions:
                 if f.visible:

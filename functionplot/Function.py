@@ -178,19 +178,19 @@ class Function:
                     debug('Added inflection point at ('+\
                             str(xc)+','+str(yc)+')')
             #
-            # discontinuity points (vertical asymptotes)
+            # vertical asymptotes
             #
-            debug('Looking for discontinuity points for: '+str(expr))
+            debug('Looking for vertical asymptotes for: '+str(expr))
             dp = pod(expr, 'x')
             for i in dp:
                 y = expr.subs('x', i)
                 xc = rfc(i)
                 #yc = float(y) # this returns inf.
-                # we'll just put discontinuity points on the x axis
+                # we'll just put vertical asymptotes on the x axis
                 if xc is not None:
                     yc = 0
                     self.poi.append(POI(xc, yc, 6))
-                    debug('Added discontinuity point at ('+str(xc)+','+\
+                    debug('Added vertical asymptote ('+str(xc)+','+\
                             str(yc)+')')
             #
             # horizontal asymptotes
