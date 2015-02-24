@@ -64,8 +64,8 @@ class Function:
         expr = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
         expr = re.sub('(pi)([a-z\(])', '\\1*\\2', expr)
         expr = re.sub('([a-z\)])(pi)', '\\1*\\2', expr)
-        expr = re.sub('(\))([a-z]\()', '\\1*\\2', expr)
-        expr = re.sub('(x)([a-z]\()', '\\1*\\2', expr)
+        expr = re.sub('(\))([a-z\(])', '\\1*\\2', expr)
+        expr = re.sub('(x)([a-z\(])', '\\1*\\2', expr)
         return expr
 
     def _get_np_expr(self, expr):
