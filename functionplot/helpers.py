@@ -72,8 +72,9 @@ def fsolve(expr):
                 debug('Found solution: '+str(xc))
     except NotImplementedError:
         debug('NotImplementedError for solving "'+str(expr)+'"')
-    #except TypeError:
-    #    debug('This was not supposed to happen. Probably a bug in sympy')
+    except TypeError:
+        debug('TypeError exception. This was not supposed to happen. '+\
+                'Probably a bug in sympy.')
     return xl
 
 def rfc(x):
