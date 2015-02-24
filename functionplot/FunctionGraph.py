@@ -99,6 +99,8 @@ class FunctionGraph:
             return False
 
     def update_xylimits(self):
+        vertical_asymptotes = False
+        horizontal_asymptotes = False
         if self.auto:
             debug('Calculating xylimits.')
             xl = []
@@ -123,6 +125,27 @@ class FunctionGraph:
                 point = [p.x, p.y]
                 if point not in points:
                     points.append([p.x, p.y])
+            # asymptotes
+            # we need a trick to put asymptotes far away, but also
+            # show them on the x axis. So, if there are any
+            # asymptotes, we increase the size of the respective axis 2 times.
+            # FIXME: there should be a better way to do this
+            for f in self.functions:
+                if f.visible:
+                    for p in f.poi:
+                        # vertical asymptotes
+                        if p.point_type == 6:
+                            vertical_asymptotes = True
+                            point = [p.x, 0]
+                            if point not in points:
+                                points.append([p.x, 0])
+                        # horizontal asymptotes
+                        elif p.point_type == 7:
+                            horizontal_asymptotes = True
+                            point = [0, p.y]
+                            if point not in points:
+                                points.append([p.x, 0])
+            # gather everything together
             for point in points:
                 xl.append(point[0])
                 yl.append(point[1])
@@ -140,20 +163,15 @@ class FunctionGraph:
             y_min = min(yl)
             y_max = max(yl)
             y_range = y_max - y_min
-            # vertical asymptotes
-            # we need a trick to put vertical asymptotes far away, but also
-            # show them on the x axis. So, if there are any vertical
-            # asymptotes, we increase the size of the y axis 2 times.
+            # asymptotes. Increase the axis size in case any are
+            # found
             # FIXME: there should be a better way to do this
-            for f in self.functions:
-                if f.visible:
-                    for p in f.poi:
-                        if p.point_type == 6:
-                            y_min = y_min - y_range
-                            y_max = y_max + y_range
-                            #point = [p.x, p.y]
-                            #if point not in points:
-                            #    points.append([p.x, p.y])
+            if vertical_asymptotes:
+                y_min = y_min - y_range
+                y_max = y_max + y_range
+            if horizontal_asymptotes:
+                x_min = x_min - x_range
+                x_max = x_max + x_range
             # take care of edge cases, where all poi in an axis have the same
             # coordinate.
             if x_min == x_max:
