@@ -3,7 +3,7 @@
 
 from __future__ import division
 import numpy as np
-from sympy import diff, limit, simplify, latex
+from sympy import diff, limit, simplify, latex, pi
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
@@ -151,7 +151,11 @@ class Function:
             for xc in x:
                 self.poi.append(POI(xc, 0, 2))
                 debug('Added x intercept at ('+str(xc)+',0)')
-
+            # try to find if the function is periodic using the distance
+            # between the x intercepts
+            if not self.periodic and not self.polynomial:
+                debug('Checking if function is periodic using x intercepts.')
+                self.check_periodic(x)
             #
             # min/max
             #
@@ -164,6 +168,9 @@ class Function:
                 if yc is not None:
                     self.poi.append(POI(xc, yc, 4))
                     debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
+            if not self.periodic and not self.polynomial:
+                debug('Checking if function is periodic using min/max.')
+                self.check_periodic(x)
             #
             # inflection points
             #
@@ -177,12 +184,16 @@ class Function:
                     self.poi.append(POI(xc, yc, 5))
                     debug('Added inflection point at ('+\
                             str(xc)+','+str(yc)+')')
+            if not self.periodic and not self.polynomial:
+                debug('Checking if function is periodic using inflection '+\
+                        'points.')
+                self.check_periodic(x)
             #
             # vertical asymptotes
             #
             debug('Looking for vertical asymptotes for: '+str(expr))
-            dp = pod(expr, 'x')
-            for i in dp:
+            x = pod(expr, 'x')
+            for i in x:
                 y = expr.subs('x', i)
                 xc = rfc(i)
                 #yc = float(y) # this returns inf.
@@ -192,6 +203,10 @@ class Function:
                     self.poi.append(POI(xc, yc, 6))
                     debug('Added vertical asymptote ('+str(xc)+','+\
                             str(yc)+')')
+            if not self.periodic and not self.polynomial:
+                debug('Checking if function is periodic using vertical '+\
+                        'asymptotes.')
+                self.check_periodic(x)
             #
             # horizontal asymptotes
             #
@@ -217,6 +232,55 @@ class Function:
             except NotImplementedError:
                 debug('NotImplementedError for finding limit of "'+\
                         str(expr)+'"')
+            # if the function was not found to be periodic yet, try some
+            # common periods
+            if not self.periodic and not self.polynomial:
+                debug('Trying some common periods to determine if function '+\
+                        'is periodic')
+                self._test_common_periods()
+
+    def check_periodic(self, x):
+        l = len(x)
+        if l > 1:
+            for i in range(0,l-1):
+                if not self.periodic:
+                    for j in range(1, l):
+                        if not self.periodic:
+                            for n in range(1,11):
+                                if not self.periodic:
+                                    period = abs(n*(x[j] - x[i]))
+                                    self._test_period(period)
+
+
+    def _test_period(self, period):
+        pf = self.simp_expr.subs('x', 'x+period')
+        pf = pf.subs('period', period)
+        pf = simplify(pf)
+        g = simplify(str(self.simp_expr)+'-('+str(pf)+')')
+        if g == 0:
+            debug('Function is periodic and has a period of '+str(period)+\
+                    '. Smaller periods may exist.')
+            self.periodic = True
+            self.period = period
+
+    # checks the functions for some common periods
+    # multiples of 0.25 (up to 1)
+    # multiples of 1 (up to 4)
+    # multiples of pi/4 (up to 2*pi)
+    # multiples of pi (up to 4*pi)
+    def _test_common_periods(self):
+        period_list = []
+        for i in np.arange(pi, 5*pi, pi):
+            period_list.append(i)
+        for i in np.arange(1, 5, 1):
+            period_list.append(i)
+        for i in np.arange(pi/4, 2*pi+pi/4, pi/4):
+            period_list.append(i)
+        for i in np.arange(0.25, 1.25, 0.25):
+            period_list.append(i)
+        for period in period_list:
+            if not self.periodic:
+                self._test_period(period)
 
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
@@ -225,6 +289,9 @@ class Function:
         self.visible = True
         self.constant = False
         self.valid = True
+        self.polynomial = False
+        self.periodic = False
+        self.period = None
         self.expr = self._get_expr(expr)
        
         # simplifying helps with functions like y=x^2/x which is
@@ -241,5 +308,6 @@ class Function:
 
         if self.valid:
             self.mathtex_expr = self._get_mathtex_expr(self.simp_expr)
+            self.polynomial = self.simp_expr.is_polynomial()
             self.calc_poi()
 

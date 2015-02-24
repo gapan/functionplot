@@ -3,7 +3,7 @@
 
 from __future__ import division
 import numpy as np
-from sympy import simplify
+from sympy import simplify, pi
 from sympy.functions import Abs
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
@@ -180,6 +180,19 @@ class FunctionGraph:
             if y_min == y_max:
                 y_min = y_min-1
                 y_max = y_min+1
+            # find the max period of all functions involved and check if at
+            # least 2 periods are shown
+            periods = []
+            for f in self.functions:
+                if f.periodic:
+                    periods.append(f.period)
+            if len(periods) > 0:
+                max_period = float(max(periods))
+                x_range = x_max - x_min
+                x_middle = (x_max - x_min)/2
+                if x_range < 2*max_period:
+                    x_min = x_middle - 1.2*max_period
+                    x_max = x_middle + 1.2*max_period
             debug('Setting X limits to '+str(x_min)+' and '+str(x_max))
             debug('Setting Y limits to '+str(y_min)+' and '+str(y_max))
             self.x_min = x_min
