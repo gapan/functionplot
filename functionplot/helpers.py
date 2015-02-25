@@ -98,7 +98,7 @@ def rfc(x):
         real = re(xe)
         img = im(xe)
         try:
-            if abs(img) < 0.00000000000000001:
+            if abs(img) < 0.00000000000000001*abs(real):
                 debug(str(real)+' is actually a real.')
                 xc = float(real)
             else:
