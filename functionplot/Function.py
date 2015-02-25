@@ -158,7 +158,8 @@ class Function:
                 debug('Added x intercept at ('+str(xc)+',0)')
             # try to find if the function is periodic using the distance
             # between the x intercepts
-            if not self.periodic and not self.polynomial:
+            if self.likely_periodic and not self.periodic and \
+                    not self.polynomial:
                 debug('Checking if function is periodic using x intercepts.')
                 self.check_periodic(x)
             #
@@ -173,7 +174,8 @@ class Function:
                 if yc is not None:
                     self.poi.append(POI(xc, yc, 4))
                     debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
-            if not self.periodic and not self.polynomial:
+            if self.likely_periodic and not self.periodic and \
+                    not self.polynomial:
                 debug('Checking if function is periodic using min/max.')
                 self.check_periodic(x)
             #
@@ -189,7 +191,8 @@ class Function:
                     self.poi.append(POI(xc, yc, 5))
                     debug('Added inflection point at ('+\
                             str(xc)+','+str(yc)+')')
-            if not self.periodic and not self.polynomial:
+            if self.likely_periodic and not self.periodic and \
+                    not self.polynomial:
                 debug('Checking if function is periodic using inflection '+\
                         'points.')
                 self.check_periodic(x)
@@ -208,7 +211,8 @@ class Function:
                     self.poi.append(POI(xc, yc, 6))
                     debug('Added vertical asymptote ('+str(xc)+','+\
                             str(yc)+')')
-            if not self.periodic and not self.polynomial:
+            if self.likely_periodic and not self.periodic and \
+                    not self.polynomial:
                 debug('Checking if function is periodic using vertical '+\
                         'asymptotes.')
                 self.check_periodic(x)
@@ -239,23 +243,21 @@ class Function:
                         str(expr)+'"')
             # if the function was not found to be periodic yet, try some
             # common periods
-            if not self.periodic and not self.polynomial:
-                debug('Trying some common periods to determine if function '+\
-                        'is periodic')
+            if self.likely_periodic and not self.periodic and \
+                    not self.polynomial:
                 self._test_common_periods()
 
     def check_periodic(self, x):
-        l = len(x)
-        if l > 1:
-            for i in range(0,l-1):
-                if not self.periodic:
-                    for j in range(1, l):
-                        if not self.periodic:
-                            for n in range(1,11):
-                                if not self.periodic:
-                                    period = abs(n*(x[j] - x[i]))
-                                    self._test_period(period)
-
+            l = len(x)
+            if l > 1:
+                for i in range(0,l-1):
+                    if not self.periodic:
+                        for j in range(1, l):
+                            if not self.periodic:
+                                for n in range(1,11):
+                                    if not self.periodic:
+                                        period = abs(n*(x[j] - x[i]))
+                                        self._test_period(period)
 
     def _test_period(self, period):
         if period != 0:
@@ -275,6 +277,8 @@ class Function:
     # multiples of pi/4 (up to 2*pi)
     # multiples of pi (up to 4*pi)
     def _test_common_periods(self):
+        debug('Trying some common periods to determine if function '+\
+                'is periodic')
         period_list = []
         for i in np.arange(pi, 5*pi, pi):
             period_list.append(i)
@@ -288,6 +292,17 @@ class Function:
             if not self.periodic:
                 self._test_period(period)
 
+    def _check_likely_periodic(self):
+        e = str(self.simp_expr)
+        # only test for periods for trig functions
+        if 'sin(' in e or 'cos(' in e or 'tan(' in e or 'cot(' in e or \
+                'sec(' in e or 'csc(' in e:
+            self.likely_periodic = True
+            debug('Function could be periodic.')
+        else:
+            self.likely_periodic = False
+            debug('Function cannot be periodic.')
+
     def __init__(self, expr, xylimits):
         # the number of points to calculate within the graph using the
         # function
@@ -296,6 +311,7 @@ class Function:
         self.constant = False
         self.valid = True
         self.polynomial = False
+        self.likely_periodic = False
         self.periodic = False
         self.period = None
         self.expr = self._get_expr(expr)
@@ -315,5 +331,7 @@ class Function:
         if self.valid:
             self.mathtex_expr = self._get_mathtex_expr(self.simp_expr)
             self.polynomial = self.simp_expr.is_polynomial()
+            if not self.polynomial:
+                self._check_likely_periodic()
             self.calc_poi()
 
