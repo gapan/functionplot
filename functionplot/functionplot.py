@@ -271,8 +271,8 @@ class GUI:
             self.ax.annotate('(0,0)', (0, 0), xytext=(-4, -4),
                     textcoords='offset points', ha='right', va='top')
 
-        self.ax.set_xlim(x_min, x_max)
-        self.ax.set_ylim(y_min, y_max)
+        self.ax.set_xlim(float(x_min), float(x_max))
+        self.ax.set_ylim(float(y_min), float(y_max))
         legend = []
 
         for f in self.fg.functions:

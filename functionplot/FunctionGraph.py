@@ -191,8 +191,8 @@ class FunctionGraph:
                 x_range = x_max - x_min
                 x_middle = (x_max - x_min)/2
                 if x_range < 2*max_period:
-                    x_min = x_middle - 1.2*max_period
-                    x_max = x_middle + 1.2*max_period
+                    x_min = float(x_middle - 1.2*max_period)
+                    x_max = float(x_middle + 1.2*max_period)
             debug('Setting X limits to '+str(x_min)+' and '+str(x_max))
             debug('Setting Y limits to '+str(y_min)+' and '+str(y_max))
             self.x_min = x_min
