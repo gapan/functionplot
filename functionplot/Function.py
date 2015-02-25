@@ -138,10 +138,15 @@ class Function:
         #
         debug('Looking for the y intercept for: '+str(expr))
         y = expr.subs('x', 0)
-        yc = rfc(y)
-        if yc is not None:
-            self.poi.append(POI(0, yc, 3))
-            debug('Added y intercept at (0,'+str(yc)+')')
+        if str(y) == 'zoo':
+            debug('The Y axis is actually a vertical asymptote.')
+            self.poi.append(POI(0, 0, 6))
+            debug('Added vertical asymptote (0,0)')
+        else:
+            yc = rfc(y)
+            if yc is not None:
+                self.poi.append(POI(0, yc, 3))
+                debug('Added y intercept at (0,'+str(yc)+')')
         if not self.constant:
             #
             # x intercepts
