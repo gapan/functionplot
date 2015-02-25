@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
-# pod function borrowed from the sympy project. It will be available in a
-# future sympy release:
-# https://github.com/hargup/sympy/blob/e8d07985635bc4d7ee42c22534073ac9433231c3/sympy/calculus/discontinuity.py
+# pod function borrowed from the sympy project bug tracker.
+# It will be available in a future sympy release. See:
+# http://goo.gl/7HdtGJ
 
 from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
@@ -73,15 +73,16 @@ def fsolve(expr):
     except NotImplementedError:
         debug('NotImplementedError for solving "'+str(expr)+'"')
     except TypeError:
-        debug('TypeError exception. This was not supposed to happen. '+\
-                'Probably a bug in sympy.')
+        debug('TypeError exception. This was not supposed to '+\
+                'happen. Probably a bug in sympy.')
     return xl
 
 def rfc(x):
     '''
     rfc - Real From Complex
-    This tries to detect if a complex number as given by sympy is actually
-    a real number. If it is, then it returns the real part as a float.
+    This tries to detect if a complex number as given by sympy is
+    actually a real number. If it is, then it returns the real part
+    as a float.
     '''
     try:
         xc = round(float(x), 15)
@@ -104,12 +105,15 @@ def rfc(x):
             else:
                 debug('Yes, it is probably a complex.')
                 xc = None
-        # another TypeError is raised if we have a function with abs()
+        # another TypeError is raised if we have a function with
+        # abs()
         # this is a hack but appears to work
+        # FIXME: I don't think this is needed for abs() anymore.
         except TypeError:
             try:
                 xc = eval(str(xe))
-                debug('Looks like a solution for an abs() function: '+str(xc))
+                debug('Looks like a solution for an abs() '+\
+                        'function: '+str(xc))
             except NameError:
                 debug('Cannot really tell. I give up.')
                 xc = None
@@ -129,8 +133,8 @@ def percentile(plist, perc):
 
 def remove_outliers(plist):
     '''
-    This function takes a list (of floats/ints) and returns the list, having
-    replaced any outliers with the median value of the list.
+    This function takes a list (of floats/ints) and returns the list,
+    having replaced any outliers with the median value of the list.
     '''
     q1 = percentile(plist, 25)
     q3 = percentile(plist, 75)
@@ -149,9 +153,9 @@ def remove_outliers(plist):
         for i in range(0,len(plist)):
             if plist[i] < min_lim or plist[i] > max_lim:
                 debug('Found outlier: '+str(plist[i]))
-                # if outliers are detected, replace their values with the
-                # median. That way it's easier to just set the axis limits to
-                # the min/max of the remaining values.
+                # if outliers are detected, replace their values with
+                # the median. That way it's easier to just set the
+                # axis limits to the min/max of the remaining values.
                 plist[i] = m
     return plist
 

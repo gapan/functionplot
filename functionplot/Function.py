@@ -20,14 +20,15 @@ class Function:
             y = eval(self.np_expr)
         except:
             return False
-        # no need to calculate values that are off the displayed scale
-        # this fixes some trouble with asymptotes like in tan(x)
+        # no need to calculate values that are off the displayed
+        # scale. This fixes some trouble with asymptotes like in
+        # tan(x).
         # FIXME: unfortunately there is more trouble with asymptotes
         try:
             y[y>y_max] = np.inf
             y[y<y_min] = np.inf
-        # if f(x)=a, make sure that y is an array with the same size as x and
-        # with a constant value.
+        # if f(x)=a, make sure that y is an array with the same size
+        # as x and with a constant value.
         except TypeError:
             debug('This looks like a constant function: '+self.np_expr)
             self.constant = True
@@ -55,7 +56,8 @@ class Function:
         expr = expr.replace('\xcf\x83\xcf\x85\xce\xbd(', 'cos(')
         expr = expr.replace('\xce\xb5\xcf\x86(', 'tan(')
         expr = expr.replace('\xcf\x83\xcf\x86(', 'cot(')
-        expr = expr.replace('\xcf\x83\xcf\x84\xce\xb5\xce\xbc(', 'csc(')
+        expr = expr.replace('\xcf\x83\xcf\x84\xce\xb5\xce\xbc(',
+                'csc(')
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
@@ -74,13 +76,14 @@ class Function:
         expr = expr.replace('cos(', 'np.cos(')
         expr = expr.replace('tan(', 'np.tan(')
         expr = expr.replace('cot(', '1/np.tan(') # no cot in numpy
-        expr = expr.replace('sec(', '1/np.cos(') # no sec or csc either
-        expr = expr.replace('csc(', '1/np.sin(')
+        expr = expr.replace('sec(', '1/np.cos(') # no sec,
+        expr = expr.replace('csc(', '1/np.sin(') # and no csc either
         # correct log functions
         expr = expr.replace('log(', 'np.log(')
         # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
-        # absolute value. For numpy, turn the sympy Abs function to np.abs
+        # absolute value. For numpy, turn the sympy Abs function
+        # to np.abs
         expr = expr.replace('Abs(', 'np.abs(')
         # pi and e
         expr = expr.replace('pi', 'np.pi')
@@ -90,20 +93,24 @@ class Function:
         return expr
     
     def _simplify_expr(self, expr):
-        # sympy.functions.Abs is imported as Abs so we're using it that way
-        # with sympy
+        # sympy.functions.Abs is imported as Abs so we're using it
+        # that way with sympy
         expr = expr.replace('abs(', 'Abs(')
-        # we need to convert e to a float value. Since sec() is the only
-        # function that also includes an "e", we'll remove that temporarily
+        # we need to convert e to a float value. Since sec() is the
+        # only function that also includes an "e", we'll remove
+        # that temporarily
         expr = expr.replace('sec(', 'scc(')
         expr = expr.replace('e', '2.7183')
         expr = expr.replace('scc(', 'sec(')
-        # sympy only supports natural logarithms and log(x) = ln(x). For log
-        # base 10, we'll do the convertion manually:
-        # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 = 0.4342944819*ln(x)
+        # sympy only supports natural logarithms and log(x) = ln(x).
+        # For log base 10, we'll do the convertion manually:
+        # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 =
+        #  = 0.4342944819*ln(x)
+        # This is a hack, but appears to should work fine (at least
+        # in most cases).
         # The number of decimal points is restricted to 4, otherwise
-        # calculations could take a really long time. 4 is good enough in any
-        # case. Example for f(x) = log(x)-1:
+        # calculations could take a really long time. 4 is good
+        # enough in any case. Example for f(x) = log(x)-1:
         # - 3 decimals: 152ms
         # - 4 decimals: 228ms
         # - 5 decimals: 301ms
@@ -112,13 +119,14 @@ class Function:
         expr = expr.replace('log(', '0.4343*ln(')
 
         simp_expr = simplify(expr)
-        debug('"'+expr+'" has been simplified to "'+str(simp_expr)+'"')
+        debug('"'+expr+'" has been simplified to "'+\
+                str(simp_expr)+'"')
         return simp_expr
 
 
     def _get_mathtex_expr(self, expr):
-        # expr is a simplified sympy expression. Creates a LaTeX string from
-        # the expression using sympy latex printing.
+        # expr is a simplified sympy expression. Creates a LaTeX
+        # string from the expression using sympy latex printing.
         e = latex(expr)
         e = e.replace('0.4343 \\log{', '\\log10{')
         e = e.replace('log{', 'ln{')
@@ -157,11 +165,12 @@ class Function:
             for xc in x:
                 self.poi.append(POI(xc, 0, 2))
                 debug('Added x intercept at ('+str(xc)+',0)')
-            # try to find if the function is periodic using the distance
-            # between the x intercepts
+            # try to find if the function is periodic using the
+            # distance between the x intercepts
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
-                debug('Checking if function is periodic using x intercepts.')
+                debug('Checking if function is periodic using'+\
+                        ' x intercepts.')
                 self.check_periodic(x)
             #
             # min/max
@@ -174,10 +183,12 @@ class Function:
                 yc = rfc(y)
                 if yc is not None:
                     self.poi.append(POI(xc, yc, 4))
-                    debug('Added local min/max at ('+str(xc)+','+str(yc)+')')
+                    debug('Added local min/max at ('+str(xc)+','+\
+                            str(yc)+')')
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
-                debug('Checking if function is periodic using min/max.')
+                debug('Checking if function is periodic using'+\
+                        ' min/max.')
                 self.check_periodic(x)
             #
             # inflection points
@@ -194,8 +205,8 @@ class Function:
                             str(xc)+','+str(yc)+')')
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
-                debug('Checking if function is periodic using inflection '+\
-                        'points.')
+                debug('Checking if function is periodic using'+\
+                        ' inflection points.')
                 self.check_periodic(x)
             #
             # vertical asymptotes
@@ -214,36 +225,37 @@ class Function:
                             str(yc)+')')
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
-                debug('Checking if function is periodic using vertical '+\
-                        'asymptotes.')
+                debug('Checking if function is periodic using'+\
+                        ' vertical asymptotes.')
                 self.check_periodic(x)
             #
             # horizontal asymptotes
             #
             #FIXME: implement this
-            # if the limit(x->+oo)=a, or limit(x->-oo)=a, then y=a is a
-            # horizontal asymptote.
+            # if the limit(x->+oo)=a, or limit(x->-oo)=a, then
+            # y=a is a horizontal asymptote.
             # sympy: limit(expr, x, oo)
-            debug('Looking for horizontal asymptotes for: '+str(expr))
+            debug('Looking for horizontal asymptotes for: '+\
+                    str(expr))
             try:
                 lr = limit(expr, 'x', 'oo')
                 ll = limit(expr, 'x', '-oo')
                 if 'oo' not in str(lr):
-                    debug('Found a horizontal asymptote at y='+str(lr)+\
-                            ' as x->+oo.')
+                    debug('Found a horizontal asymptote at y='+\
+                            str(lr)+' as x->+oo.')
                     self.poi.append(POI(0, lr, 7))
                 if 'oo' not in str(ll):
                     if ll == lr:
                         debug('Same horizontal asymptote as x->-oo.')
                     else:
-                        debug('Found a horizontal asymptote at y='+str(ll)+\
-                                ' as x->-oo')
+                        debug('Found a horizontal asymptote at y='+\
+                                str(ll)+' as x->-oo')
                         self.poi.append(POI(0, ll, 7))
             except NotImplementedError:
                 debug('NotImplementedError for finding limit of "'+\
                         str(expr)+'"')
-            # if the function was not found to be periodic yet, try some
-            # common periods
+            # if the function was not found to be periodic yet, try
+            # some common periods
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
                 self._test_common_periods()
@@ -267,8 +279,8 @@ class Function:
             pf = simplify(pf)
             g = simplify(str(self.simp_expr)+'-('+str(pf)+')')
             if g == 0:
-                debug('Function is periodic and has a period of '+str(period)+\
-                        '. Smaller periods may exist.')
+                debug('Function is periodic and has a period of '+\
+                        str(period)+'. Smaller periods may exist.')
                 self.periodic = True
                 self.period = period
 
@@ -278,8 +290,8 @@ class Function:
     # multiples of pi/4 (up to 2*pi)
     # multiples of pi (up to 4*pi)
     def _test_common_periods(self):
-        debug('Trying some common periods to determine if function '+\
-                'is periodic')
+        debug('Trying some common periods to determine if '+\
+                'function is periodic')
         period_list = []
         for i in np.arange(pi, 5*pi, pi):
             period_list.append(i)
@@ -296,8 +308,8 @@ class Function:
     def _check_trigonometric(self):
         e = str(self.simp_expr)
         # only test for periods for trig functions
-        if 'sin(' in e or 'cos(' in e or 'tan(' in e or 'cot(' in e or \
-                'sec(' in e or 'csc(' in e:
+        if 'sin(' in e or 'cos(' in e or 'tan(' in e or \
+                'cot(' in e or 'sec(' in e or 'csc(' in e:
             self.trigonometric = True
             debug('Function could be periodic.')
         else:
@@ -305,8 +317,8 @@ class Function:
             debug('Function cannot be periodic.')
 
     def __init__(self, expr, xylimits):
-        # the number of points to calculate within the graph using the
-        # function
+        # the number of points to calculate within the graph using
+        # the function
         self.resolution = 1000
         self.visible = True
         self.constant = False
@@ -330,7 +342,8 @@ class Function:
         self.poi = []
 
         if self.valid:
-            self.mathtex_expr = self._get_mathtex_expr(self.simp_expr)
+            self.mathtex_expr = \
+                    self._get_mathtex_expr(self.simp_expr)
             self.polynomial = self.simp_expr.is_polynomial()
             if not self.polynomial:
                 self._check_trigonometric()

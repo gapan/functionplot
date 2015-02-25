@@ -14,8 +14,8 @@ from matplotlib.figure import Figure
 #    as FigureCanvas
 from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg \
     as FigureCanvas
-#from matplotlib.backends.backend_gtkcairo import FigureCanvasGTKCairo \
-#    as FigureCanvas
+#from matplotlib.backends.backend_gtkcairo import \
+#    FigureCanvasGTKCairo as FigureCanvas
 from FunctionGraph import FunctionGraph
 
 import logging
@@ -34,8 +34,8 @@ gtk.glade.textdomain("functionplot")
 #Initializing the gtk's thread engine
 gtk.gdk.threads_init()
 
-# Use the stix fonts for matplotlib mathtext. They blend better with Times New
-# Roman.
+# Use the stix fonts for matplotlib mathtext.
+# They blend better with Times New Roman.
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 
 def threaded(f):
@@ -45,13 +45,14 @@ def threaded(f):
     return wrapper
 
 class CenteredFormatter(matplotlib.ticker.ScalarFormatter):
-    """Acts exactly like the default Scalar Formatter, but yields an empty 
-    label for ticks at the origin."""
+    """Acts exactly like the default Scalar Formatter, but yields an
+    empty label for ticks at the origin."""
     def __call__(self, value, pos=None):
         if value == 0:
             return ''
         else:
-            return matplotlib.ticker.ScalarFormatter.__call__(self, value, pos)
+            return matplotlib.ticker.ScalarFormatter.__call__(self,
+                    value, pos)
 
 class GUI:
     #
@@ -196,9 +197,9 @@ class GUI:
         self.graph_update()
 
     # when moving the mouse, while holding down the mouse button (any
-    # mouse button - that makes nice middle-click pan and zoom possible)
-    # calculate how much the mouse has travelled and adjust the graph
-    # accordingly
+    # mouse button - that makes nice middle-click pan and zoom
+    # possible) calculate how much the mouse has travelled and adjust
+    # the graph accordingly
     def pan_motion(self, event):
         if self.mousebutton_press is None: return
         if event.inaxes != self.ax: return
@@ -283,12 +284,14 @@ class GUI:
                 xp = []
                 yp = []
                 for p in f.poi:
-                    # don't plot vertical or horizontal asymptotes here
+                    # don't plot vertical or horizontal asymptotes
+                    # here. We'll do it later
                     if p.point_type < 6:
                         #FIXME: if point type enabled
                         xp.append(p.x)
                         yp.append(p.y)
-                    self.ax.scatter(xp, yp, s=80, c=color, linewidths=0)
+                    self.ax.scatter(xp, yp, s=80, c=color,
+                            linewidths=0)
                 # plot asymptotes now
                 xp = []
                 yp = []
@@ -297,8 +300,8 @@ class GUI:
                         xp.append(p.x)
                         yp.append(0)
                         # vertical asymptotes are plotted as 'x'
-                        self.ax.scatter(xp, yp, s=80, marker='x', c=color, 
-                                linewidths=2)
+                        self.ax.scatter(xp, yp, s=80, marker='x',
+                                c=color, linewidths=2)
                 xp = []
                 yp = []
                 for p in f.poi:
@@ -306,8 +309,8 @@ class GUI:
                         xp.append(0)
                         yp.append(p.y)
                         # horizontal asymptotes are plotted as '+'
-                        self.ax.scatter(xp, yp, s=80, marker='+', c=color, 
-                                linewidths=2)
+                        self.ax.scatter(xp, yp, s=80, marker='+',
+                                c=color, linewidths=2)
                 # add function to legend
                 legend.append(f.mathtex_expr)
         xp = []
@@ -319,8 +322,8 @@ class GUI:
         self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
                 linewidths=0)
         if self.fg.show_legend:
-            self.ax.legend(legend, loc='upper right', bbox_to_anchor=(1,1),
-                    fontsize=18)
+            self.ax.legend(legend, loc='upper right',
+                    bbox_to_anchor=(1,1), fontsize=18)
         self.ax.figure.canvas.draw()
         # check/uncheck the toolbutton for auto-adjustment
         self.btn_auto.set_active(self.fg.auto)
@@ -331,7 +334,8 @@ class GUI:
         index = 0
         for f in self.fg.functions:
             if f.visible:
-                color = self.color[visible_functions % len(self.color)]
+                color = self.color[visible_functions % \
+                        len(self.color)]
                 visible_functions += 1
             else:
                 color = '#999999'
@@ -517,7 +521,8 @@ class GUI:
                 self.filename = filename
             except:
                 self.label_open_error.\
-                    set_text(_("File doesn't look like a FunctionPlot file."))
+                    set_text(\
+                    _("File doesn't look like a FunctionPlot file."))
                 self.dialog_file_open_error.show()
         except:
             self.label_open_error.set_text(_('Error reading file.'))
@@ -554,8 +559,8 @@ class GUI:
                     self.dialog_overwrite.show()
                 else:
                     saved = self._save()
-        # TypeError is raised if the filename is empty, or only spaces, or has
-        # invalid characters.
+        # TypeError is raised if the filename is empty, or only
+        # spaces, or has invalid characters.
         except TypeError:
             pass
 
@@ -617,8 +622,8 @@ class GUI:
                     self.dialog_export_overwrite.show()
                 else:
                     saved = self._export()
-        # TypeError is raised if the filename is empty, or only spaces, or has
-        # invalid characters.
+        # TypeError is raised if the filename is empty, or only
+        # spaces, or has invalid characters.
         except TypeError:
             pass
 
@@ -626,7 +631,8 @@ class GUI:
     def on_button_export_cancel_clicked(self, widget):
         self.fcdialog_export.hide()
 
-    def on_filechooserdialog_export_delete_event(self, widget, event):
+    def on_filechooserdialog_export_delete_event(self, widget,
+            event):
         self.fcdialog_export.hide()
         return True
 
@@ -648,7 +654,8 @@ class GUI:
     def on_button_export_error_close_clicked(self, widget):
         self.dialog_file_export_error.hide()
 
-    def on_dialog_file_export_error_delete_event(self, widget, event):
+    def on_dialog_file_export_error_delete_event(self, widget,
+            event):
         self.dialog_file_export_error.hide()
         return True
 
@@ -676,9 +683,10 @@ class GUI:
             self.dialog_file_export_error.show()
 
     def __init__(self):
-        # Only a few colors defined. Hard to find more that will stand out.
-        # If there are more functions, colors will cycle from the start
-        # colors were taken from http://latexcolor.com/
+        # Only a few colors defined. Hard to find more that will
+        # stand out. If there are more functions, colors will cycle
+        # from the start.
+        # colors were taken mostly from http://latexcolor.com/
         self.color = ['#4F81BD', # blue
                 '#C0504D',# red
                 '#9BBB59',# green
@@ -697,7 +705,8 @@ class GUI:
         self.export_filename = None
         # create a FunctionGraph object
         self.fg = FunctionGraph()
-        # we need this to keep track if the file has changed since last save
+        # we need this to keep track if the file has changed since
+        # last save
         self.changed = False 
         # we'll need this for panning
         self.mousebutton_press = None
@@ -714,7 +723,8 @@ class GUI:
         # menus
         self.imagemenuitem_quit = \
             builder.get_object('imagemenuitem_quit')
-        self.checkmenuitem_legend = builder.get_object('checkmenuitem_legend')
+        self.checkmenuitem_legend = \
+            builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
         # main toolbar
         self.btn_auto = builder.get_object('btn_auto')
@@ -729,23 +739,31 @@ class GUI:
         self.canvas = FigureCanvas(self.fig)
         self.table.attach(self.canvas, 0, 1, 0, 1)
         # function list
-        self.ls_functions = builder.get_object('liststore_functions')
+        self.ls_functions = \
+            builder.get_object('liststore_functions')
         self.ls_functions.clear()
-        self.treeview_functions = builder.get_object('treeview_functions')
-        self.cr_toggle_visible = builder.get_object('cr_toggle_visible')
+        self.treeview_functions = \
+            builder.get_object('treeview_functions')
+        self.cr_toggle_visible = \
+            builder.get_object('cr_toggle_visible')
         # catch mouse wheel scroll
         self.canvas.mpl_connect('scroll_event', self.wheel_zoom)
         # catch click and pan
-        self.canvas.mpl_connect('button_press_event', self.pan_press)
-        self.canvas.mpl_connect('button_release_event', self.pan_release)
-        self.canvas.mpl_connect('motion_notify_event', self.pan_motion)
+        self.canvas.mpl_connect('button_press_event',
+                self.pan_press)
+        self.canvas.mpl_connect('button_release_event',
+                self.pan_release)
+        self.canvas.mpl_connect('motion_notify_event',
+                self.pan_motion)
         self.graph_update()
 
         #
         # file open/save dialogs
         #
-        self.fcdialog_open = builder.get_object('filechooserdialog_open')
-        self.fcdialog_save = builder.get_object('filechooserdialog_save')
+        self.fcdialog_open = \
+            builder.get_object('filechooserdialog_open')
+        self.fcdialog_save = \
+            builder.get_object('filechooserdialog_save')
         filefilter = gtk.FileFilter()
         filefilter.set_name(_('FunctionPlot files'))
         filefilter.add_pattern('*.functionplot')
@@ -754,19 +772,24 @@ class GUI:
         self.fcdialog_save.add_filter(filefilter)
         self.dialog_file_open_error = \
             builder.get_object('dialog_file_open_error')
-        self.label_open_error = builder.get_object('label_open_error')
+        self.label_open_error = \
+            builder.get_object('label_open_error')
         self.dialog_file_save_error = \
             builder.get_object('dialog_file_save_error')
         self.folder = os.path.expanduser("~")
         # overwrite dialog
-        self.dialog_overwrite = builder.get_object('dialog_overwrite')
+        self.dialog_overwrite = \
+            builder.get_object('dialog_overwrite')
         self.label_overwrite = builder.get_object('label_overwrite')
         # confirm open dialog
-        self.dialog_confirm_open = builder.get_object('dialog_confirm_open')
+        self.dialog_confirm_open = \
+            builder.get_object('dialog_confirm_open')
         # confirm new dialog
-        self.dialog_confirm_new = builder.get_object('dialog_confirm_new')
+        self.dialog_confirm_new = \
+            builder.get_object('dialog_confirm_new')
         # export dialogs
-        self.fcdialog_export = builder.get_object('filechooserdialog_export')
+        self.fcdialog_export = \
+            builder.get_object('filechooserdialog_export')
         exportfilter = gtk.FileFilter()
         exportfilter.set_name(_('PNG image files'))
         exportfilter.add_pattern('*.png')
@@ -779,11 +802,14 @@ class GUI:
         #
         # Add function dialog
         #
-        self.dialog_add_function = builder.get_object('dialog_add_function')
+        self.dialog_add_function = \
+            builder.get_object('dialog_add_function')
         self.entry_function = builder.get_object('entry_function')
-        self.dialog_add_error = builder.get_object('dialog_add_error')
+        self.dialog_add_error = \
+            builder.get_object('dialog_add_error')
         # Calculating... window
-        self.window_calculating = builder.get_object('window_calculating')
+        self.window_calculating = \
+            builder.get_object('window_calculating')
 
         # Connect all signals
         builder.connect_signals(self)

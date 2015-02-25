@@ -110,7 +110,8 @@ class FunctionGraph:
             for f in self.functions:
                 if f.visible:
                     for p in f.poi:
-                        # don't add vertical or horizontal asymptotes here
+                        # don't add vertical or horizontal
+                        # asymptotes here
                         if p.point_type < 6:
                             point = [p.x, p.y]
                             if point not in points:
@@ -128,7 +129,8 @@ class FunctionGraph:
             # asymptotes
             # we need a trick to put asymptotes far away, but also
             # show them on the x axis. So, if there are any
-            # asymptotes, we increase the size of the respective axis 2 times.
+            # asymptotes, we increase the size of the respective
+            # axis 2 times.
             # FIXME: there should be a better way to do this
             for f in self.functions:
                 if f.visible:
@@ -172,16 +174,16 @@ class FunctionGraph:
             if horizontal_asymptotes:
                 x_min = x_min - x_range
                 x_max = x_max + x_range
-            # take care of edge cases, where all poi in an axis have the same
-            # coordinate.
+            # take care of edge cases, where all poi in an axis have
+            # the same coordinate.
             if x_min == x_max:
                 x_min = x_min-1
                 x_max = x_min+1
             if y_min == y_max:
                 y_min = y_min-1
                 y_max = y_min+1
-            # find the max period of all functions involved and check if at
-            # least 2 periods are shown
+            # find the max period of all functions involved and check
+            # if at least 2 periods are shown
             periods = []
             for f in self.functions:
                 if f.periodic:
@@ -193,8 +195,10 @@ class FunctionGraph:
                 if x_range < 2*max_period:
                     x_min = float(x_middle - 1.2*max_period)
                     x_max = float(x_middle + 1.2*max_period)
-            debug('Setting X limits to '+str(x_min)+' and '+str(x_max))
-            debug('Setting Y limits to '+str(y_min)+' and '+str(y_max))
+            debug('Setting X limits to '+\
+                    str(x_min)+' and '+str(x_max))
+            debug('Setting Y limits to '+\
+                    str(y_min)+' and '+str(y_max))
             self.x_min = x_min
             self.x_max = x_max
             self.y_min = y_min
