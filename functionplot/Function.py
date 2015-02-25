@@ -258,15 +258,16 @@ class Function:
 
 
     def _test_period(self, period):
-        pf = self.simp_expr.subs('x', 'x+period')
-        pf = pf.subs('period', period)
-        pf = simplify(pf)
-        g = simplify(str(self.simp_expr)+'-('+str(pf)+')')
-        if g == 0:
-            debug('Function is periodic and has a period of '+str(period)+\
-                    '. Smaller periods may exist.')
-            self.periodic = True
-            self.period = period
+        if period != 0:
+            pf = self.simp_expr.subs('x', 'x+period')
+            pf = pf.subs('period', period)
+            pf = simplify(pf)
+            g = simplify(str(self.simp_expr)+'-('+str(pf)+')')
+            if g == 0:
+                debug('Function is periodic and has a period of '+str(period)+\
+                        '. Smaller periods may exist.')
+                self.periodic = True
+                self.period = period
 
     # checks the functions for some common periods
     # multiples of 0.25 (up to 1)
