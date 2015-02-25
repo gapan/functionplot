@@ -84,7 +84,7 @@ def rfc(x):
     a real number. If it is, then it returns the real part as a float.
     '''
     try:
-        xc = float(x)
+        xc = round(float(x), 15)
     # TypeError is thrown for complex solutions during casting
     # to float. We only want real solutions.
     except TypeError:
@@ -100,7 +100,7 @@ def rfc(x):
         try:
             if abs(img) < 0.00000000000000001*abs(real):
                 debug(str(real)+' is actually a real.')
-                xc = float(real)
+                xc = round(float(real),15)
             else:
                 debug('Yes, it is probably a complex.')
                 xc = None
