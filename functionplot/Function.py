@@ -138,7 +138,7 @@ class Function:
         #
         debug('Looking for the y intercept for: '+str(expr))
         y = expr.subs('x', 0)
-        if str(y) == 'zoo':
+        if str(y) == 'zoo': # 'zoo' is imaginary infinity
             debug('The Y axis is actually a vertical asymptote.')
             self.poi.append(POI(0, 0, 6))
             debug('Added vertical asymptote (0,0)')
