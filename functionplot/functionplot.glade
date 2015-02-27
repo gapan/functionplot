@@ -1387,6 +1387,8 @@
     <property name="width_request">750</property>
     <property name="height_request">500</property>
     <property name="can_focus">False</property>
+    <property name="title">FunctionPlot</property>
+    <property name="icon_name">document-page-setup</property>
     <signal name="delete-event" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -1902,6 +1904,9 @@
                     <property name="bottom_attach">2</property>
                     <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
