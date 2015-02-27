@@ -106,7 +106,7 @@ class Function:
         # For log base 10, we'll do the convertion manually:
         # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 =
         #  = 0.4342944819*ln(x)
-        # This is a hack, but appears to should work fine (at least
+        # This is a hack, but appears to work fine (at least
         # in most cases).
         # The number of decimal points is restricted to 4, otherwise
         # calculations could take a really long time. 4 is good
