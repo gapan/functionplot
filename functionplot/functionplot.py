@@ -719,6 +719,20 @@ class GUI:
         # Main Window
         #
         self.window = builder.get_object('functionplot')
+        # Adjust window size to 80% of working area
+        try:
+            print 'trying'
+            w = gtk.gdk.get_default_root_window()
+            p = gtk.gdk.atom_intern('_NET_WORKAREA')
+            workarea_width, workarea_height = w.property_get(p)[2][2:4]
+            width = int(workarea_width*0.8)
+            height = int(workarea_height*0.8)
+            print width, height
+        except TypeError:
+            print 'typerrro'
+            width = 700
+            height= 500
+        self.window.set_default_size(width, height)
         #self.window.maximize()
         # menus
         self.imagemenuitem_quit = \
@@ -814,6 +828,8 @@ class GUI:
         # Connect all signals
         builder.connect_signals(self)
         self.window.show_all()
+
+
 
 if __name__ == "__main__":
     app = GUI()
