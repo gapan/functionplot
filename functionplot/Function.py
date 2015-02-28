@@ -30,7 +30,8 @@ class Function:
         # if f(x)=a, make sure that y is an array with the same size
         # as x and with a constant value.
         except TypeError:
-            debug('This looks like a constant function: '+self.np_expr)
+            debug('This looks like a constant function: '+\
+                    self.np_expr)
             self.constant = True
             l = len(x)
             yarr = np.ndarray([l,])
@@ -231,10 +232,8 @@ class Function:
             #
             # horizontal asymptotes
             #
-            #FIXME: implement this
             # if the limit(x->+oo)=a, or limit(x->-oo)=a, then
             # y=a is a horizontal asymptote.
-            # sympy: limit(expr, x, oo)
             debug('Looking for horizontal asymptotes for: '+\
                     str(expr))
             try:
