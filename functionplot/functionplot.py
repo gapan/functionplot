@@ -721,15 +721,12 @@ class GUI:
         self.window = builder.get_object('functionplot')
         # Adjust window size to 80% of working area
         try:
-            print 'trying'
             w = gtk.gdk.get_default_root_window()
             p = gtk.gdk.atom_intern('_NET_WORKAREA')
             workarea_width, workarea_height = w.property_get(p)[2][2:4]
             width = int(workarea_width*0.8)
             height = int(workarea_height*0.8)
-            print width, height
         except TypeError:
-            print 'typerrro'
             width = 700
             height= 500
         self.window.set_default_size(width, height)
