@@ -221,20 +221,24 @@ class FunctionGraph:
                         '" and "'+g.expr+'".')
                 #FIXME: maybe I can do away with simplify here?
                 d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
-                ds = simplify(d)
-                x = fsolve(ds)
-                for i in x:
-                    y = f.simp_expr.subs('x', i)
-                    xc = rfc(i)
-                    yc = rfc(y)
-                    if xc is not None and yc is not None:
-                        pc = [xc, yc]
-                        p = POI(xc, yc, 1)
-                        if pc not in plist:
-                            plist.append(pc)
-                            self.poi.append(p)
-                            debug('New intercept point: ('+\
-                                    str(xc)+','+str(yc)+')')
+                try:
+                    ds = simplify(d)
+                    x = fsolve(ds)
+                    for i in x:
+                        y = f.simp_expr.subs('x', i)
+                        xc = rfc(i)
+                        yc = rfc(y)
+                        if xc is not None and yc is not None:
+                            pc = [xc, yc]
+                            p = POI(xc, yc, 1)
+                            if pc not in plist:
+                                plist.append(pc)
+                                self.poi.append(p)
+                                debug('New intercept point: ('+\
+                                        str(xc)+','+str(yc)+')')
+                except ValueError:
+                    debug('ValueError exception. Probably a '+\
+                            'bug in sympy.')
 
     def clear(self):
         self.x_min = -1.2
