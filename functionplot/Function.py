@@ -292,15 +292,8 @@ class Function:
     def _test_common_periods(self):
         debug('Trying some common periods to determine if '+\
                 'function is periodic')
-        period_list = []
-        for i in np.arange(pi, 5*pi, pi):
-            period_list.append(i)
-        for i in np.arange(1, 5, 1):
-            period_list.append(i)
-        for i in np.arange(pi/4, 2*pi+pi/4, pi/4):
-            period_list.append(i)
-        for i in np.arange(0.25, 1.25, 0.25):
-            period_list.append(i)
+        period_list = [pi, 2*pi, 3*pi, 4*pi, 3*pi/4,
+                1, 2, 3, 4, 0.75]
         for period in period_list:
             if not self.periodic:
                 self._test_period(period)
