@@ -14,7 +14,7 @@ class Function:
     
     def update_graph_points(self, xylimits):
         x_min, x_max, y_min, y_max = xylimits
-        x = np.arange(x_min, x_max, (x_max-x_min)/self.resolution)
+        x = np.linspace(x_min, x_max, self.resolution)
         # if it doesn't evaluate, the expression is wrong
         try:
             y = eval(self.np_expr)
