@@ -155,7 +155,7 @@ class Function:
             debug('Added vertical asymptote (0,0)')
         else:
             yc = rfc(y)
-            if yc is not None:
+            if yc is not None and 'inf' not in str(yc):
                 self.poi.append(POI(0, yc, 3))
                 debug('Added y intercept at (0,'+str(yc)+')')
         if not self.constant:
