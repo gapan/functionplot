@@ -164,7 +164,7 @@ class GUI:
         if iter is not None:
             index = self.ls_functions.get_value(iter, 3)
             self.fg.functions.pop(index)
-            self.fg.calc_intercepts()
+            self.fg.calc_intersections()
             self.update_function_list()
             self.graph_update()
             self.changed = True

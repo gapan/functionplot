@@ -92,7 +92,7 @@ class FunctionGraph:
         f = Function(expr, xylimits)
         if f.valid:
             self.functions.append(f)
-            self.calc_intercepts()
+            self.calc_intersections()
             self.update_xylimits()
             return True
         else:
@@ -117,7 +117,7 @@ class FunctionGraph:
                                 point = [p.x, p.y]
                                 if point not in points:
                                     points.append([p.x, p.y])
-            # add graph POIs (function intercepts)
+            # add graph POIs (function intersections)
             for p in self.poi:
                 if self.point_type_enabled[p.point_type]:
                     point = [p.x, p.y]
@@ -212,7 +212,7 @@ class FunctionGraph:
             self._zoom(zoom_out=True)
             self._zoom(zoom_out=True)
 
-    def calc_intercepts(self):
+    def calc_intersections(self):
         # we're using plist as a helper list for checking if
         # a point is already in
         plist = []
@@ -222,7 +222,7 @@ class FunctionGraph:
             f = self.functions[i]
             for j in range(i+1, l):
                 g = self.functions[j]
-                debug('Looking for intercepts between "'+f.expr+\
+                debug('Looking for intersections between "'+f.expr+\
                         '" and "'+g.expr+'".')
                 #FIXME: maybe I can do away with simplify here?
                 d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
@@ -239,7 +239,7 @@ class FunctionGraph:
                             if pc not in plist:
                                 plist.append(pc)
                                 self.poi.append(p)
-                                debug('New intercept point: ('+\
+                                debug('New intersection point: ('+\
                                         str(xc)+','+str(yc)+')')
                 except ValueError:
                     debug('ValueError exception. Probably a '+\
@@ -275,7 +275,7 @@ class FunctionGraph:
         # we have 7 types of POIs
         self.point_type_enabled = [
                 True, # 0: standard axis points
-                True, # 1: function intercepts
+                True, # 1: function intersections
                 True, # 2: x intercepts
                 True, # 3: y intercept
                 True, # 4: local min/max
