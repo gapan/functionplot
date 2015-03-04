@@ -110,22 +110,25 @@ class FunctionGraph:
             for f in self.functions:
                 if f.visible:
                     for p in f.poi:
-                        # don't add vertical or horizontal
-                        # asymptotes here
-                        if p.point_type < 6:
-                            point = [p.x, p.y]
-                            if point not in points:
-                                points.append([p.x, p.y])
+                        if self.point_type_enabled[p.point_type]:
+                            # don't add vertical or horizontal
+                            # asymptotes here
+                            if p.point_type < 6:
+                                point = [p.x, p.y]
+                                if point not in points:
+                                    points.append([p.x, p.y])
             # add graph POIs (function intercepts)
             for p in self.poi:
-                point = [p.x, p.y]
-                if point not in points:
-                    points.append([p.x, p.y])
+                if self.point_type_enabled[p.point_type]:
+                    point = [p.x, p.y]
+                    if point not in points:
+                        points.append([p.x, p.y])
             # add default POIs (origin (0,0) etc)
             for p in self.poi_defaults:
-                point = [p.x, p.y]
-                if point not in points:
-                    points.append([p.x, p.y])
+                if self.point_type_enabled[p.point_type]:
+                    point = [p.x, p.y]
+                    if point not in points:
+                        points.append([p.x, p.y])
             # asymptotes
             # we need a trick to put asymptotes far away, but also
             # show them on the x axis. So, if there are any
@@ -137,16 +140,18 @@ class FunctionGraph:
                     for p in f.poi:
                         # vertical asymptotes
                         if p.point_type == 6:
-                            vertical_asymptotes = True
-                            point = [p.x, 0]
-                            if point not in points:
-                                points.append([p.x, 0])
+                            if self.point_type_enabled[p.point_type]:
+                                vertical_asymptotes = True
+                                point = [p.x, 0]
+                                if point not in points:
+                                    points.append([p.x, 0])
                         # horizontal asymptotes
                         elif p.point_type == 7:
-                            horizontal_asymptotes = True
-                            point = [0, p.y]
-                            if point not in points:
-                                points.append([p.x, 0])
+                            if self.point_type_enabled[p.point_type]:
+                                horizontal_asymptotes = True
+                                point = [0, p.y]
+                                if point not in points:
+                                    points.append([p.x, 0])
             # gather everything together
             for point in points:
                 xl.append(point[0])
@@ -267,4 +272,15 @@ class FunctionGraph:
 
     def __init__(self):
         self.scale_factor = 1.2
+        # we have 7 types of POIs
+        self.point_type_enabled = [
+                True, # 0: standard axis points
+                True, # 1: function intercepts
+                True, # 2: x intercepts
+                True, # 3: y intercept
+                True, # 4: local min/max
+                True, # 5: inflection points
+                True, # 6: vertical asymptotes
+                True  # 7: horizontal asymptotes
+                ]
         self.new()

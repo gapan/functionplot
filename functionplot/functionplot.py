@@ -72,13 +72,57 @@ class GUI:
     def on_imagemenuitem_quit_activate(self, widget):
         gtk.main_quit()
 
-    def on_checkmenuitem_legend_toggled(self, widget):
-        self.fg.show_legend = self.checkmenuitem_legend.get_active()
+    # View menu
+
+    def on_checkmenuitem_function_intersections_toggled(self, widget):
+        self.fg.point_type_enabled[1] = \
+                self.checkmenuitem_function_intersections.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_x_intercepts_toggled(self, widget):
+        self.fg.point_type_enabled[2] = \
+                self.checkmenuitem_x_intercepts.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_y_intercepts_toggled(self, widget):
+        self.fg.point_type_enabled[3] = \
+                self.checkmenuitem_y_intercepts.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_extrema_toggled(self, widget):
+        self.fg.point_type_enabled[4] = \
+                self.checkmenuitem_extrema.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_inflection_toggled(self, widget):
+        self.fg.point_type_enabled[5] = \
+                self.checkmenuitem_inflection.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_vertical_asym_toggled(self, widget):
+        self.fg.point_type_enabled[6] = \
+                self.checkmenuitem_vertical_asym.get_active()
+        self.fg.update_xylimits()
         self.graph_update()
     
+    def on_checkmenuitem_horizontal_asym_toggled(self, widget):
+        self.fg.point_type_enabled[7] = \
+                self.checkmenuitem_horizontal_asym.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
     def on_checkmenuitem_outliers_toggled(self, widget):
         self.fg.outliers = self.checkmenuitem_outliers.get_active()
         self.fg.update_xylimits()
+        self.graph_update()
+
+    def on_checkmenuitem_legend_toggled(self, widget):
+        self.fg.show_legend = self.checkmenuitem_legend.get_active()
         self.graph_update()
 
     # toolbar button activation signals
@@ -287,9 +331,9 @@ class GUI:
                     # don't plot vertical or horizontal asymptotes
                     # here. We'll do it later
                     if p.point_type < 6:
-                        #FIXME: if point type enabled
-                        xp.append(p.x)
-                        yp.append(p.y)
+                        if self.fg.point_type_enabled[p.point_type]:
+                            xp.append(p.x)
+                            yp.append(p.y)
                     self.ax.scatter(xp, yp, s=80, c=color,
                             linewidths=0)
                 # plot asymptotes now
@@ -297,8 +341,9 @@ class GUI:
                 yp = []
                 for p in f.poi:
                     if p.point_type == 6:
-                        xp.append(p.x)
-                        yp.append(0)
+                        if self.fg.point_type_enabled[p.point_type]:
+                            xp.append(p.x)
+                            yp.append(0)
                         # vertical asymptotes are plotted as 'x'
                         self.ax.scatter(xp, yp, s=80, marker='x',
                                 c=color, linewidths=2)
@@ -306,8 +351,9 @@ class GUI:
                 yp = []
                 for p in f.poi:
                     if p.point_type == 7:
-                        xp.append(0)
-                        yp.append(p.y)
+                        if self.fg.point_type_enabled[p.point_type]:
+                            xp.append(0)
+                            yp.append(p.y)
                         # horizontal asymptotes are plotted as '+'
                         self.ax.scatter(xp, yp, s=80, marker='+',
                                 c=color, linewidths=2)
@@ -317,8 +363,9 @@ class GUI:
         yp = []
         # add function intercepts POI
         for p in self.fg.poi:
-            xp.append(p.x)
-            yp.append(p.y)
+            if self.fg.point_type_enabled[p.point_type]:
+                xp.append(p.x)
+                yp.append(p.y)
         self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
                 linewidths=0)
         if self.fg.show_legend:
@@ -734,15 +781,45 @@ class GUI:
         # menus
         self.imagemenuitem_quit = \
             builder.get_object('imagemenuitem_quit')
+        
+        self.checkmenuitem_function_intersections = \
+            builder.get_object('checkmenuitem_function_intersections')
+        self.checkmenuitem_function_intersections.\
+                set_active(self.fg.point_type_enabled[1])
+        self.checkmenuitem_x_intercepts = \
+            builder.get_object('checkmenuitem_x_intercepts')
+        self.checkmenuitem_x_intercepts.\
+                set_active(self.fg.point_type_enabled[2])
+        self.checkmenuitem_y_intercepts = \
+            builder.get_object('checkmenuitem_y_intercepts')
+        self.checkmenuitem_y_intercepts.\
+                set_active(self.fg.point_type_enabled[3])
+        self.checkmenuitem_extrema = \
+            builder.get_object('checkmenuitem_extrema')
+        self.checkmenuitem_extrema.\
+                set_active(self.fg.point_type_enabled[4])
+        self.checkmenuitem_inflection = \
+            builder.get_object('checkmenuitem_inflection')
+        self.checkmenuitem_inflection.\
+                set_active(self.fg.point_type_enabled[5])
+        self.checkmenuitem_vertical_asym = \
+            builder.get_object('checkmenuitem_vertical_asym')
+        self.checkmenuitem_vertical_asym.\
+                set_active(self.fg.point_type_enabled[6])
+        self.checkmenuitem_horizontal_asym = \
+            builder.get_object('checkmenuitem_horizontal_asym')
+        self.checkmenuitem_horizontal_asym.\
+                set_active(self.fg.point_type_enabled[7])
+        self.checkmenuitem_outliers = \
+            builder.get_object('checkmenuitem_outliers')
+        self.checkmenuitem_outliers.set_active(self.fg.outliers)
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
         # main toolbar
         self.btn_auto = builder.get_object('btn_auto')
         self.btn_auto.set_active(self.fg.auto)
-        self.checkmenuitem_outliers = \
-            builder.get_object('checkmenuitem_outliers')
-        self.checkmenuitem_outliers.set_active(self.fg.outliers)
+
         # graph in main window
         self.table = builder.get_object('table_graph')
         self.fig = Figure(facecolor='w', tight_layout=True)

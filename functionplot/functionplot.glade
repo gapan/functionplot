@@ -1539,6 +1539,75 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_function_intersections">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Function intersections</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_function_intersections_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_x_intercepts">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_X intercepts</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_x_intercepts_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_y_intercepts">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Y intercepts</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_y_intercepts_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_extrema">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Local extrema</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_extrema_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_inflection">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Inflection points</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_inflection_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_vertical_asym">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Vertical asymptotes</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_vertical_asym_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_horizontal_asym">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Horizontal asymptotes</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_horizontal_asym_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSeparatorMenuItem" id="menuitem1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkCheckMenuItem" id="checkmenuitem_outliers">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -1904,6 +1973,9 @@
                     <property name="bottom_attach">2</property>
                     <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
