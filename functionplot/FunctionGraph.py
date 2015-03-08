@@ -256,6 +256,7 @@ class FunctionGraph:
     def new(self):
         self.visible = True
         self.show_legend = True
+        self.show_poi = True
         
         self.outliers = False
         

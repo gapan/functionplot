@@ -121,6 +121,10 @@ class GUI:
         self.fg.update_xylimits()
         self.graph_update()
 
+    def on_checkmenuitem_show_poi_toggled(self, widget):
+        self.fg.show_poi = self.checkmenuitem_show_poi.get_active()
+        self.graph_update()
+
     def on_checkmenuitem_legend_toggled(self, widget):
         self.fg.show_legend = self.checkmenuitem_legend.get_active()
         self.graph_update()
@@ -327,47 +331,49 @@ class GUI:
                 self.ax.plot(x, y, linewidth=2, color=color)
                 xp = []
                 yp = []
-                for p in f.poi:
-                    # don't plot vertical or horizontal asymptotes
-                    # here. We'll do it later
-                    if p.point_type < 6:
-                        if self.fg.point_type_enabled[p.point_type]:
-                            xp.append(p.x)
-                            yp.append(p.y)
-                    self.ax.scatter(xp, yp, s=80, c=color,
-                            linewidths=0)
-                # plot asymptotes now
-                xp = []
-                yp = []
-                for p in f.poi:
-                    if p.point_type == 6:
-                        if self.fg.point_type_enabled[p.point_type]:
-                            xp.append(p.x)
-                            yp.append(0)
-                        # vertical asymptotes are plotted as 'x'
-                        self.ax.scatter(xp, yp, s=80, marker='x',
-                                c=color, linewidths=2)
-                xp = []
-                yp = []
-                for p in f.poi:
-                    if p.point_type == 7:
-                        if self.fg.point_type_enabled[p.point_type]:
-                            xp.append(0)
-                            yp.append(p.y)
-                        # horizontal asymptotes are plotted as '+'
-                        self.ax.scatter(xp, yp, s=80, marker='+',
-                                c=color, linewidths=2)
+                if self.fg.show_poi:
+                    for p in f.poi:
+                        # don't plot vertical or horizontal asymptotes
+                        # here. We'll do it later
+                        if p.point_type < 6:
+                            if self.fg.point_type_enabled[p.point_type]:
+                                xp.append(p.x)
+                                yp.append(p.y)
+                        self.ax.scatter(xp, yp, s=80, c=color,
+                                linewidths=0)
+                    # plot asymptotes now
+                    xp = []
+                    yp = []
+                    for p in f.poi:
+                        if p.point_type == 6:
+                            if self.fg.point_type_enabled[p.point_type]:
+                                xp.append(p.x)
+                                yp.append(0)
+                            # vertical asymptotes are plotted as 'x'
+                            self.ax.scatter(xp, yp, s=80, marker='x',
+                                    c=color, linewidths=2)
+                    xp = []
+                    yp = []
+                    for p in f.poi:
+                        if p.point_type == 7:
+                            if self.fg.point_type_enabled[p.point_type]:
+                                xp.append(0)
+                                yp.append(p.y)
+                            # horizontal asymptotes are plotted as '+'
+                            self.ax.scatter(xp, yp, s=80, marker='+',
+                                    c=color, linewidths=2)
                 # add function to legend
                 legend.append(f.mathtex_expr)
-        xp = []
-        yp = []
-        # add function intercepts POI
-        for p in self.fg.poi:
-            if self.fg.point_type_enabled[p.point_type]:
-                xp.append(p.x)
-                yp.append(p.y)
-        self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
-                linewidths=0)
+        if self.fg.show_poi:
+            xp = []
+            yp = []
+            # add function intercepts POI
+            for p in self.fg.poi:
+                if self.fg.point_type_enabled[p.point_type]:
+                    xp.append(p.x)
+                    yp.append(p.y)
+            self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
+                    linewidths=0)
         if self.fg.show_legend:
             self.ax.legend(legend, loc='upper right',
                     bbox_to_anchor=(1,1), fontsize=18)
@@ -813,6 +819,9 @@ class GUI:
         self.checkmenuitem_outliers = \
             builder.get_object('checkmenuitem_outliers')
         self.checkmenuitem_outliers.set_active(self.fg.outliers)
+        self.checkmenuitem_show_poi = \
+            builder.get_object('checkmenuitem_show_poi')
+        self.checkmenuitem_show_poi.set_active(self.fg.show_poi)
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
