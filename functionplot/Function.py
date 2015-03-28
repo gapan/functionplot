@@ -326,16 +326,16 @@ class Function:
                 self._test_common_periods()
 
     def check_periodic(self, x):
-            l = len(x)
-            if l > 1:
-                for i in range(0,l-1):
-                    if not self.periodic:
-                        for j in range(1, l):
-                            if not self.periodic:
-                                for n in range(1,11):
-                                    if not self.periodic:
-                                        period = abs(n*(x[j] - x[i]))
-                                        self._test_period(period)
+        l = len(x)
+        if l > 1:
+            for i in range(0,l-1):
+                if not self.periodic:
+                    for j in range(1, l):
+                        if not self.periodic:
+                            for n in range(1,11):
+                                if not self.periodic:
+                                    period = abs(n*(x[j] - x[i]))
+                                    self._test_period(period)
 
     def _test_period(self, period):
         if period != 0:
