@@ -19,7 +19,8 @@ from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg \
 from FunctionGraph import FunctionGraph
 
 import logging
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
+        format='(%(processName)-10s) %(message)s',)
 
 # Internationalization
 import locale
