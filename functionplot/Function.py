@@ -9,6 +9,7 @@ from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc
 from logging import debug
 import re
+import multiprocessing as mp
 
 class Function:
     
@@ -139,6 +140,104 @@ class Function:
         e = '$'+e+'$'
         return e
 
+    def _calc_x_intercepts(self, q, expr):
+        debug('Looking for x intercepts for: '+str(expr))
+        x = fsolve(expr)
+        poi = []
+        for xc in x:
+            poi.append(POI(xc, 0, 2))
+            debug('Added x intercept at ('+str(xc)+',0)')
+        # try to find if the function is periodic using the
+        # distance between the x intercepts
+        if self.trigonometric and not self.periodic and \
+                not self.polynomial:
+            debug('Checking if function is periodic using'+\
+                    ' x intercepts.')
+            self.check_periodic(x)
+        q.put(poi)
+
+    def _calc_min_max(self, q, f1, expr):
+        debug('Looking for local min/max for: '+str(expr))
+        x = fsolve(f1)
+        poi = []
+        for xc in x:
+            y = expr.subs('x', xc)
+            yc = rfc(y)
+            if yc is not None:
+                poi.append(POI(xc, yc, 4))
+                debug('Added local min/max at ('+str(xc)+','+\
+                        str(yc)+')')
+        if self.trigonometric and not self.periodic and \
+                not self.polynomial:
+            debug('Checking if function is periodic using'+\
+                    ' min/max.')
+            self.check_periodic(x)
+        q.put(poi)
+
+    def _calc_inflection(self, q, f2, expr):
+        debug('Looking for inflection points for: '+str(expr))
+        x = fsolve(f2)
+        poi = []
+        for xc in x:
+            y = expr.subs('x', xc)
+            yc = rfc(y)
+            if yc is not None:
+                poi.append(POI(xc, yc, 5))
+                debug('Added inflection point at ('+\
+                        str(xc)+','+str(yc)+')')
+        if self.trigonometric and not self.periodic and \
+                not self.polynomial:
+            debug('Checking if function is periodic using'+\
+                    ' inflection points.')
+            self.check_periodic(x)
+        q.put(poi)
+
+    def _calc_vertical_asym(self, q, expr):
+        debug('Looking for vertical asymptotes for: '+str(expr))
+        x = pod(expr, 'x')
+        poi = []
+        for i in x:
+            y = expr.subs('x', i)
+            xc = rfc(i)
+            #yc = float(y) # this returns inf.
+            # we'll just put vertical asymptotes on the x axis
+            if xc is not None:
+                yc = 0
+                poi.append(POI(xc, yc, 6))
+                debug('Added vertical asymptote ('+str(xc)+','+\
+                        str(yc)+')')
+        if self.trigonometric and not self.periodic and \
+                not self.polynomial:
+            debug('Checking if function is periodic using'+\
+                    ' vertical asymptotes.')
+            self.check_periodic(x)
+        q.put(poi)
+
+    def _calc_horizontal_asym(self, q, expr):
+        # if the limit(x->+oo)=a, or limit(x->-oo)=a, then
+        # y=a is a horizontal asymptote.
+        debug('Looking for horizontal asymptotes for: '+\
+                str(expr))
+        try:
+            poi = []
+            lr = limit(expr, 'x', 'oo')
+            ll = limit(expr, 'x', '-oo')
+            if 'oo' not in str(lr):
+                debug('Found a horizontal asymptote at y='+\
+                        str(lr)+' as x->+oo.')
+                self.poi.append(POI(0, lr, 7))
+            if 'oo' not in str(ll):
+                if ll == lr:
+                    debug('Same horizontal asymptote as x->-oo.')
+                else:
+                    debug('Found a horizontal asymptote at y='+\
+                            str(ll)+' as x->-oo')
+                    poi.append(POI(0, ll, 7))
+            q.put(poi)
+        except NotImplementedError:
+            debug('NotImplementedError for finding limit of "'+\
+                    str(expr)+'"')
+
     def calc_poi(self):
         expr = self.simp_expr
         
@@ -159,101 +258,67 @@ class Function:
                 self.poi.append(POI(0, yc, 3))
                 debug('Added y intercept at (0,'+str(yc)+')')
         if not self.constant:
+            # calculate 1st and 2nd derivatives
+            f1 = diff(expr, 'x')
+            f2 = diff(f1, 'x')
             #
             # x intercepts
             #
-            debug('Looking for x intercepts for: '+str(expr))
-            x = fsolve(expr)
-            for xc in x:
-                self.poi.append(POI(xc, 0, 2))
-                debug('Added x intercept at ('+str(xc)+',0)')
-            # try to find if the function is periodic using the
-            # distance between the x intercepts
-            if self.trigonometric and not self.periodic and \
-                    not self.polynomial:
-                debug('Checking if function is periodic using'+\
-                        ' x intercepts.')
-                self.check_periodic(x)
+            q_x = mp.Queue()
+            p_x = mp.Process(target=self._calc_x_intercepts, args=(q_x, expr,))
             #
             # min/max
             #
-            debug('Looking for local min/max for: '+str(expr))
-            f1 = diff(expr, 'x')
-            x = fsolve(f1)
-            for xc in x:
-                y = expr.subs('x', xc)
-                yc = rfc(y)
-                if yc is not None:
-                    self.poi.append(POI(xc, yc, 4))
-                    debug('Added local min/max at ('+str(xc)+','+\
-                            str(yc)+')')
-            if self.trigonometric and not self.periodic and \
-                    not self.polynomial:
-                debug('Checking if function is periodic using'+\
-                        ' min/max.')
-                self.check_periodic(x)
+            q_min_max = mp.Queue()
+            p_min_max = mp.Process(target=self._calc_min_max, args=(q_min_max,
+                f1, expr,))
             #
             # inflection points
             #
-            debug('Looking for inflection points for: '+str(expr))
-            f2 = diff(f1, 'x')
-            x = fsolve(f2)
-            for xc in x:
-                y = expr.subs('x', xc)
-                yc = rfc(y)
-                if yc is not None:
-                    self.poi.append(POI(xc, yc, 5))
-                    debug('Added inflection point at ('+\
-                            str(xc)+','+str(yc)+')')
-            if self.trigonometric and not self.periodic and \
-                    not self.polynomial:
-                debug('Checking if function is periodic using'+\
-                        ' inflection points.')
-                self.check_periodic(x)
+            q_inflection = mp.Queue()
+            p_inflection = mp.Process(target=self._calc_inflection, args=(q_inflection,
+                f2, expr,))
             #
             # vertical asymptotes
             #
-            debug('Looking for vertical asymptotes for: '+str(expr))
-            x = pod(expr, 'x')
-            for i in x:
-                y = expr.subs('x', i)
-                xc = rfc(i)
-                #yc = float(y) # this returns inf.
-                # we'll just put vertical asymptotes on the x axis
-                if xc is not None:
-                    yc = 0
-                    self.poi.append(POI(xc, yc, 6))
-                    debug('Added vertical asymptote ('+str(xc)+','+\
-                            str(yc)+')')
-            if self.trigonometric and not self.periodic and \
-                    not self.polynomial:
-                debug('Checking if function is periodic using'+\
-                        ' vertical asymptotes.')
-                self.check_periodic(x)
+            q_vertical_asym = mp.Queue()
+            p_vertical_asym = mp.Process(target=self._calc_vertical_asym, args=(q_vertical_asym,
+                expr,))
             #
             # horizontal asymptotes
             #
-            # if the limit(x->+oo)=a, or limit(x->-oo)=a, then
-            # y=a is a horizontal asymptote.
-            debug('Looking for horizontal asymptotes for: '+\
-                    str(expr))
-            try:
-                lr = limit(expr, 'x', 'oo')
-                ll = limit(expr, 'x', '-oo')
-                if 'oo' not in str(lr):
-                    debug('Found a horizontal asymptote at y='+\
-                            str(lr)+' as x->+oo.')
-                    self.poi.append(POI(0, lr, 7))
-                if 'oo' not in str(ll):
-                    if ll == lr:
-                        debug('Same horizontal asymptote as x->-oo.')
-                    else:
-                        debug('Found a horizontal asymptote at y='+\
-                                str(ll)+' as x->-oo')
-                        self.poi.append(POI(0, ll, 7))
-            except NotImplementedError:
-                debug('NotImplementedError for finding limit of "'+\
-                        str(expr)+'"')
+            q_horizontal_asym = mp.Queue()
+            p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym, args=(q_horizontal_asym,
+                expr,))
+            # start processes, different process for each POI type
+            p_x.start()
+            p_min_max.start()
+            p_inflection.start()
+            p_vertical_asym.start()
+            p_horizontal_asym.start()
+            # get the processes output
+            poi_x = q_x.get()
+            poi_min_max = q_min_max.get()
+            poi_inflection = q_inflection.get()
+            poi_vertical_asym = q_vertical_asym.get()
+            poi_horizontal_asym = q_horizontal_asym.get()
+            # wait until all processes are done
+            p_x.join()
+            p_min_max.join()
+            p_inflection.join()
+            p_vertical_asym.join()
+            p_horizontal_asym.join()
+            # gather POIs
+            for i in poi_x:
+                self.poi.append(i)
+            for i in poi_min_max:
+                self.poi.append(i)
+            for i in poi_inflection:
+                self.poi.append(i)
+            for i in poi_vertical_asym:
+                self.poi.append(i)
+            for i in poi_horizontal_asym:
+                self.poi.append(i)
             # if the function was not found to be periodic yet, try
             # some common periods
             if self.trigonometric and not self.periodic and \
