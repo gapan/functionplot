@@ -140,6 +140,20 @@ class Function:
         e = '$'+e+'$'
         return e
 
+    def _calc_y_intercept(self, q, expr):
+        debug('Looking for the y intercept for: '+str(expr))
+        y = expr.subs('x', 0)
+        if str(y) == 'zoo' or str(y) == 'nan':
+            # 'zoo' is imaginary infinity
+            debug('The Y axis is actually a vertical asymptote.')
+            debug('Added vertical asymptote (0,0)')
+            q.put(POI(0, 0, 6))
+        else:
+            yc = rfc(y)
+            if yc is not None and 'inf' not in str(yc):
+                debug('Added y intercept at (0,'+str(yc)+')')
+                q.put(POI(0, yc, 3))
+
     def _calc_x_intercepts(self, q, expr):
         debug('Looking for x intercepts for: '+str(expr))
         x = fsolve(expr)
@@ -245,18 +259,8 @@ class Function:
         #
         # y intercept
         #
-        debug('Looking for the y intercept for: '+str(expr))
-        y = expr.subs('x', 0)
-        if str(y) == 'zoo' or str(y) == 'nan':
-            # 'zoo' is imaginary infinity
-            debug('The Y axis is actually a vertical asymptote.')
-            self.poi.append(POI(0, 0, 6))
-            debug('Added vertical asymptote (0,0)')
-        else:
-            yc = rfc(y)
-            if yc is not None and 'inf' not in str(yc):
-                self.poi.append(POI(0, yc, 3))
-                debug('Added y intercept at (0,'+str(yc)+')')
+        q_y = mp.Queue()
+        p_y = mp.Process(target=self._calc_y_intercept, args=(q_y, expr,))
         if not self.constant:
             # calculate 1st and 2nd derivatives
             f1 = diff(expr, 'x')
@@ -291,24 +295,28 @@ class Function:
             p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym, args=(q_horizontal_asym,
                 expr,))
             # start processes, different process for each POI type
+            p_y.start()
             p_x.start()
             p_min_max.start()
             p_inflection.start()
             p_vertical_asym.start()
             p_horizontal_asym.start()
             # get the processes output
+            poi_y = q_y.get()
             poi_x = q_x.get()
             poi_min_max = q_min_max.get()
             poi_inflection = q_inflection.get()
             poi_vertical_asym = q_vertical_asym.get()
             poi_horizontal_asym = q_horizontal_asym.get()
             # wait until all processes are done
+            p_y.join()
             p_x.join()
             p_min_max.join()
             p_inflection.join()
             p_vertical_asym.join()
             p_horizontal_asym.join()
             # gather POIs
+            self.poi.append(poi_y)
             for i in poi_x:
                 self.poi.append(i)
             for i in poi_min_max:
