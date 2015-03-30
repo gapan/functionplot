@@ -158,6 +158,8 @@ class Function:
         debug('Looking for x intercepts for: '+str(expr))
         x = fsolve(expr)
         poi = []
+        if x == []:
+            x = self._calc_x_intercepts_manually()
         for xc in x:
             poi.append(POI(xc, 0, 2))
             debug('Added x intercept at ('+str(xc)+',0)')
@@ -170,10 +172,24 @@ class Function:
             self.check_periodic(x)
         q.put(poi)
 
+    def _calc_x_intercepts_manually(self):
+        debug('Calculating x intercepts manually')
+        x = np.linspace(-10,10,10000)
+        y = eval(self.np_expr)
+        sol = []
+        for i in range(1, len(y)-1):
+            if ((y[i] == 0) or
+                    (y[i-1] < 0 and y[i] > 0 ) or
+                    (y[i-1] > 0 and y[i] < 0 )):
+                sol.append(x[i])
+        return sol
+
     def _calc_min_max(self, q, f1, expr):
         debug('Looking for local min/max for: '+str(expr))
         x = fsolve(f1)
         poi = []
+        if x == []:
+            x = self._calc_min_max_manually()
         for xc in x:
             y = expr.subs('x', xc)
             yc = rfc(y)
@@ -187,6 +203,17 @@ class Function:
                     ' min/max.')
             self.check_periodic(x)
         q.put(poi)
+
+    def _calc_min_max_manually(self):
+        debug('Calculating local min/max manually')
+        x = np.linspace(-10,10,10000)
+        y = eval(self.np_expr)
+        sol = []
+        for i in range(1, len(y)-1):
+            if (( y[i-1] > y[i] and y[i+1] > y[i]) or
+                ( y[i-1] < y[i] and y[i+1] < y[i] )):
+                sol.append(x[i])
+        return sol
 
     def _calc_inflection(self, q, f2, expr):
         debug('Looking for inflection points for: '+str(expr))
