@@ -173,7 +173,10 @@ class Function:
             debug('Checking if function is periodic using'+\
                     ' x intercepts.')
             self.check_periodic(x)
-        debug('Done calculating x intercepts')
+        if poi == []:
+            debug('Done calculating x intercepts. None found.')
+        else:
+            debug('Done calculating x intercepts')
         q.put(poi)
 
     def _calc_x_intercepts_manually(self):
@@ -208,7 +211,10 @@ class Function:
             debug('Checking if function is periodic using'+\
                     ' min/max.')
             self.check_periodic(x)
-        debug('Done calculating min/max')
+        if poi == []:
+            debug('Done calculating min/max. None found.')
+        else:
+            debug('Done calculating min/max')
         q.put(poi)
 
     def _calc_min_max_manually(self):
@@ -240,7 +246,10 @@ class Function:
             debug('Checking if function is periodic using'+\
                     ' inflection points.')
             self.check_periodic(x)
-        debug('Done calculating inflection points')
+        if poi == []:
+            debug('Done calculating inflection points. None found.')
+        else:
+            debug('Done calculating inflection points')
         q.put(poi)
 
     def _calc_vertical_asym(self, q, expr):
@@ -262,7 +271,10 @@ class Function:
             debug('Checking if function is periodic using'+\
                     ' vertical asymptotes.')
             self.check_periodic(x)
-        debug('Done calculating vertical asymptotes')
+        if poi == []:
+            debug('Done calculating vertical asymptotes. None found.')
+        else:
+            debug('Done calculating vertical asymptotes')
         q.put(poi)
 
     def _calc_horizontal_asym(self, q, expr):
@@ -289,7 +301,10 @@ class Function:
         except NotImplementedError:
             debug('NotImplementedError for finding limit of "'+\
                     str(expr)+'"')
-        debug('Done calculating horizontal asymptotes')
+        if poi == []:
+            debug('Done calculating horizontal asymptotes. None found.')
+        else:
+            debug('Done calculating horizontal asymptotes')
 
     def calc_poi(self):
         expr = self.simp_expr
