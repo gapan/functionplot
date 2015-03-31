@@ -218,9 +218,9 @@ class FunctionGraph:
         plist = []
         self.poi = []
         l = len(self.functions)
-        for i in range(0, l-1):
+        for i in xrange(0, l-1):
             f = self.functions[i]
-            for j in range(i+1, l):
+            for j in xrange(i+1, l):
                 g = self.functions[j]
                 debug('Looking for intersections between "'+f.expr+\
                         '" and "'+g.expr+'".')

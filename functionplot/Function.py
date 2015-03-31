@@ -65,7 +65,7 @@ class Function:
         expr = expr.replace('\xcf\x80', 'pi')
         # implied multiplication
         expr = re.sub('([0-9])([a-z\(])', '\\1*\\2', expr)
-        expr = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
+        EXPR = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
         expr = re.sub('(pi)([a-z\(])', '\\1*\\2', expr)
         expr = re.sub('([a-z\)])(pi)', '\\1*\\2', expr)
         expr = re.sub('(\))([a-z\(])', '\\1*\\2', expr)
@@ -181,7 +181,7 @@ class Function:
         x = np.linspace(-10,10,10000)
         y = eval(self.np_expr)
         sol = []
-        for i in range(1, len(y)-1):
+        for i in xrange(1, len(y)-1):
             if ((y[i] == 0) or
                     (y[i-1] < 0 and y[i] > 0 ) or
                     (y[i-1] > 0 and y[i] < 0 )):
@@ -216,7 +216,7 @@ class Function:
         x = np.linspace(-10,10,10000)
         y = eval(self.np_expr)
         sol = []
-        for i in range(1, len(y)-1):
+        for i in xrange(1, len(y)-1):
             if (( y[i-1] > y[i] and y[i+1] > y[i]) or
                 ( y[i-1] < y[i] and y[i+1] < y[i] )):
                 sol.append(x[i])
@@ -376,11 +376,11 @@ class Function:
     def check_periodic(self, x):
         l = len(x)
         if l > 1:
-            for i in range(0,l-1):
+            for i in xrange(0,l-1):
                 if not self.periodic:
-                    for j in range(1, l):
+                    for j in xrange(1, l):
                         if not self.periodic:
-                            for n in range(1,11):
+                            for n in xrange(1,11):
                                 if not self.periodic:
                                     period = abs(n*(x[j] - x[i]))
                                     self._test_period(period)

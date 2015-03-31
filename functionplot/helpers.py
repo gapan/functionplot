@@ -167,7 +167,7 @@ def remove_outliers(plist):
     if min_lim < max_lim:
         debug('Any values<'+str(min_lim)+' or >'+\
                 str(max_lim)+' are outliers.')
-        for i in range(0,len(plist)):
+        for i in xrange(0,len(plist)):
             if plist[i] < min_lim or plist[i] > max_lim:
                 debug('Found outlier: '+str(plist[i]))
                 # if outliers are detected, replace their values with
