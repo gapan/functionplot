@@ -308,19 +308,20 @@ class Function:
             # x intercepts
             #
             q_x = mp.Queue()
-            p_x = mp.Process(target=self._calc_x_intercepts, args=(q_x, expr,))
+            p_x = mp.Process(target=self._calc_x_intercepts,
+                    args=(q_x, expr,))
             #
             # min/max
             #
             q_min_max = mp.Queue()
-            p_min_max = mp.Process(target=self._calc_min_max, args=(q_min_max,
-                f1, expr,))
+            p_min_max = mp.Process(target=self._calc_min_max,
+                    args=(q_min_max, f1, expr,))
             #
             # inflection points
             #
             q_inflection = mp.Queue()
-            p_inflection = mp.Process(target=self._calc_inflection, args=(q_inflection,
-                f2, expr,))
+            p_inflection = mp.Process(target=self._calc_inflection,
+                    args=(q_inflection, f2, expr,))
             #
             # vertical asymptotes
             #
