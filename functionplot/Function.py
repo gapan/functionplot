@@ -325,14 +325,14 @@ class Function:
             # vertical asymptotes
             #
             q_vertical_asym = mp.Queue()
-            p_vertical_asym = mp.Process(target=self._calc_vertical_asym, args=(q_vertical_asym,
-                expr,))
+            p_vertical_asym = mp.Process(target=self._calc_vertical_asym,
+                    args=(q_vertical_asym, expr,))
             #
             # horizontal asymptotes
             #
             q_horizontal_asym = mp.Queue()
-            p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym, args=(q_horizontal_asym,
-                expr,))
+            p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym,
+                    args=(q_horizontal_asym, expr,))
             # start processes, different process for each POI type
             p_y.start()
             p_x.start()
