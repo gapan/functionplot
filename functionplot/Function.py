@@ -153,12 +153,15 @@ class Function:
             if yc is not None and 'inf' not in str(yc):
                 debug('Added y intercept at (0,'+str(yc)+')')
                 q.put(POI(0, yc, 3))
+        debug('Done calculating y intercept')
 
     def _calc_x_intercepts(self, q, expr):
         debug('Looking for x intercepts for: '+str(expr))
         x = fsolve(expr)
         poi = []
-        if x == []:
+        manual = False
+        if x is None:
+            manual = True
             x = self._calc_x_intercepts_manually()
         for xc in x:
             poi.append(POI(xc, 0, 2))
@@ -166,10 +169,11 @@ class Function:
         # try to find if the function is periodic using the
         # distance between the x intercepts
         if self.trigonometric and not self.periodic and \
-                not self.polynomial:
+                not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' x intercepts.')
             self.check_periodic(x)
+        debug('Done calculating x intercepts')
         q.put(poi)
 
     def _calc_x_intercepts_manually(self):
@@ -188,7 +192,9 @@ class Function:
         debug('Looking for local min/max for: '+str(expr))
         x = fsolve(f1)
         poi = []
-        if x == []:
+        manual = False
+        if x is None:
+            manual = True
             x = self._calc_min_max_manually()
         for xc in x:
             y = expr.subs('x', xc)
@@ -198,10 +204,11 @@ class Function:
                 debug('Added local min/max at ('+str(xc)+','+\
                         str(yc)+')')
         if self.trigonometric and not self.periodic and \
-                not self.polynomial:
+                not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' min/max.')
             self.check_periodic(x)
+        debug('Done calculating min/max')
         q.put(poi)
 
     def _calc_min_max_manually(self):
@@ -219,6 +226,8 @@ class Function:
         debug('Looking for inflection points for: '+str(expr))
         x = fsolve(f2)
         poi = []
+        if x is None:
+            x = []
         for xc in x:
             y = expr.subs('x', xc)
             yc = rfc(y)
@@ -227,10 +236,11 @@ class Function:
                 debug('Added inflection point at ('+\
                         str(xc)+','+str(yc)+')')
         if self.trigonometric and not self.periodic and \
-                not self.polynomial:
+                not self.polynomial and x != []:
             debug('Checking if function is periodic using'+\
                     ' inflection points.')
             self.check_periodic(x)
+        debug('Done calculating inflection points')
         q.put(poi)
 
     def _calc_vertical_asym(self, q, expr):
@@ -248,10 +258,11 @@ class Function:
                 debug('Added vertical asymptote ('+str(xc)+','+\
                         str(yc)+')')
         if self.trigonometric and not self.periodic and \
-                not self.polynomial:
+                not self.polynomial and x != []:
             debug('Checking if function is periodic using'+\
                     ' vertical asymptotes.')
             self.check_periodic(x)
+        debug('Done calculating vertical asymptotes')
         q.put(poi)
 
     def _calc_horizontal_asym(self, q, expr):
@@ -278,6 +289,7 @@ class Function:
         except NotImplementedError:
             debug('NotImplementedError for finding limit of "'+\
                     str(expr)+'"')
+        debug('Done calculating horizontal asymptotes')
 
     def calc_poi(self):
         expr = self.simp_expr
@@ -374,6 +386,7 @@ class Function:
 
     def _test_period(self, period):
         if period != 0:
+            debug('Trying period: '+str(period))
             pf = self.simp_expr.subs('x', 'x+period')
             pf = pf.subs('period', period)
             pf = simplify(pf)
@@ -383,6 +396,8 @@ class Function:
                         str(period)+'. Smaller periods may exist.')
                 self.periodic = True
                 self.period = period
+            else:
+                debug('Not a period: '+str(period))
 
     # checks the functions for some common periods
     # multiples of 0.25 (up to 1)

@@ -229,6 +229,8 @@ class FunctionGraph:
                 try:
                     ds = simplify(d)
                     x = fsolve(ds)
+                    if x is None:
+                        x = []
                     for i in x:
                         y = f.simp_expr.subs('x', i)
                         xc = rfc(i)
