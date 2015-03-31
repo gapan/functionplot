@@ -63,8 +63,17 @@ def pod(expr, sym):
     return list(set(pods)) # remove duplicates
 
 def mpsolve(q, expr):
-    x = solve(expr, 'x')
-    q.put(x)
+    try:
+        x = solve(expr, 'x')
+        q.put(x)
+    except NotImplementedError:
+        debug('NotImplementedError for solving "'+str(expr)+'"')
+        q.put(None)
+    except TypeError:
+        debug('TypeError exception. This was not supposed to '+\
+                'happen. Probably a bug in sympy.')
+        q.put(None)
+
 
 def fsolve(expr):
     xl = []
@@ -75,18 +84,14 @@ def fsolve(expr):
         # timeout solving after 5 seconds
         x = q.get(True, 5)
         p.join()
-        for i in x:
-            xc = rfc(i)
-            if xc is not None:
-                xl.append(xc)
-                debug('Found solution: '+str(xc))
-    except NotImplementedError:
-        debug('NotImplementedError for solving "'+str(expr)+'"')
-        xl = None
-    except TypeError:
-        debug('TypeError exception. This was not supposed to '+\
-                'happen. Probably a bug in sympy.')
-        xl = None
+        if x is None:
+            xl = None
+        else:
+            for i in x:
+                xc = rfc(i)
+                if xc is not None:
+                    xl.append(xc)
+                    debug('Found solution: '+str(xc))
     except Queue.Empty:
         debug('Solving timed out.')
         xl = None
