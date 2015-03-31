@@ -9,6 +9,8 @@ from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
 from logging import debug
 import numpy as np
+import multiprocessing as mp
+import Queue
 import random
 
 def pod(expr, sym):
@@ -60,11 +62,19 @@ def pod(expr, sym):
 
     return list(set(pods)) # remove duplicates
 
+def mpsolve(q, expr):
+    x = solve(expr, 'x')
+    q.put(x)
 
 def fsolve(expr):
     xl = []
     try:
-        x = solve(expr, 'x')
+        q = mp.Queue()
+        p = mp.Process(target=mpsolve, args=(q, expr,))
+        p.start()
+        # timeout solving after 5 seconds
+        x = q.get(True, 5)
+        p.join()
         for i in x:
             xc = rfc(i)
             if xc is not None:
@@ -77,6 +87,11 @@ def fsolve(expr):
         debug('TypeError exception. This was not supposed to '+\
                 'happen. Probably a bug in sympy.')
         xl = None
+    except Queue.Empty:
+        debug('Solving timed out.')
+        xl = None
+    finally:
+        p.terminate()
     return xl
 
 def rfc(x):
