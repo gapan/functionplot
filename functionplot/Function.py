@@ -224,8 +224,10 @@ class Function:
         debug('Looking for inflection points for: '+str(expr))
         x = fsolve(f2)
         poi = []
+        manual = False
         if x is None:
-            x = []
+            manual = True
+            x = self._calc_inflection_manually(f2)
         for xc in x:
             y = expr.subs('x', xc)
             yc = rfc(y)
@@ -234,7 +236,7 @@ class Function:
                 debug('Added inflection point at ('+\
                         str(xc)+','+str(yc)+')')
         if self.trigonometric and not self.periodic and \
-                not self.polynomial and x != []:
+                not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' inflection points.')
             self.check_periodic(x)
@@ -244,14 +246,29 @@ class Function:
             debug('Done calculating inflection points')
         q.put(poi)
 
+    def _calc_inflection_manually(self, f2):
+        debug('Calculating inflection points manually')
+        npexpr = self._get_np_expr(str(f2))
+        x = np.linspace(-20,20,10000)
+        y = eval(npexpr)
+        sol = []
+        for i in xrange(1, len(y)-1):
+            if ((y[i] == 0) or
+                    (y[i-1] < 0 and y[i] > 0 ) or
+                    (y[i-1] > 0 and y[i] < 0 )):
+                sol.append(x[i])
+        return sol
+
     def _calc_slope_45(self, q, f1, expr):
         debug('Looking for points where slope is 45 degrees for: '+
             str(expr))
         x1 = fsolve(2*f1-1)
         x2 = fsolve(2*f1+1)
         poi = []
+        manual = False
         if x1 is None and x2 is None:
-            x = []
+            manual = True
+            x = self._calc_slope45_manually(f1)
         elif x1 is None:
             x = x2
         elif x2 is None:
@@ -275,6 +292,21 @@ class Function:
         else:
             debug('Done calculating slope45 points')
         q.put(poi)
+
+    def _calc_slope45_manually(self, f1):
+        debug('Calculating inflection points manually')
+        npexpr = self._get_np_expr(str(f1))
+        x = np.linspace(-20,20,10000)
+        y = eval(npexpr)
+        sol = []
+        for i in xrange(1, len(y)-1):
+            if ((y[i] == 0.5) or (y[i] == -0.5) or
+                    (y[i-1] < 0.5 and y[i] > 0.5 ) or
+                    (y[i-1] > 0.5 and y[i] < 0.5 ) or
+                    (y[i-1] < -0.5 and y[i] > -0.5 ) or
+                    (y[i-1] > -0.5 and y[i] < -0.5 )):
+                sol.append(x[i])
+        return sol
 
     def _calc_vertical_asym(self, q, expr):
         debug('Looking for vertical asymptotes for: '+str(expr))
