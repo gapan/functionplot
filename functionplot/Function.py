@@ -254,6 +254,38 @@ class Function:
             debug('Done calculating inflection points')
         q.put(poi)
 
+    def _calc_slope_45(self, q, f1, expr):
+        debug('Looking for points where slope is 45 degrees for: '+
+            str(expr))
+        x1 = fsolve(2*f1-1)
+        x2 = fsolve(2*f1+1)
+        poi = []
+        if x1 is None and x2 is None:
+            x = []
+        elif x1 is None:
+            x = x2
+        elif x2 is None:
+            x = x1
+        else:
+            x = x1 + x2
+        for xc in x:
+            y = expr.subs('x', xc)
+            yc = rfc(y)
+            if yc is not None:
+                poi.append(POI(xc, yc, 8))
+                debug('Added slope45 point at ('+\
+                        str(xc)+','+str(yc)+')')
+        if self.trigonometric and not self.periodic and \
+                not self.polynomial and x != []:
+            debug('Checking if function is periodic using'+\
+                    ' slope45 points.')
+            self.check_periodic(x)
+        if poi == []:
+            debug('Done calculating slope45 points. None found.')
+        else:
+            debug('Done calculating slope45 points')
+        q.put(poi)
+
     def _calc_vertical_asym(self, q, expr):
         debug('Looking for vertical asymptotes for: '+str(expr))
         x = pod(expr, 'x')
@@ -351,6 +383,12 @@ class Function:
             q_horizontal_asym = mp.Queue()
             p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym,
                     args=(q_horizontal_asym, expr,))
+            #
+            # points where the slope is 45 degrees
+            #
+            q_slope_45 = mp.Queue()
+            p_slope_45 = mp.Process(target=self._calc_slope_45,
+                    args=(q_slope_45, f1, expr,))
             # start processes, different process for each POI type
             p_y.start()
             p_x.start()
@@ -358,6 +396,7 @@ class Function:
             p_inflection.start()
             p_vertical_asym.start()
             p_horizontal_asym.start()
+            p_slope_45.start()
             # get the processes output
             poi_y = q_y.get()
             poi_x = q_x.get()
@@ -365,6 +404,7 @@ class Function:
             poi_inflection = q_inflection.get()
             poi_vertical_asym = q_vertical_asym.get()
             poi_horizontal_asym = q_horizontal_asym.get()
+            poi_slope_45 = q_slope_45.get()
             # wait until all processes are done
             p_y.join()
             p_x.join()
@@ -372,6 +412,7 @@ class Function:
             p_inflection.join()
             p_vertical_asym.join()
             p_horizontal_asym.join()
+            p_slope_45.join()
             # gather POIs
             if poi_y is not None:
                 self.poi.append(poi_y)
@@ -384,6 +425,8 @@ class Function:
             for i in poi_vertical_asym:
                 self.poi.append(i)
             for i in poi_horizontal_asym:
+                self.poi.append(i)
+            for i in poi_slope_45:
                 self.poi.append(i)
             # if the function was not found to be periodic yet, try
             # some common periods

@@ -16,6 +16,7 @@ class PointOfInterest:
         # 5: inflection points
         # 6: vertical asymptotes
         # 7: horizontal asymptotes
+        # 8: slope is 45 or -45 degrees
 
         self.point_type = point_type
 

@@ -1685,6 +1685,15 @@
                               </object>
                             </child>
                             <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem_slope45">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_45 degrees slope</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_checkmenuitem_slope45_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkSeparatorMenuItem" id="menuitem1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -2079,6 +2088,9 @@
                     <property name="bottom_attach">2</property>
                     <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>

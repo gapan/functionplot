@@ -113,7 +113,7 @@ class FunctionGraph:
                         if self.point_type_enabled[p.point_type]:
                             # don't add vertical or horizontal
                             # asymptotes here
-                            if p.point_type < 6:
+                            if p.point_type < 6 or p.point_type > 7:
                                 point = [p.x, p.y]
                                 if point not in points:
                                     points.append([p.x, p.y])
@@ -284,6 +284,7 @@ class FunctionGraph:
                 True, # 4: local min/max
                 True, # 5: inflection points
                 True, # 6: vertical asymptotes
-                True  # 7: horizontal asymptotes
+                True, # 7: horizontal asymptotes
+                True  # 8: slope is 45 or -45 degrees
                 ]
         self.new()

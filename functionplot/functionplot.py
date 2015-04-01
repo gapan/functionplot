@@ -117,6 +117,12 @@ class GUI:
         self.fg.update_xylimits()
         self.graph_update()
 
+    def on_checkmenuitem_slope45_toggled(self, widget):
+        self.fg.point_type_enabled[8] = \
+                self.checkmenuitem_slope45.get_active()
+        self.fg.update_xylimits()
+        self.graph_update()
+
     def on_checkmenuitem_outliers_toggled(self, widget):
         self.fg.outliers = self.checkmenuitem_outliers.get_active()
         self.fg.update_xylimits()
@@ -336,7 +342,7 @@ class GUI:
                     for p in f.poi:
                         # don't plot vertical or horizontal asymptotes
                         # here. We'll do it later
-                        if p.point_type < 6:
+                        if p.point_type < 6 or p.point_type > 7:
                             if self.fg.point_type_enabled[p.point_type]:
                                 xp.append(p.x)
                                 yp.append(p.y)
@@ -817,6 +823,10 @@ class GUI:
             builder.get_object('checkmenuitem_horizontal_asym')
         self.checkmenuitem_horizontal_asym.\
                 set_active(self.fg.point_type_enabled[7])
+        self.checkmenuitem_slope45 = \
+            builder.get_object('checkmenuitem_slope45')
+        self.checkmenuitem_slope45.\
+                set_active(self.fg.point_type_enabled[8])
         self.checkmenuitem_outliers = \
             builder.get_object('checkmenuitem_outliers')
         self.checkmenuitem_outliers.set_active(self.fg.outliers)
