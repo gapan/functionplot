@@ -74,7 +74,6 @@ def mpsolve(q, expr):
                 'happen. Probably a bug in sympy.')
         q.put(None)
 
-
 def fsolve(expr):
     xl = []
     try:
