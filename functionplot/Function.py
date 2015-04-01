@@ -164,7 +164,8 @@ class Function:
                 not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' x intercepts.')
-            self.check_periodic(x)
+            if not manual:
+                self.check_periodic(x)
         if poi == []:
             debug('Done calculating x intercepts. None found.')
         else:
@@ -202,7 +203,8 @@ class Function:
                 not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' min/max.')
-            self.check_periodic(x)
+            if not manual:
+                self.check_periodic(x)
         if poi == []:
             debug('Done calculating min/max. None found.')
         else:
@@ -239,7 +241,8 @@ class Function:
                 not self.polynomial and not manual and x != []:
             debug('Checking if function is periodic using'+\
                     ' inflection points.')
-            self.check_periodic(x)
+            if not manual:
+                self.check_periodic(x)
         if poi == []:
             debug('Done calculating inflection points. None found.')
         else:
@@ -286,7 +289,8 @@ class Function:
                 not self.polynomial and x != []:
             debug('Checking if function is periodic using'+\
                     ' slope45 points.')
-            self.check_periodic(x)
+            if not manual:
+                self.check_periodic(x)
         if poi == []:
             debug('Done calculating slope45 points. None found.')
         else:
