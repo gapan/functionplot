@@ -180,3 +180,5 @@ def remove_outliers(plist):
                 plist[i] = m
     return plist
 
+def log10(f):
+    return log(f, 10)

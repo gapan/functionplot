@@ -6,7 +6,7 @@ import numpy as np
 from sympy import diff, limit, simplify, latex, pi
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
-from helpers import pod, fsolve, rfc
+from helpers import pod, fsolve, rfc, log10
 from logging import debug
 import re
 import multiprocessing as mp
@@ -81,6 +81,7 @@ class Function:
         expr = expr.replace('sec(', '1/np.cos(') # no sec,
         expr = expr.replace('csc(', '1/np.sin(') # and no csc either
         # correct log functions
+        expr = expr.replace('log10(', 'np.log10(')
         expr = expr.replace('log(', 'np.log(')
         # square root
         expr = expr.replace('sqrt(', 'np.sqrt(')
@@ -104,22 +105,10 @@ class Function:
         expr = expr.replace('sec(', 'scc(')
         expr = expr.replace('e', '2.7183')
         expr = expr.replace('scc(', 'sec(')
-        # sympy only supports natural logarithms and log(x) = ln(x).
-        # For log base 10, we'll do the convertion manually:
-        # log10(x) = ln(x)/ln(10) = ln(x)/2.302585093 =
-        #  = 0.4342944819*ln(x)
-        # This is a hack, but appears to work fine (at least
-        # in most cases).
-        # The number of decimal points is restricted to 4, otherwise
-        # calculations could take a really long time. 4 is good
-        # enough in any case. Example for f(x) = log(x)-1:
-        # - 3 decimals: 152ms
-        # - 4 decimals: 228ms
-        # - 5 decimals: 301ms
-        # - 6 decimals: 561ms
-        # - 7 decimals: 3.89s
-        expr = expr.replace('log(', '0.4343*ln(')
-
+        # log() in sympy is natural log. log10() is defined in helpers.py
+        expr = expr.replace('log(', 'log10(')
+        expr = expr.replace('ln(', 'log(')
+        
         simp_expr = simplify(expr)
         debug('"'+expr+'" has been simplified to "'+\
                 str(simp_expr)+'"')
@@ -130,9 +119,8 @@ class Function:
         # expr is a simplified sympy expression. Creates a LaTeX
         # string from the expression using sympy latex printing.
         e = latex(expr)
-        e = e.replace('0.4343 \\log{', '\\log10{')
         e = e.replace('log{', 'ln{')
-        e = e.replace('log10', 'log')
+        e = e.replace('log_{10}', 'log')
         e = e.replace('\\lvert', '|')
         e = e.replace('\\rvert', '|')
         # translate e value back to e symbol
