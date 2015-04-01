@@ -494,7 +494,7 @@ class GUI:
         self._entry_function_append_text('10^x')
 
     def on_button_ep_x_clicked(self, widget):
-        self._entry_function_append_text('e^x')
+        self._entry_function_append_text('exp(x)')
 
     def on_button_sqrt_clicked(self, widget):
         self._entry_function_append_text('sqrt(x)')

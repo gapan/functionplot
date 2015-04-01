@@ -53,6 +53,8 @@ class Function:
         expr = expr.replace('}', ')')
         expr = expr.replace('[', '(')
         expr = expr.replace(']', ')')
+        # exp contains an x that we don't like
+        expr = expr.replace('exp(', 'ep(')
         # turn greek (unicode) notation to english
         expr = expr.replace('\xce\xb7\xce\xbc(', 'sin(')
         expr = expr.replace('\xcf\x83\xcf\x85\xce\xbd(', 'cos(')
@@ -70,6 +72,8 @@ class Function:
         expr = re.sub('([a-z\)])(pi)', '\\1*\\2', expr)
         expr = re.sub('(\))([a-z\(])', '\\1*\\2', expr)
         expr = re.sub('(x)([a-z\(])', '\\1*\\2', expr)
+        # bring back exp
+        expr = expr.replace('ep(', 'exp(')
         return expr
 
     def _get_np_expr(self, expr):
@@ -88,7 +92,7 @@ class Function:
         # absolute value. For numpy, turn the sympy Abs function
         # to np.abs
         expr = expr.replace('Abs(', 'np.abs(')
-        # pi and e
+        # pi and e (e also covers exp->np.exp)
         expr = expr.replace('pi', 'np.pi')
         expr = expr.replace('e', 'np.e')
         # powers
@@ -102,9 +106,9 @@ class Function:
         # we need to convert e to a float value. Since sec() is the
         # only function that also includes an "e", we'll remove
         # that temporarily
-        expr = expr.replace('sec(', 'scc(')
-        expr = expr.replace('e', '2.7183')
-        expr = expr.replace('scc(', 'sec(')
+        #expr = expr.replace('sec(', 'scc(')
+        #expr = expr.replace('e', '2.7183')
+        #expr = expr.replace('scc(', 'sec(')
         # log() in sympy is natural log. log10() is defined in helpers.py
         expr = expr.replace('log(', 'log10(')
         expr = expr.replace('ln(', 'log(')
@@ -123,8 +127,6 @@ class Function:
         e = e.replace('log_{10}', 'log')
         e = e.replace('\\lvert', '|')
         e = e.replace('\\rvert', '|')
-        # translate e value back to e symbol
-        e = e.replace('2.7183', 'e')
         e = '$'+e+'$'
         return e
 
