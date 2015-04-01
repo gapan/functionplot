@@ -67,7 +67,7 @@ class Function:
         expr = expr.replace('\xcf\x80', 'pi')
         # implied multiplication
         expr = re.sub('([0-9])([a-z\(])', '\\1*\\2', expr)
-        EXPR = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
+        expr = re.sub('([a-z\)])([0-9])', '\\1*\\2', expr)
         expr = re.sub('(pi)([a-z\(])', '\\1*\\2', expr)
         expr = re.sub('([a-z\)])(pi)', '\\1*\\2', expr)
         expr = re.sub('(\))([a-z\(])', '\\1*\\2', expr)
