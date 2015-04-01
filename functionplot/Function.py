@@ -414,8 +414,6 @@ class Function:
                         str(period)+'. Smaller periods may exist.')
                 self.periodic = True
                 self.period = period
-            else:
-                debug('Not a period: '+str(period))
 
     # checks the functions for some common periods
     # multiples of 0.25 (up to 1)
