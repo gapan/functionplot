@@ -173,7 +173,7 @@ class Function:
 
     def _calc_x_intercepts_manually(self):
         debug('Calculating x intercepts manually')
-        x = np.linspace(-10,10,10000)
+        x = np.linspace(-20,20,10000)
         y = eval(self.np_expr)
         sol = []
         for i in xrange(1, len(y)-1):
@@ -211,7 +211,7 @@ class Function:
 
     def _calc_min_max_manually(self):
         debug('Calculating local min/max manually')
-        x = np.linspace(-10,10,10000)
+        x = np.linspace(-20,20,10000)
         y = eval(self.np_expr)
         sol = []
         for i in xrange(1, len(y)-1):
