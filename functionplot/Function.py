@@ -153,6 +153,8 @@ class Function:
             if yc is not None and 'inf' not in str(yc):
                 debug('Added y intercept at (0,'+str(yc)+')')
                 q.put(POI(0, yc, 3))
+            else:
+                q.put(None)
         debug('Done calculating y intercept')
 
     def _calc_x_intercepts(self, q, expr):
@@ -371,7 +373,8 @@ class Function:
             p_vertical_asym.join()
             p_horizontal_asym.join()
             # gather POIs
-            self.poi.append(poi_y)
+            if poi_y is not None:
+                self.poi.append(poi_y)
             for i in poi_x:
                 self.poi.append(i)
             for i in poi_min_max:
