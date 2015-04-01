@@ -405,8 +405,7 @@ class Function:
             debug('Trying period: '+str(period))
             pf = self.simp_expr.subs('x', 'x+period')
             pf = pf.subs('period', period)
-            pf = simplify(pf)
-            g = simplify(str(self.simp_expr)+'-('+str(pf)+')')
+            g = self.simp_expr-pf
             if g == 0:
                 debug('Function is periodic and has a period of '+\
                         str(period)+'. Smaller periods may exist.')
