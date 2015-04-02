@@ -254,13 +254,16 @@ class Function:
         debug('Calculating inflection points manually')
         npexpr = self._get_np_expr(str(f2))
         x = np.linspace(-20,20,10000)
-        y = eval(npexpr)
         sol = []
-        for i in xrange(1, len(y)-1):
-            if ((y[i] == 0) or
-                    (y[i-1] < 0 and y[i] > 0 ) or
-                    (y[i-1] > 0 and y[i] < 0 )):
-                sol.append(x[i])
+        try:
+            y = eval(npexpr)
+            for i in xrange(1, len(y)-1):
+                if ((y[i] == 0) or
+                        (y[i-1] < 0 and y[i] > 0 ) or
+                        (y[i-1] > 0 and y[i] < 0 )):
+                    sol.append(x[i])
+        except NameError:
+            debug('Not possible to evaluate second derivative')
         return sol
 
     def _calc_slope_45(self, q, f1, expr):
@@ -302,15 +305,18 @@ class Function:
         debug('Calculating inflection points manually')
         npexpr = self._get_np_expr(str(f1))
         x = np.linspace(-20,20,10000)
-        y = eval(npexpr)
         sol = []
-        for i in xrange(1, len(y)-1):
-            if ((y[i] == 0.5) or (y[i] == -0.5) or
-                    (y[i-1] < 0.5 and y[i] > 0.5 ) or
-                    (y[i-1] > 0.5 and y[i] < 0.5 ) or
-                    (y[i-1] < -0.5 and y[i] > -0.5 ) or
-                    (y[i-1] > -0.5 and y[i] < -0.5 )):
-                sol.append(x[i])
+        try:
+            y = eval(npexpr)
+            for i in xrange(1, len(y)-1):
+                if ((y[i] == 0.5) or (y[i] == -0.5) or
+                        (y[i-1] < 0.5 and y[i] > 0.5 ) or
+                        (y[i-1] > 0.5 and y[i] < 0.5 ) or
+                        (y[i-1] < -0.5 and y[i] > -0.5 ) or
+                        (y[i-1] > -0.5 and y[i] < -0.5 )):
+                    sol.append(x[i])
+        except NameError:
+            debug('Not possible to evaluate first derivative')
         return sol
 
     def _calc_vertical_asym(self, q, expr):
