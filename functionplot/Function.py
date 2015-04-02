@@ -530,7 +530,6 @@ class Function:
             self.simp_expr = self._simplify_expr(self.expr)
             # expression as used by numpy
             self.np_expr = self._get_np_expr(str(self.simp_expr))
-            self.valid = self.update_graph_points(xylimits)
         except:
             self.valid = False
         self.poi = []
