@@ -6,7 +6,7 @@ import numpy as np
 from sympy import diff, limit, simplify, latex, pi
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
-from helpers import pod, fsolve, rfc, log10
+from helpers import pod, fsolve, rfc, log10, sample
 from logging import debug
 import re
 import multiprocessing as mp
@@ -15,30 +15,31 @@ class Function:
     
     def update_graph_points(self, xylimits):
         x_min, x_max, y_min, y_max = xylimits
-        x = np.linspace(x_min, x_max, self.resolution)
-        # if it doesn't evaluate, the expression is wrong
+        x_initial = np.linspace(x_min, x_max, self.resolution)
         try:
-            y = eval(self.np_expr)
-        except:
+            x_val, y = sample(self.np_expr, x_initial)
+            y_val = y[0]
+        except IndexError:
+            # if f(x)=a, make sure that y is an array with the same size
+            # as x and with a constant value.
+            debug('This looks like a constant function: '+\
+                    self.np_expr)
+            self.constant = True
+            x_val = np.array([x_min, 0, x_max])
+            this_y = eval(self.np_expr)
+            y_val = np.array([this_y, this_y, this_y])
+        except Exception, e:
+            debug('Exception caught. This should not have happened here: '+e)
             return False
         # no need to calculate values that are off the displayed
         # scale. This fixes some trouble with asymptotes like in
         # tan(x).
         # FIXME: unfortunately there is more trouble with asymptotes
-        try:
-            y[y>y_max] = np.inf
-            y[y<y_min] = np.inf
-        # if f(x)=a, make sure that y is an array with the same size
-        # as x and with a constant value.
-        except TypeError:
-            debug('This looks like a constant function: '+\
-                    self.np_expr)
-            self.constant = True
-            l = len(x)
-            yarr = np.ndarray([l,])
-            yarr[yarr!=y]=y
-            y = yarr
-        self.graph_points = x, y
+        if not self.constant:
+            y_val[y_val>y_max] = np.inf
+            y_val[y_val<y_min] = np.inf
+        self.graph_points = x_val, y_val
+        debug('Number of points calculated:'+str(len(x_val)))
         return True
 
     def _get_expr(self, expr):
@@ -368,13 +369,13 @@ class Function:
 
     def calc_poi(self):
         expr = self.simp_expr
-        
         self.poi = []
         #
         # y intercept
         #
         q_y = mp.Queue()
         p_y = mp.Process(target=self._calc_y_intercept, args=(q_y, expr,))
+        p_y.start()
         if not self.constant:
             # calculate 1st and 2nd derivatives
             f1 = diff(expr, 'x')
@@ -416,7 +417,6 @@ class Function:
             p_slope_45 = mp.Process(target=self._calc_slope_45,
                     args=(q_slope_45, f1, expr,))
             # start processes, different process for each POI type
-            p_y.start()
             p_x.start()
             p_min_max.start()
             p_inflection.start()
@@ -424,7 +424,6 @@ class Function:
             p_horizontal_asym.start()
             p_slope_45.start()
             # get the processes output
-            poi_y = q_y.get()
             poi_x = q_x.get()
             poi_min_max = q_min_max.get()
             poi_inflection = q_inflection.get()
@@ -432,7 +431,6 @@ class Function:
             poi_horizontal_asym = q_horizontal_asym.get()
             poi_slope_45 = q_slope_45.get()
             # wait until all processes are done
-            p_y.join()
             p_x.join()
             p_min_max.join()
             p_inflection.join()
@@ -440,8 +438,6 @@ class Function:
             p_horizontal_asym.join()
             p_slope_45.join()
             # gather POIs
-            if poi_y is not None:
-                self.poi.append(poi_y)
             for i in poi_x:
                 self.poi.append(i)
             for i in poi_min_max:
@@ -459,6 +455,11 @@ class Function:
             if self.trigonometric and not self.periodic and \
                     not self.polynomial:
                 self._test_common_periods()
+        # Add y intercept to POIs (if any)
+        poi_y = q_y.get()
+        p_y.join()
+        if poi_y is not None:
+            self.poi.append(poi_y)
 
     def check_periodic(self, x):
         l = len(x)
