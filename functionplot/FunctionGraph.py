@@ -12,8 +12,6 @@ from logging import debug
 
 class FunctionGraph:
 
-    # for now this defaults to setting limits to -1.2 to 1.2
-    # it will eventually autoadjust to functions
     def zoom_default(self):
         self.clear()
         self.auto = True
