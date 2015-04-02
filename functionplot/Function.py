@@ -25,9 +25,10 @@ class Function:
             debug('This looks like a constant function: '+\
                     self.np_expr)
             self.constant = True
-            x_val = np.array([x_min, 0, x_max])
+            # 2 graph points are enough for a constant function
+            x_val = np.array([x_min, x_max])
             this_y = eval(self.np_expr)
-            y_val = np.array([this_y, this_y, this_y])
+            y_val = np.array([this_y, this_y])
         except Exception, e:
             debug('Exception caught. This should not have happened here: '+e)
             return False
