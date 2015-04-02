@@ -21,25 +21,21 @@ class FunctionGraph:
 
     def zoom_x_in(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom_x(zoom_out=False)
         self.update_graph_points()
     
     def zoom_x_out(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom_x(zoom_out=True)
         self.update_graph_points()
 
     def zoom_y_in(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom_y(zoom_out=False)
         self.update_graph_points()
 
     def zoom_y_out(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom_y(zoom_out=True)
         self.update_graph_points()
 
