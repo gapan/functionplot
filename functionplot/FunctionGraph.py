@@ -21,59 +21,46 @@ class FunctionGraph:
 
     def zoom_x_in(self):
         self.auto = False
-        self._zoom_x(zoom_out=False)
-        self.update_graph_points()
+        self._zoom(zoom_out=False, zoom_x=True, zoom_y=False)
     
     def zoom_x_out(self):
         self.auto = False
-        self._zoom_x(zoom_out=True)
-        self.update_graph_points()
+        self._zoom(zoom_out=True, zoom_x=True, zoom_y=False)
 
     def zoom_y_in(self):
         self.auto = False
-        self._zoom_y(zoom_out=False)
-        self.update_graph_points()
+        self._zoom(zoom_out=False, zoom_x=False, zoom_y=True)
 
     def zoom_y_out(self):
         self.auto = False
-        self._zoom_y(zoom_out=True)
-        self.update_graph_points()
+        self._zoom(zoom_out=True, zoom_x=False, zoom_y=True)
 
     def zoom_in(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom(zoom_out=False)
 
     def zoom_out(self):
         self.auto = False
-        self.update_graph_points()
         self._zoom(zoom_out=True)
 
-    def _zoom_x(self, zoom_out=False):
+    def _zoom(self, zoom_out=False, zoom_x=True, zoom_y=True,
+            multiplier=1):
         if zoom_out:
-            sf = self.scale_factor
+            sf = self.scale_factor*multiplier
         else:
-            sf = 1.0/self.scale_factor
-        x_center = (self.x_max + self.x_min)/2
-        x_range = self.x_max - self.x_min
-        new_x_range = x_range*sf
-        self.x_min = x_center - new_x_range/2
-        self.x_max = x_center + new_x_range/2
-    
-    def _zoom_y(self, zoom_out=False):
-        if zoom_out:
-            sf = self.scale_factor
-        else:
-            sf = 1.0/self.scale_factor
-        y_center = (self.y_max + self.y_min)/2
-        y_range = self.y_max - self.y_min
-        new_y_range = y_range*sf
-        self.y_min = y_center - new_y_range/2
-        self.y_max = y_center + new_y_range/2
-   
-    def _zoom(self, zoom_out=False):
-        self._zoom_x(zoom_out)
-        self._zoom_y(zoom_out)
+            sf = 1.0/(self.scale_factor*multiplier)
+        if zoom_x:
+            x_center = (self.x_max + self.x_min)/2
+            x_range = self.x_max - self.x_min
+            new_x_range = x_range*sf
+            self.x_min = x_center - new_x_range/2
+            self.x_max = x_center + new_x_range/2
+        if zoom_y:
+            y_center = (self.y_max + self.y_min)/2
+            y_range = self.y_max - self.y_min
+            new_y_range = y_range*sf
+            self.y_min = y_center - new_y_range/2
+            self.y_max = y_center + new_y_range/2
         self.update_graph_points()
 
     def update_graph_points(self):
@@ -205,8 +192,7 @@ class FunctionGraph:
             self.y_min = y_min
             self.y_max = y_max
             # zoom out twice, gives better output
-            self._zoom(zoom_out=True)
-            self._zoom(zoom_out=True)
+            self._zoom(zoom_out=True, zoom_x=True, zoom_y=True, multiplier=2)
 
     def calc_intersections(self):
         # we're using plist as a helper list for checking if
