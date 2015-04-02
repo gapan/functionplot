@@ -271,7 +271,7 @@ class FunctionGraph:
 
     def __init__(self):
         self.scale_factor = 1.2
-        # we have 7 types of POIs
+        # we have 8 types of POIs
         self.point_type_enabled = [
                 True, # 0: standard axis points
                 True, # 1: function intersections
