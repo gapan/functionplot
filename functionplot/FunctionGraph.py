@@ -80,9 +80,9 @@ class FunctionGraph:
             return False
 
     def update_xylimits(self):
-        vertical_asymptotes = False
-        horizontal_asymptotes = False
         if self.auto:
+            vertical_asymptotes = False
+            horizontal_asymptotes = False
             debug('Calculating xylimits.')
             xl = []
             yl = []
