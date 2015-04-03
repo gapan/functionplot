@@ -49,6 +49,29 @@ class Function:
                 delete.append(i)
         x = np.delete(x, delete)
         y = np.delete(y, delete)
+        # add points at the edge of the graph
+        addyinf = []
+        addx = []
+        for i in xrange(1, len(x)):
+            if y[i] == np.inf and y[i-1] > y_mean:
+                addyinf.append(i)
+                addx.append(x[i-1])
+            if y[i] > y_mean and y[i-1] == np.inf:
+                addyinf.append(i)
+                addx.append(x[i])
+        x = np.insert(x, addyinf, addx)
+        y = np.insert(y, addyinf, y_max)
+        addyinf = []
+        addx = []
+        for i in xrange(1, len(x)):
+            if y[i] == -np.inf and y[i-1] < y_mean:
+                addyinf.append(i)
+                addx.append(x[i-1])
+            if y[i] < y_mean and y[i-1] == -np.inf:
+                addyinf.append(i)
+                addx.append(x[i])
+        x = np.insert(x, addyinf, addx)
+        y = np.insert(y, addyinf, y_min)
 
         self.graph_points = x, y
         debug('Number of points calculated:'+str(len(x)))
