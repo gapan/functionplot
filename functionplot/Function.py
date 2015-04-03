@@ -17,8 +17,8 @@ class Function:
         x_min, x_max, y_min, y_max = xylimits
         x_initial = np.linspace(x_min, x_max, self.resolution)
         try:
-            x_val, y = sample(self.np_expr, x_initial)
-            y_val = y[0]
+            x, y_arr = sample(self.np_expr, x_initial)
+            y = y_arr[0]
         except IndexError:
             # if f(x)=a, make sure that y is an array with the same size
             # as x and with a constant value.
@@ -26,9 +26,9 @@ class Function:
                     self.np_expr)
             self.constant = True
             # 2 graph points are enough for a constant function
-            x_val = np.array([x_min, x_max])
+            x = np.array([x_min, x_max])
             this_y = eval(self.np_expr)
-            y_val = np.array([this_y, this_y])
+            y = np.array([this_y, this_y])
         except Exception, e:
             debug('Exception caught. This should not have happened here: '+e)
             return False
@@ -37,10 +37,21 @@ class Function:
         # tan(x).
         # FIXME: unfortunately there is more trouble with asymptotes
         if not self.constant:
-            y_val[y_val>y_max] = np.inf
-            y_val[y_val<y_min] = np.inf
-        self.graph_points = x_val, y_val
-        debug('Number of points calculated:'+str(len(x_val)))
+            y[y>y_max] = np.inf
+            y[y<y_min] = -np.inf
+        y_mean = (y_max+y_min)/2
+        # delete consecutive inf or -inf values
+        delete = []
+        for i in xrange(1, len(x)):
+            if y[i] == np.inf and y[i-1] == np.inf:
+                delete.append(i)
+            if y[i] == -np.inf and y[i-1] == -np.inf:
+                delete.append(i)
+        x = np.delete(x, delete)
+        y = np.delete(y, delete)
+
+        self.graph_points = x, y
+        debug('Number of points calculated:'+str(len(x)))
         return True
 
     def _get_expr(self, expr):
