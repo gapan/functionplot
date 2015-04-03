@@ -71,7 +71,7 @@ class GUI:
         self.fcdialog_export.show()
 
     def on_imagemenuitem_quit_activate(self, widget):
-        gtk.main_quit()
+        self._quit()
 
     # View menu
 
@@ -404,7 +404,13 @@ class GUI:
             index += 1
 
     def gtk_main_quit(self, widget, data=None):
-        gtk.main_quit()
+        self._quit()
+
+    def _quit(self):
+        if self.changed:
+            self.dialog_confirm_quit.show()
+        else:
+            gtk.main_quit()
 
     #
     # Add function dialog
@@ -687,9 +693,18 @@ class GUI:
         except TypeError:
             pass
 
-
     def on_button_export_cancel_clicked(self, widget):
         self.fcdialog_export.hide()
+
+    def on_button_confirm_quit_yes_clicked(self, widget):
+        gtk.main_quit()
+
+    def on_button_confirm_quit_cancel_clicked(self, widget):
+        self.dialog_confirm_quit.hide()
+
+    def on_dialog_confirm_quit_delete_event(self, widget, event):
+        self.dialog_confirm_quit.hide()
+        return True
 
     def on_filechooserdialog_export_delete_event(self, widget,
             event):
@@ -717,6 +732,10 @@ class GUI:
     def on_dialog_file_export_error_delete_event(self, widget,
             event):
         self.dialog_file_export_error.hide()
+        return True
+
+    def on_functionplot_delete_event(self, widget, event):
+        self._quit()
         return True
 
     # save the graph
@@ -895,6 +914,9 @@ class GUI:
         # confirm new dialog
         self.dialog_confirm_new = \
             builder.get_object('dialog_confirm_new')
+        # confirm quit dialog
+        self.dialog_confirm_quit = \
+            builder.get_object('dialog_confirm_quit')
         # export dialogs
         self.fcdialog_export = \
             builder.get_object('filechooserdialog_export')
