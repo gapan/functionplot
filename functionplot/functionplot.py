@@ -811,6 +811,27 @@ class GUI:
         self._add_example_function('-(x+3)^13')
     def on_button_add_poly12_clicked(self, widget):
         self._add_example_function('abs(x^3)')
+    def on_button_add_rat1_clicked(self, widget):
+        self._add_example_function('1/x')
+    def on_button_add_rat2_clicked(self, widget):
+        self._add_example_function('-1/x')
+    def on_button_add_rat3_clicked(self, widget):
+        self._add_example_function('1/(x+2)')
+    def on_button_add_rat4_clicked(self, widget):
+        self._add_example_function('2/x')
+    def on_button_add_rat5_clicked(self, widget):
+        self._add_example_function('x/(2x+3)')
+    def on_button_add_rat6_clicked(self, widget):
+        self._add_example_function('(2x+1)/(x+1)')
+    def on_button_add_rat7_clicked(self, widget):
+        self._add_example_function('(x^2+1)/(x-1)')
+    def on_button_add_rat8_clicked(self, widget):
+        self._add_example_function('(x-1)/(x^2+1)')
+    def on_button_add_rat9_clicked(self, widget):
+        self._add_example_function('1/x^2')
+    def on_button_add_rat10_clicked(self, widget):
+        self._add_example_function('4/(x^2+1)')
+
     # save the graph
     def _save(self):
         try:
