@@ -741,6 +741,7 @@ class GUI:
     # example functions
     @threaded
     def _add_example_function(self, expr):
+        self.changed = True
         gtk.gdk.threads_enter()
         self.window_calculating.show()
         gtk.gdk.threads_leave()
