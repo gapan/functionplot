@@ -738,6 +738,79 @@ class GUI:
         self._quit()
         return True
 
+    # example functions
+    @threaded
+    def _add_example_function(self, expr):
+        gtk.gdk.threads_enter()
+        self.window_calculating.show()
+        gtk.gdk.threads_leave()
+        f = self.fg.add_function(expr)
+        gtk.gdk.threads_enter()
+        self.window_calculating.hide()
+        self.update_function_list()
+        self.graph_update()
+        gtk.gdk.threads_leave()
+
+    def on_button_add_2_clicked(self, widget):
+        self._add_example_function('2')
+    def on_button_abs_xp2_m1_clicked(self, widget):
+        self._add_example_function('abs(x+2)-1')
+    def on_button_abs_x_p2_clicked(self, widget):
+        self._add_example_function('abs(x)+2')
+    def on_button_add_x_clicked(self, widget):
+        self._add_example_function('x')
+    def on_button_add_2x_clicked(self, widget):
+        self._add_example_function('2x')
+    def on_button_add_mx_clicked(self, widget):
+        self._add_example_function('-x')
+    def on_button_add_xm1_clicked(self, widget):
+        self._add_example_function('x-1')
+    def on_button_add_mxp3_clicked(self, widget):
+        self._add_example_function('-x+3')
+    def on_button_add_abs_x_clicked(self, widget):
+        self._add_example_function('abs(x)')
+    def on_button_abs_xp2_clicked(self, widget):
+        self._add_example_function('abs(x+2)')
+    def on_button_add_x_square_clicked(self, widget):
+        self._add_example_function('x^2')
+    def on_button_add_quad1_clicked(self, widget):
+        self._add_example_function('2x^2')
+    def on_button_add_quad2_clicked(self, widget):
+        self._add_example_function('-x^2')
+    def on_button_add_quad3_clicked(self, widget):
+        self._add_example_function('3x^2+2x-4')
+    def on_button_add_quad4_clicked(self, widget):
+        self._add_example_function('(x-1)^2')
+    def on_button_add_quad5_clicked(self, widget):
+        self._add_example_function('(x+2)(x-1)')
+    def on_button_add_quad6_clicked(self, widget):
+        self._add_example_function('(x-2)^2')
+    def on_button_add_x_cube_clicked(self, widget):
+        self._add_example_function('x^3')
+    def on_button_add_poly1_clicked(self, widget):
+        self._add_example_function('2x^3')
+    def on_button_add_poly2_clicked(self, widget):
+        self._add_example_function('-x^3')
+    def on_button_add_poly3_clicked(self, widget):
+        self._add_example_function('3x^3-8x^2+2x-1')
+    def on_button_add_poly4_clicked(self, widget):
+        self._add_example_function('-(x-2)^3')
+    def on_button_add_poly5_clicked(self, widget):
+        self._add_example_function('(x+2)(x-1)(x-3)')
+    def on_button_add_poly6_clicked(self, widget):
+        self._add_example_function('x^4')
+    def on_button_add_poly7_clicked(self, widget):
+        self._add_example_function('x^4-3x^2+5x-3')
+    def on_button_add_poly8_clicked(self, widget):
+        self._add_example_function('x^5')
+    def on_button_add_poly9_clicked(self, widget):
+        self._add_example_function('-(x-5)^3 x^2')
+    def on_button_add_poly10_clicked(self, widget):
+        self._add_example_function('(x-1)^12')
+    def on_button_add_poly11_clicked(self, widget):
+        self._add_example_function('-(x+3)^13')
+    def on_button_add_poly12_clicked(self, widget):
+        self._add_example_function('abs(x^3)')
     # save the graph
     def _save(self):
         try:
