@@ -1805,16 +1805,6 @@
       <action-widget response="0">button_overwrite_yes</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkImage" id="image_quad5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/quad5.png</property>
-  </object>
-  <object class="GtkImage" id="image_quad6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/quad6.png</property>
-  </object>
   <object class="GtkImage" id="image_10_p_x">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -2059,15 +2049,20 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">img/quad4.png</property>
   </object>
+  <object class="GtkImage" id="image_quad5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/quad5.png</property>
+  </object>
+  <object class="GtkImage" id="image_quad6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/quad6.png</property>
+  </object>
   <object class="GtkImage" id="image_rat1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">img/rat1.png</property>
-  </object>
-  <object class="GtkImage" id="image_rat10">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/rat10.png</property>
   </object>
   <object class="GtkImage" id="image_rat2">
     <property name="visible">True</property>
@@ -2083,6 +2078,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">img/rat4.png</property>
+  </object>
+  <object class="GtkImage" id="image_rat10">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/rat10.png</property>
   </object>
   <object class="GtkImage" id="image_rat5">
     <property name="visible">True</property>
@@ -2113,6 +2113,41 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">img/root1.png</property>
+  </object>
+  <object class="GtkImage" id="image_root2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root2.png</property>
+  </object>
+  <object class="GtkImage" id="image_root3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root3.png</property>
+  </object>
+  <object class="GtkImage" id="image_root4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root4.png</property>
+  </object>
+  <object class="GtkImage" id="image_root5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root5.png</property>
+  </object>
+  <object class="GtkImage" id="image_root6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root6.png</property>
+  </object>
+  <object class="GtkImage" id="image_root7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root7.png</property>
+  </object>
+  <object class="GtkImage" id="image_root8">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">img/root8.png</property>
   </object>
   <object class="GtkWindow" id="functionplot">
     <property name="width_request">750</property>
@@ -2382,6 +2417,21 @@
                         <property name="label" translatable="yes">Show _Legend</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_checkmenuitem_legend_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="menuitem3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="checkmenuitem_logscale">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Logscale</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="on_checkmenuitem_logscale_toggled" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -4642,6 +4692,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="resize">True</property>
@@ -4657,41 +4710,6 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="image_root2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root2.png</property>
-  </object>
-  <object class="GtkImage" id="image_root3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root3.png</property>
-  </object>
-  <object class="GtkImage" id="image_root4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root4.png</property>
-  </object>
-  <object class="GtkImage" id="image_root5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root5.png</property>
-  </object>
-  <object class="GtkImage" id="image_root6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root6.png</property>
-  </object>
-  <object class="GtkImage" id="image_root7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root7.png</property>
-  </object>
-  <object class="GtkImage" id="image_root8">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">img/root8.png</property>
   </object>
   <object class="GtkImage" id="image_root9">
     <property name="visible">True</property>
