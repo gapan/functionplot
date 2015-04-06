@@ -136,6 +136,10 @@ class GUI:
         self.fg.show_legend = self.checkmenuitem_legend.get_active()
         self.graph_update()
 
+    def on_checkmenuitem_logscale_toggled(self, widget):
+        self.fg.logscale = self.checkmenuitem_logscale.get_active()
+        self.graph_update()
+
     # toolbar button activation signals
     def on_btn_new_clicked(self, widget):
         if self.changed:
@@ -278,6 +282,12 @@ class GUI:
         x_min, x_max = self.fg.x_min, self.fg.x_max
         y_min, y_max = self.fg.y_min, self.fg.y_max
        
+        if self.fg.logscale:
+            self.ax.set_xscale('symlog')
+            self.ax.set_yscale('symlog')
+        else:
+            self.ax.set_xscale('linear')
+            self.ax.set_yscale('linear')
         # put axes in center instead of the sides
         # when axes are off screen, put them on the edges
         self.ax.grid(True)
@@ -1038,6 +1048,9 @@ class GUI:
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
+        self.checkmenuitem_logscale = \
+            builder.get_object('checkmenuitem_logscale')
+
         # main toolbar
         self.btn_auto = builder.get_object('btn_auto')
         self.btn_auto.set_active(self.fg.auto)
