@@ -852,6 +852,44 @@ class GUI:
         self._add_example_function('10^x')
     def on_button_add_pow10_clicked(self, widget):
         self._add_example_function('x^x')
+    def on_button_add_log1_clicked(self, widget):
+        self._add_example_function('log(x)')
+    def on_button_add_log2_clicked(self, widget):
+        self._add_example_function('log(x-1)')
+    def on_button_add_log3_clicked(self, widget):
+        self._add_example_function('log(x+1)')
+    def on_button_add_log4_clicked(self, widget):
+        self._add_example_function('log(2x)')
+    def on_button_add_log5_clicked(self, widget):
+        self._add_example_function('log(x)-2')
+    def on_button_add_log6_clicked(self, widget):
+        self._add_example_function('xlog(x)')
+    def on_button_add_log7_clicked(self, widget):
+        self._add_example_function('ln(x)')
+    def on_button_add_log8_clicked(self, widget):
+        self._add_example_function('log(x)ln(x)')
+    def on_button_add_log9_clicked(self, widget):
+        self._add_example_function('log(abs(x))')
+    def on_button_add_trig1_clicked(self, widget):
+        self._add_example_function('sin(x)')
+    def on_button_add_trig2_clicked(self, widget):
+        self._add_example_function('sin(2x)')
+    def on_button_add_trig3_clicked(self, widget):
+        self._add_example_function('-sin(x)')
+    def on_button_add_trig4_clicked(self, widget):
+        self._add_example_function('sin(x-1)')
+    def on_button_add_trig5_clicked(self, widget):
+        self._add_example_function('sin(x+1)')
+    def on_button_add_trig6_clicked(self, widget):
+        self._add_example_function('cos(x)')
+    def on_button_add_trig7_clicked(self, widget):
+        self._add_example_function('tan(x)')
+    def on_button_add_trig8_clicked(self, widget):
+        self._add_example_function('cot(x)')
+    def on_button_add_trig9_clicked(self, widget):
+        self._add_example_function('sec(x)')
+    def on_button_add_trig10_clicked(self, widget):
+        self._add_example_function('csc(x)')
 
     # save the graph
     def _save(self):
