@@ -832,6 +832,26 @@ class GUI:
         self._add_example_function('1/x^2')
     def on_button_add_rat10_clicked(self, widget):
         self._add_example_function('4/(x^2+1)')
+    def on_button_add_pow1_clicked(self, widget):
+        self._add_example_function('2^x')
+    def on_button_add_pow2_clicked(self, widget):
+        self._add_example_function('2^(-x)')
+    def on_button_add_pow3_clicked(self, widget):
+        self._add_example_function('-2^x')
+    def on_button_add_pow4_clicked(self, widget):
+        self._add_example_function('-2^(-x)')
+    def on_button_add_pow5_clicked(self, widget):
+        self._add_example_function('2^(x-1)')
+    def on_button_add_pow6_clicked(self, widget):
+        self._add_example_function('2^(x+1)')
+    def on_button_add_pow7_clicked(self, widget):
+        self._add_example_function('exp(x)')
+    def on_button_add_pow8_clicked(self, widget):
+        self._add_example_function('3^x')
+    def on_button_add_pow9_clicked(self, widget):
+        self._add_example_function('10^x')
+    def on_button_add_pow10_clicked(self, widget):
+        self._add_example_function('x^x')
 
     # save the graph
     def _save(self):
