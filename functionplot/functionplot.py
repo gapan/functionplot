@@ -890,6 +890,22 @@ class GUI:
         self._add_example_function('sec(x)')
     def on_button_add_trig10_clicked(self, widget):
         self._add_example_function('csc(x)')
+    def on_button_add_root1_clicked(self, widget):
+        self._add_example_function('sqrt(x)')
+    def on_button_add_root2_clicked(self, widget):
+        self._add_example_function('sqrt(2x)')
+    def on_button_add_root3_clicked(self, widget):
+        self._add_example_function('-sqrt(x)')
+    def on_button_add_root4_clicked(self, widget):
+        self._add_example_function('sqrt(-x)')
+    def on_button_add_root5_clicked(self, widget):
+        self._add_example_function('sqrt(x-1)')
+    def on_button_add_root6_clicked(self, widget):
+        self._add_example_function('sqrt(x^2+3)')
+    def on_button_add_root7_clicked(self, widget):
+        self._add_example_function('sqrt(1-x^2)')
+    def on_button_add_root8_clicked(self, widget):
+        self._add_example_function('xsqrt(x^2-4)')
 
     # save the graph
     def _save(self):
