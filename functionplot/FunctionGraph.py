@@ -70,7 +70,7 @@ class FunctionGraph:
     def add_function(self, expr):
         debug('Adding function: '+expr)
         xylimits = [self.x_min, self.x_max, self.y_min, self.y_max]
-        f = Function(expr, xylimits)
+        f = Function(expr, xylimits, self.logscale)
         if f.valid:
             self.functions.append(f)
             self.calc_intersections()
@@ -232,7 +232,7 @@ class FunctionGraph:
         self.x_max = 1.2
         self.y_min = -1.2
         self.y_max = 1.2
-        self.axis_type = 'linear'
+        self.logscale = False
         self.auto = True
 
     def new(self):
