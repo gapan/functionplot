@@ -906,6 +906,20 @@ class GUI:
         self._add_example_function('sqrt(1-x^2)')
     def on_button_add_root8_clicked(self, widget):
         self._add_example_function('xsqrt(x^2-4)')
+    def on_button_add_comb1_clicked(self, widget):
+        self._add_example_function('x-cos(x)')
+    def on_button_add_comb2_clicked(self, widget):
+        self._add_example_function('x^2/log(x)')
+    def on_button_add_comb3_clicked(self, widget):
+        self._add_example_function('x^3/abs(x(x-1))')
+    def on_button_add_comb4_clicked(self, widget):
+        self._add_example_function('x2^x')
+    def on_button_add_comb5_clicked(self, widget):
+        self._add_example_function('-4^x+x^4')
+    def on_button_add_comb6_clicked(self, widget):
+        self._add_example_function('(x^2+3)/sqrt(x-2)')
+    def on_button_add_comb7_clicked(self, widget):
+        self._add_example_function('sin(log(x))')
 
     # save the graph
     def _save(self):
