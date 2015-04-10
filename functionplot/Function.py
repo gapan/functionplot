@@ -551,7 +551,7 @@ class Function:
             self.trigonometric = False
             debug('Function cannot be periodic.')
 
-    def __init__(self, expr, xylimits):
+    def __init__(self, expr, xylimits, logscale = False):
         # the number of points to calculate within the graph using
         # the function
         self.resolution = 1000
