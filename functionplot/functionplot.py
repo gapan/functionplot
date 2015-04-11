@@ -330,7 +330,7 @@ class GUI:
 
         # we don't need the origin annotated in both axes
         if x_min < 0 and x_max >0 and y_min < 0 and y_max > 0:
-            formatter = CenteredFormatter()
+            formatter = CenteredFormatter(useMathText=True)
             formatter.center = 0
             self.ax.xaxis.set_major_formatter(formatter)
             self.ax.yaxis.set_major_formatter(formatter)
