@@ -59,6 +59,11 @@ class FunctionGraph:
             new_y_range = y_range*sf
             self.y_min = y_center - new_y_range/2
             self.y_max = y_center + new_y_range/2
+        if self.logscale:
+            if self.x_min < 0:
+                self.x_min = 0
+            if self.y_min < 0:
+                self.y_min = 0
         self.update_graph_points()
 
     def update_graph_points(self):
@@ -191,6 +196,13 @@ class FunctionGraph:
             self.y_max = y_max
             # zoom out twice, gives better output
             self._zoom(zoom_out=True, zoom_x=True, zoom_y=True, multiplier=2)
+        if self.logscale:
+            if self.x_min < 0:
+                self.x_min = 0
+                self.x_max = 100*self.x_max
+            if self.y_min < 0:
+                self.y_min = 0
+                self.y_max = 100*self.y_max
 
     def calc_intersections(self):
         # we're using plist as a helper list for checking if

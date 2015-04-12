@@ -282,61 +282,60 @@ class GUI:
         x_min, x_max = self.fg.x_min, self.fg.x_max
         y_min, y_max = self.fg.y_min, self.fg.y_max
        
+        self.ax.grid(True)
         if self.fg.logscale:
-            self.ax.set_xscale('symlog')
-            self.ax.set_yscale('symlog')
+            self.ax.set_xscale('log')
+            self.ax.set_yscale('log')
         else:
             self.ax.set_xscale('linear')
             self.ax.set_yscale('linear')
-        # put axes in center instead of the sides
-        # when axes are off screen, put them on the edges
-        self.ax.grid(True)
-        if x_min < 0 and x_max >0:
-            self.ax.spines['left'].set_color('black')
-            self.ax.spines['left'].set_position(('data', 0))
-            self.ax.spines['left'].set_smart_bounds(False)
-            self.ax.spines['right'].set_color('none')
-            self.ax.yaxis.set_ticks_position('left')
-        elif x_min >= 0:
-            self.ax.spines['left'].set_color('black')
-            self.ax.spines['left'].set_position(('data', x_min))
-            self.ax.spines['left'].set_smart_bounds(False)
-            self.ax.spines['right'].set_color('none')
-            self.ax.yaxis.set_ticks_position('left')
-        else:
-            self.ax.spines['right'].set_color('black')
-            self.ax.spines['right'].set_position(('data', x_max))
-            self.ax.spines['right'].set_smart_bounds(False)
-            self.ax.spines['left'].set_color('none')
-            self.ax.yaxis.set_ticks_position('right')
-        if y_min < 0 and y_max >0:
-            self.ax.spines['bottom'].set_color('black')
-            self.ax.spines['bottom'].set_position(('data', 0))
-            self.ax.spines['bottom'].set_smart_bounds(False)
-            self.ax.spines['top'].set_color('none')
-            self.ax.xaxis.set_ticks_position('bottom')
-        elif y_min >= 0:
-            self.ax.spines['bottom'].set_color('black')
-            self.ax.spines['bottom'].set_position(('data', y_min))
-            self.ax.spines['bottom'].set_smart_bounds(False)
-            self.ax.spines['top'].set_color('none')
-            self.ax.xaxis.set_ticks_position('bottom')
-        else:
-            self.ax.spines['top'].set_color('black')
-            self.ax.spines['top'].set_position(('data', y_max))
-            self.ax.spines['top'].set_smart_bounds(False)
-            self.ax.spines['bottom'].set_color('none')
-            self.ax.xaxis.set_ticks_position('top')
+            # put axes in center instead of the sides
+            # when axes are off screen, put them on the edges
+            if x_min < 0 and x_max >0:
+                self.ax.spines['left'].set_color('black')
+                self.ax.spines['left'].set_position(('data', 0))
+                self.ax.spines['left'].set_smart_bounds(False)
+                self.ax.spines['right'].set_color('none')
+                self.ax.yaxis.set_ticks_position('left')
+            elif x_min >= 0:
+                self.ax.spines['left'].set_color('black')
+                self.ax.spines['left'].set_position(('data', x_min))
+                self.ax.spines['left'].set_smart_bounds(False)
+                self.ax.spines['right'].set_color('none')
+                self.ax.yaxis.set_ticks_position('left')
+            else:
+                self.ax.spines['right'].set_color('black')
+                self.ax.spines['right'].set_position(('data', x_max))
+                self.ax.spines['right'].set_smart_bounds(False)
+                self.ax.spines['left'].set_color('none')
+                self.ax.yaxis.set_ticks_position('right')
+            if y_min < 0 and y_max >0:
+                self.ax.spines['bottom'].set_color('black')
+                self.ax.spines['bottom'].set_position(('data', 0))
+                self.ax.spines['bottom'].set_smart_bounds(False)
+                self.ax.spines['top'].set_color('none')
+                self.ax.xaxis.set_ticks_position('bottom')
+            elif y_min >= 0:
+                self.ax.spines['bottom'].set_color('black')
+                self.ax.spines['bottom'].set_position(('data', y_min))
+                self.ax.spines['bottom'].set_smart_bounds(False)
+                self.ax.spines['top'].set_color('none')
+                self.ax.xaxis.set_ticks_position('bottom')
+            else:
+                self.ax.spines['top'].set_color('black')
+                self.ax.spines['top'].set_position(('data', y_max))
+                self.ax.spines['top'].set_smart_bounds(False)
+                self.ax.spines['bottom'].set_color('none')
+                self.ax.xaxis.set_ticks_position('top')
 
-        # we don't need the origin annotated in both axes
-        if x_min < 0 and x_max >0 and y_min < 0 and y_max > 0:
-            formatter = CenteredFormatter(useMathText=True)
-            formatter.center = 0
-            self.ax.xaxis.set_major_formatter(formatter)
-            self.ax.yaxis.set_major_formatter(formatter)
-            self.ax.annotate('(0,0)', (0, 0), xytext=(-4, -4),
-                    textcoords='offset points', ha='right', va='top')
-
+            # we don't need the origin annotated in both axes
+            if x_min < 0 and x_max >0 and y_min < 0 and y_max > 0:
+                formatter = CenteredFormatter(useMathText=True)
+                formatter.center = 0
+                self.ax.xaxis.set_major_formatter(formatter)
+                self.ax.yaxis.set_major_formatter(formatter)
+                self.ax.annotate('(0,0)', (0, 0), xytext=(-4, -4),
+                        textcoords='offset points', ha='right', va='top')
         self.ax.set_xlim(float(x_min), float(x_max))
         self.ax.set_ylim(float(y_min), float(y_max))
         legend = []
