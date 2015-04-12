@@ -13,7 +13,6 @@ from logging import debug
 class FunctionGraph:
 
     def zoom_default(self):
-        self.clear()
         self.auto = True
         self.update_graph_points()
 
