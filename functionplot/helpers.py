@@ -331,6 +331,9 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
         return x_2, y_2
 
 def _func(npexpr):
+    """
+    Returns a numpy expression as a callable function
+    """
     funcstr = '''def f(x): return {e}'''.format(e=npexpr)
     exec(funcstr)
     return f
