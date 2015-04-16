@@ -399,7 +399,8 @@ class GUI:
                                         marker='+', c=color,
                                         linewidths=2)
                 elif p.point_type == 1:
-                    if self.fg.point_type_enabled[p.point_type]:
+                    if p.function[0].visible and p.function[1].visible \
+                        and self.fg.point_type_enabled[p.point_type]:
                         # plot function intercepts
                         self.ax.scatter([p.x], [p.y], s=80,
                                 alpha=0.5,

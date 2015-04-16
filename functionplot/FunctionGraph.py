@@ -272,7 +272,7 @@ class FunctionGraph:
                         yc = rfc(y)
                         if xc is not None and yc is not None:
                             pc = [xc, yc]
-                            p = POI(xc, yc, 1)
+                            p = POI(xc, yc, 1, function=[f,g])
                             if pc not in plist:
                                 plist.append(pc)
                                 self.poi.append(p)
