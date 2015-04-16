@@ -132,6 +132,10 @@ class GUI:
         self.fg.show_poi = self.checkmenuitem_show_poi.get_active()
         self.graph_update()
 
+    def on_checkmenuitem_grouped_toggled(self, widget):
+        self.fg.grouped = self.checkmenuitem_grouped.get_active()
+        self.graph_update()
+
     def on_checkmenuitem_legend_toggled(self, widget):
         self.fg.show_legend = self.checkmenuitem_legend.get_active()
         self.graph_update()
@@ -369,7 +373,7 @@ class GUI:
         if self.fg.grouped:
             grouped_poi = self.fg.grouped_poi(ungrouped_poi)
         else:
-            grouped_poi = upgrouped_poi
+            grouped_poi = ungrouped_poi
         # draw POI
         if self.fg.show_poi:
             for p in grouped_poi:
@@ -1062,6 +1066,9 @@ class GUI:
         self.checkmenuitem_show_poi = \
             builder.get_object('checkmenuitem_show_poi')
         self.checkmenuitem_show_poi.set_active(self.fg.show_poi)
+        self.checkmenuitem_grouped = \
+            builder.get_object('checkmenuitem_grouped')
+        self.checkmenuitem_grouped.set_active(self.fg.grouped)
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
