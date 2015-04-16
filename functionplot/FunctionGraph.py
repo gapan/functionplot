@@ -104,7 +104,8 @@ class FunctionGraph:
                                     points.append([p.x, p.y])
             # add graph POIs (function intersections)
             for p in self.poi:
-                if self.point_type_enabled[p.point_type]:
+                if p.function[0].visible and p.function[1].visible \
+                    and self.point_type_enabled[p.point_type]:
                     point = [p.x, p.y]
                     if point not in points:
                         points.append([p.x, p.y])
