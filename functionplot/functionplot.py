@@ -363,7 +363,7 @@ class GUI:
                     if self.fg.point_type_enabled[p.point_type]:
                         p.color = color
                         ungrouped_poi.append(p)
-            color_index+=1
+                color_index+=1
         # add function intercepts POI to ungrouped list
         for p in self.fg.poi:
             if self.fg.point_type_enabled[p.point_type]:
