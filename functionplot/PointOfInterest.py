@@ -3,9 +3,13 @@
 
 class PointOfInterest:
 
-    def __init__(self, x, y, point_type):
+    def __init__(self, x, y, point_type=None, size=1,
+            function=None, color=None):
         self.x = x
         self.y = y
+        self.size = size
+        self.function = function
+        self.color = color
 
         # POI types:
         # 0: standard axis points {(0,0), (0,1), (1,0)}
@@ -17,6 +21,7 @@ class PointOfInterest:
         # 6: vertical asymptotes
         # 7: horizontal asymptotes
         # 8: slope is 45 or -45 degrees
+        # 9: POI group
 
         self.point_type = point_type
 

@@ -7,7 +7,7 @@ from sympy import simplify, pi
 from sympy.functions import Abs
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve, rfc, remove_outliers
+from helpers import fsolve, rfc, remove_outliers, euclidean, BreakLoop
 from logging import debug
 
 class FunctionGraph:
@@ -203,6 +203,50 @@ class FunctionGraph:
                 self.y_min = 0
                 self.y_max = 100*self.y_max
 
+    def grouped_poi(self, points):
+        # max distance for grouped points is graph diagonal size /100
+        dmax = euclidean(POI(self.x_min,self.y_min),
+                POI(self.x_max,self.y_max))/100
+        # temp list of grouped points. Every group is a sublist
+        c=[]
+        for i in points:
+            c.append([i])
+        done = False
+        while not done:
+            try:
+                l = len(c)
+                for i in xrange(0,l-1):
+                    for j in xrange(1,l):
+                        if i != j:
+                            for m in c[i]:
+                                for n in c[j]:
+                                    if euclidean(m,n) < dmax:
+                                        for k in c[j]:
+                                            c[i].append(k)
+                                        c.pop(j)
+                                        raise BreakLoop
+                done = True
+            except BreakLoop:
+                pass
+        # final list of grouped points. For groups, return a single
+        # point with coordinates the mean values of the coordinates
+        # of the points that are grouped
+        grouped = []
+        for i in c:
+            l = len(i)
+            if l == 1:
+                grouped.append(i[0])
+            else:
+                x_sum = 0
+                y_sum = 0
+                for j in i:
+                    x_sum+=j.x
+                    y_sum+=j.y
+                x = x_sum/l
+                y = y_sum/l
+                grouped.append(POI(x,y,9,size=l))
+        return grouped
+
     def calc_intersections(self):
         # we're using plist as a helper list for checking if
         # a point is already in
@@ -252,6 +296,7 @@ class FunctionGraph:
         self.show_poi = True
         
         self.outliers = False
+        self.grouped = True
         
         self.functions = []
         self.poi = []
@@ -276,6 +321,7 @@ class FunctionGraph:
                 True, # 5: inflection points
                 True, # 6: vertical asymptotes
                 True, # 7: horizontal asymptotes
-                True  # 8: slope is 45 or -45 degrees
+                True, # 8: slope is 45 or -45 degrees
+                True  # 9: grouped POIs
                 ]
         self.new()

@@ -340,59 +340,77 @@ class GUI:
         self.ax.set_ylim(float(y_min), float(y_max))
         legend = []
 
+        # draw the functions
         for f in self.fg.functions:
             x, y = f.graph_points
             if f.visible:
                 color=self.color[len(legend) % len(self.color)]
                 self.ax.plot(x, y, linewidth=2, color=color)
-                xp = []
-                yp = []
-                if self.fg.show_poi:
-                    for p in f.poi:
+                # add function to legend
+                legend.append(f.mathtex_expr)
+        # create a list of ungrouped POI
+        color_index = 0
+        ungrouped_poi = []
+        for f in self.fg.functions:
+            if f.visible:
+                color=self.color[color_index % len(self.color)]
+                # function POI
+                for p in f.poi:
+                    if self.fg.point_type_enabled[p.point_type]:
+                        p.color = color
+                        ungrouped_poi.append(p)
+            color_index+=1
+        # add function intercepts POI to ungrouped list
+        for p in self.fg.poi:
+            if self.fg.point_type_enabled[p.point_type]:
+                p.color = 'black'
+                ungrouped_poi.append(p)
+        # group POI
+        if self.fg.grouped:
+            grouped_poi = self.fg.grouped_poi(ungrouped_poi)
+        else:
+            grouped_poi = upgrouped_poi
+        # draw POI
+        if self.fg.show_poi:
+            for p in grouped_poi:
+                if p.point_type >1 and p.point_type <9:
+                    if p.function.visible:
                         # don't plot vertical or horizontal asymptotes
                         # here. We'll do it later
                         if p.point_type < 6 or p.point_type > 7:
                             if self.fg.point_type_enabled[p.point_type]:
-                                xp.append(p.x)
-                                yp.append(p.y)
-                        self.ax.scatter(xp, yp, s=80, c=color,
-                                linewidths=0)
-                    # plot asymptotes now
-                    xp = []
-                    yp = []
-                    for p in f.poi:
-                        if p.point_type == 6:
+                                self.ax.scatter([p.x], [p.y], s=80,
+                                        c=p.color, linewidths=0)
+                        # plot asymptotes now
+                        elif p.point_type == 6:
                             if self.fg.point_type_enabled[p.point_type]:
-                                xp.append(p.x)
-                                yp.append(0)
-                            # vertical asymptotes are plotted as 'x'
-                            self.ax.scatter(xp, yp, s=80, marker='x',
-                                    c=color, linewidths=2)
-                    xp = []
-                    yp = []
-                    for p in f.poi:
-                        if p.point_type == 7:
+                                # vertical asymptotes are plotted as 'x'
+                                self.ax.scatter([p.x], [0], s=80,
+                                        marker='x', c=color,
+                                        linewidths=2)
+                        elif p.point_type == 7:
                             if self.fg.point_type_enabled[p.point_type]:
-                                xp.append(0)
-                                yp.append(p.y)
-                            # horizontal asymptotes are plotted as '+'
-                            self.ax.scatter(xp, yp, s=80, marker='+',
-                                    c=color, linewidths=2)
-                # add function to legend
-                legend.append(f.mathtex_expr)
-        if self.fg.show_poi:
-            xp = []
-            yp = []
-            # add function intercepts POI
-            for p in self.fg.poi:
-                if self.fg.point_type_enabled[p.point_type]:
-                    xp.append(p.x)
-                    yp.append(p.y)
-            self.ax.scatter(xp, yp, s=80, alpha=0.5, c='black',
-                    linewidths=0)
+                                # horizontal asymptotes are plotted as '+'
+                                self.ax.scatter([0], [p.y], s=80,
+                                        marker='+', c=color,
+                                        linewidths=2)
+                elif p.point_type == 1:
+                    if self.fg.point_type_enabled[p.point_type]:
+                        # plot function intercepts
+                        self.ax.scatter([p.x], [p.y], s=80,
+                                alpha=0.5,
+                                c='black', linewidths=0)
+                elif p.point_type == 9:
+                    if self.fg.point_type_enabled[p.point_type]:
+                        # plot function intercepts
+                        self.ax.scatter([p.x], [p.y], s=p.size*80,
+                                alpha=0.8,
+                                c='orange', linewidths=0)
+        # show legend
         if self.fg.show_legend:
             self.ax.legend(legend, loc='upper right',
                     bbox_to_anchor=(1,1), fontsize=18)
+        # show canvas
         self.ax.figure.canvas.draw()
         # check/uncheck the toolbutton for auto-adjustment
         self.btn_auto.set_active(self.fg.auto)

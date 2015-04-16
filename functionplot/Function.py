@@ -501,6 +501,9 @@ class Function:
         p_y.join()
         if poi_y is not None:
             self.poi.append(poi_y)
+        # assign all POI to the present function
+        for i in self.poi:
+            i.function=self
 
     def check_periodic(self, x):
         l = len(x)

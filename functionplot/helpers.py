@@ -16,6 +16,13 @@ import numpy as np
 import multiprocessing as mp
 import Queue
 import random
+from math import sqrt
+
+class BreakLoop(Exception):
+    """
+    An Exception class to help breaking out of nested loops
+    """
+    pass
 
 def pod(expr, sym):
     """
@@ -338,3 +345,12 @@ def _func(npexpr):
     exec(funcstr)
     return f
 
+def euclidean(p1, p2):
+    """
+    Returns the euclidean distance between to instances of PointOfInterest,
+    p1 and p2.
+    """
+    dx = p1.x-p2.x
+    dy = p1.y-p2.y
+    d = sqrt(dx**2 + dy**2)
+    return d
