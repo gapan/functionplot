@@ -1,0 +1,336 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-17 23:45+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: functionplot/functionplot.glade:37 functionplot/functionplot.glade:2608
+#: functionplot/functionplot.glade:2609
+msgid "Add function"
+msgstr ""
+
+#: functionplot/functionplot.glade:54
+msgid "Enter the mathematical expression for the function:"
+msgstr ""
+
+#: functionplot/functionplot.glade:385 functionplot/functionplot.glade:4047
+msgid "sin(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:394 functionplot/functionplot.glade:4139
+msgid "cos(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:407 functionplot/functionplot.glade:4153
+msgid "tan(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:420 functionplot/functionplot.glade:4167
+msgid "cot(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:548 functionplot/functionplot.glade:4192
+msgid "sec(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:561 functionplot/functionplot.glade:4206
+msgid "csc(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:646 functionplot/functionplot.glade:1190
+#: functionplot/functionplot.glade:1281 functionplot/functionplot.glade:1371
+msgid "Error"
+msgstr ""
+
+#: functionplot/functionplot.glade:713
+msgid "The function expression is not valid."
+msgstr ""
+
+#: functionplot/functionplot.glade:737
+msgid "Create new file?"
+msgstr ""
+
+#: functionplot/functionplot.glade:819 functionplot/functionplot.glade:929
+msgid "File has not been saved. Are you sure you want to open a new file?"
+msgstr ""
+
+#: functionplot/functionplot.glade:847
+msgid "Open file?"
+msgstr ""
+
+#: functionplot/functionplot.glade:957
+msgid "Quit?"
+msgstr ""
+
+#: functionplot/functionplot.glade:1037
+msgid "File has not been saved. Are you sure you want to quit?"
+msgstr ""
+
+#: functionplot/functionplot.glade:1065 functionplot/functionplot.glade:1462
+msgid "File already exists"
+msgstr ""
+
+#: functionplot/functionplot.glade:1161 functionplot/functionplot.glade:1560
+msgid "File already exists. Overwrite?"
+msgstr ""
+
+#: functionplot/functionplot.glade:1254
+msgid "Error exporting file."
+msgstr ""
+
+#: functionplot/functionplot.glade:1435
+msgid "Error saving file."
+msgstr ""
+
+#: functionplot/functionplot.glade:1666
+msgid "Open..."
+msgstr ""
+
+#: functionplot/functionplot.glade:1736
+msgid "Save as..."
+msgstr ""
+
+#: functionplot/functionplot.glade:2171
+msgid "_File"
+msgstr ""
+
+#: functionplot/functionplot.glade:2225
+msgid "Export"
+msgstr ""
+
+#: functionplot/functionplot.glade:2257
+msgid "_Edit"
+msgstr ""
+
+#: functionplot/functionplot.glade:2293
+msgid "_Points Of Interest"
+msgstr ""
+
+#: functionplot/functionplot.glade:2303
+msgid "_Function intersections"
+msgstr ""
+
+#: functionplot/functionplot.glade:2312
+msgid "_X intercepts"
+msgstr ""
+
+#: functionplot/functionplot.glade:2321
+msgid "_Y intercepts"
+msgstr ""
+
+#: functionplot/functionplot.glade:2330
+msgid "_Local extrema"
+msgstr ""
+
+#: functionplot/functionplot.glade:2339
+msgid "_Inflection points"
+msgstr ""
+
+#: functionplot/functionplot.glade:2348
+msgid "_Vertical asymptotes"
+msgstr ""
+
+#: functionplot/functionplot.glade:2357
+msgid "_Horizontal asymptotes"
+msgstr ""
+
+#: functionplot/functionplot.glade:2366
+msgid "_45 degrees slope"
+msgstr ""
+
+#: functionplot/functionplot.glade:2381
+msgid "_Outliers"
+msgstr ""
+
+#: functionplot/functionplot.glade:2398
+msgid "_View"
+msgstr ""
+
+#: functionplot/functionplot.glade:2408
+msgid "Show _Points of Interest"
+msgstr ""
+
+#: functionplot/functionplot.glade:2417
+msgid "_Group points that are close"
+msgstr ""
+
+#: functionplot/functionplot.glade:2427
+msgid "_Legend"
+msgstr ""
+
+#: functionplot/functionplot.glade:2437
+msgid "Show _Legend"
+msgstr ""
+
+#: functionplot/functionplot.glade:2452
+msgid "Upper _Left"
+msgstr ""
+
+#: functionplot/functionplot.glade:2462
+msgid "Upper _Right"
+msgstr ""
+
+#: functionplot/functionplot.glade:2474
+msgid "_Lower Left"
+msgstr ""
+
+#: functionplot/functionplot.glade:2485
+msgid "L_ower Right"
+msgstr ""
+
+#: functionplot/functionplot.glade:2506
+msgid "_Logscale"
+msgstr ""
+
+#: functionplot/functionplot.glade:2519
+msgid "_Help"
+msgstr ""
+
+#: functionplot/functionplot.glade:2553
+msgid "New graph"
+msgstr ""
+
+#: functionplot/functionplot.glade:2554
+msgid "New"
+msgstr ""
+
+#: functionplot/functionplot.glade:2568
+msgid "Open graph"
+msgstr ""
+
+#: functionplot/functionplot.glade:2569
+msgid "Open"
+msgstr ""
+
+#: functionplot/functionplot.glade:2583
+msgid "Save graph"
+msgstr ""
+
+#: functionplot/functionplot.glade:2584
+msgid "Save"
+msgstr ""
+
+#: functionplot/functionplot.glade:2623 functionplot/functionplot.glade:2624
+msgid "Remove function"
+msgstr ""
+
+#: functionplot/functionplot.glade:2648 functionplot/functionplot.glade:2649
+msgid "Zoom in"
+msgstr ""
+
+#: functionplot/functionplot.glade:2663 functionplot/functionplot.glade:2664
+msgid "Zoom out"
+msgstr ""
+
+#: functionplot/functionplot.glade:2678 functionplot/functionplot.glade:2679
+msgid "Auto zoom"
+msgstr ""
+
+#: functionplot/functionplot.glade:2731
+msgid "Visible"
+msgstr ""
+
+#: functionplot/functionplot.glade:2744
+msgid "Function"
+msgstr ""
+
+#: functionplot/functionplot.glade:2783
+msgid "<b>Example functions:</b>"
+msgstr ""
+
+#: functionplot/functionplot.glade:2986
+msgid "Linear functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:3141
+msgid "Quadratic functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:3424
+msgid "Higher degree polynomials:"
+msgstr ""
+
+#: functionplot/functionplot.glade:3621
+msgid "Rational functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:3818
+msgid "Power functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:4023
+msgid "Logarithmic functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:4061
+msgid "sin(2x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:4075
+msgid "-sin(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:4100
+msgid "sin(x-1)"
+msgstr ""
+
+#: functionplot/functionplot.glade:4114
+msgid "sin(x+1)"
+msgstr ""
+
+#: functionplot/functionplot.glade:4231
+msgid "Trigonometric  functions:"
+msgstr ""
+
+#: functionplot/functionplot.glade:4400
+msgid "Functions with roots:"
+msgstr ""
+
+#: functionplot/functionplot.glade:4424
+msgid "x-cos(x)"
+msgstr ""
+
+#: functionplot/functionplot.glade:4541
+msgid "sin(log(x))"
+msgstr ""
+
+#: functionplot/functionplot.glade:4566
+msgid "Category combinations:"
+msgstr ""
+
+#: functionplot/functionplot.glade:4849
+msgid "Calculating"
+msgstr ""
+
+#: functionplot/functionplot.glade:4883
+msgid "Performing calculations. Please wait..."
+msgstr ""
+
+#: functionplot/functionplot.py:627
+msgid "File doesn't look like a FunctionPlot file."
+msgstr ""
+
+#: functionplot/functionplot.py:630
+msgid "Error reading file."
+msgstr ""
+
+#: functionplot/functionplot.py:1120
+msgid "FunctionPlot files"
+msgstr ""
+
+#: functionplot/functionplot.py:1149
+msgid "PNG image files"
+msgstr ""
