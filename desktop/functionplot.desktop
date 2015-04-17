@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Sourcery SlackBuild Manager
+Comment=A graphical frontend to slapt-src
+Exec=functionplot
+Icon=document-page-setup
+Terminal=false
+Type=Application
+Categories=Application;Education;
+Encoding=UTF-8
