@@ -22,6 +22,10 @@ import logging
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
         format='(%(processName)-10s) %(message)s',)
 
+# get location of this file. It will be used later for
+# loading resources
+here = os.path.dirname(__file__)
+
 # Internationalization
 import locale
 import gettext
@@ -1007,7 +1011,7 @@ class GUI:
         
         # Load GUI from glade file
         builder = gtk.Builder()
-        builder.add_from_file('functionplot.glade')
+        builder.add_from_file(os.path.join(here, 'functionplot.glade'))
         
         #
         # Main Window
