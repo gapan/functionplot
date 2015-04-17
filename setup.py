@@ -28,7 +28,7 @@ optimal position and zoom scale for the graph.""",
     #packages = find_packages("src", exclude="tests"),
  
     entry_points = {
-        'console_scripts': ['functionplot = functionplot.functionplot.main:main']
+        'console_scripts': ['functionplot = functionplot.functionplot:main']
                     },
  
     download_url = "https://github.com/gapan/functionplot",
