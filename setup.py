@@ -32,5 +32,5 @@ optimal position and zoom scale for the graph.""",
                     },
  
     download_url = "https://github.com/gapan/functionplot",
-    zip_safe = True
+    zip_safe = False
 )
