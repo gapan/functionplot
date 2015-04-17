@@ -1166,8 +1166,9 @@ class GUI:
         builder.connect_signals(self)
         self.window.show_all()
 
-
-
-if __name__ == "__main__":
+def main():
     app = GUI()
     gtk.main()
+
+if __name__ == "__main__":
+    main()
