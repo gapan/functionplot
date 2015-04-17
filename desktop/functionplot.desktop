@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Sourcery SlackBuild Manager
-Comment=A graphical frontend to slapt-src
+Name=FunctionPlot
+Comment=An intelligent mathematical function plotter
 Exec=functionplot
 Icon=document-page-setup
 Terminal=false
