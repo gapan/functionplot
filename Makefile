@@ -32,7 +32,7 @@ clean:
 	rm -f po/*.po~
 
 install: install-mo
-	python setup.py --prefix=$(PREFIX) --root=$(DESTDIR)
+	python setup.py install --prefix=$(PREFIX) --root=$(DESTDIR)
 
 install-mo:
 	for i in `ls po/*.po | sed 's/.po//' | xargs -n1 basename` ;do \
