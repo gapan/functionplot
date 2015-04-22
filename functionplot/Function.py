@@ -304,8 +304,8 @@ class Function:
     def _calc_slope_45(self, q, f1, expr):
         debug('Looking for points where slope is 45 degrees for: '+
             str(expr))
-        x1 = fsolve(2*f1-1)
-        x2 = fsolve(2*f1+1)
+        x1 = fsolve(f1-1)
+        x2 = fsolve(f1+1)
         poi = []
         manual = False
         if x1 is None and x2 is None:
