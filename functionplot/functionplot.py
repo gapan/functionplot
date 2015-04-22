@@ -148,6 +148,11 @@ class GUI:
         self.fg.logscale = self.checkmenuitem_logscale.get_active()
         self.graph_update()
 
+    # help menu
+
+    def on_imagemenuitem_about_activate(self, widget):
+        self.aboutdialog.show()
+
     # toolbar button activation signals
     def on_btn_new_clicked(self, widget):
         if self.changed:
@@ -240,6 +245,14 @@ class GUI:
             self.fg.functions[i].visible = True
         self.update_function_list()
         self.graph_update()
+
+    # about dialog close
+    def on_aboutdialog_response(self, widget, event):
+        self.aboutdialog.hide()
+
+    def on_aboutdialog_delete_event(self, widget, event):
+        self.aboutdialog.hide()
+        return True
 
     # zoom in/out with the mouse wheel
     def wheel_zoom(self, event):
@@ -1165,6 +1178,9 @@ class GUI:
         # Calculating... window
         self.window_calculating = \
             builder.get_object('window_calculating')
+        # About dialog
+        self.aboutdialog = \
+            builder.get_object('aboutdialog')
 
         # Connect all signals
         builder.connect_signals(self)
