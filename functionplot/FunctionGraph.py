@@ -120,7 +120,6 @@ class FunctionGraph:
             # show them on the x axis. So, if there are any
             # asymptotes, we increase the size of the respective
             # axis 2 times.
-            # FIXME: there should be a better way to do this
             for f in self.functions:
                 if f.visible:
                     for p in f.poi:
@@ -158,7 +157,6 @@ class FunctionGraph:
             y_range = y_max - y_min
             # asymptotes. Increase the axis size in case any are
             # found
-            # FIXME: there should be a better way to do this
             if vertical_asymptotes:
                 y_min = y_min - y_range
                 y_max = y_max + y_range

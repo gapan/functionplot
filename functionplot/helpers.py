@@ -140,7 +140,8 @@ def rfc(x):
         # another TypeError is raised if we have a function with
         # abs()
         # this is a hack but appears to work
-        # FIXME: I don't think this is needed for abs() anymore.
+        # FIXME: This probably is not needed for abs() anymore. I'm keeping it
+        # to cover all cases, until it is tested 100%.
         except TypeError:
             try:
                 xc = eval(str(xe))

@@ -35,7 +35,6 @@ class Function:
         # no need to calculate values that are off the displayed
         # scale. This fixes some trouble with asymptotes like in
         # tan(x).
-        # FIXME: unfortunately there is more trouble with asymptotes
         if not self.constant:
             y[y>y_max] = np.inf
             y[y<y_min] = -np.inf
