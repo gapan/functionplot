@@ -325,7 +325,7 @@ class GUI:
             self.fg.update_xylimits()
         x_min, x_max = self.fg.x_min, self.fg.x_max
         y_min, y_max = self.fg.y_min, self.fg.y_max
-       
+        
         self.ax.grid(True)
         if self.fg.logscale:
             self.ax.set_xscale('log')
