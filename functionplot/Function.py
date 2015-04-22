@@ -343,11 +343,11 @@ class Function:
         try:
             y = eval(npexpr)
             for i in xrange(1, len(y)-1):
-                if ((y[i] == 0.5) or (y[i] == -0.5) or
-                        (y[i-1] < 0.5 and y[i] > 0.5 ) or
-                        (y[i-1] > 0.5 and y[i] < 0.5 ) or
-                        (y[i-1] < -0.5 and y[i] > -0.5 ) or
-                        (y[i-1] > -0.5 and y[i] < -0.5 )):
+                if ((y[i] == 1) or (y[i] == -1) or
+                        (y[i-1] < 1 and y[i] > 1 ) or
+                        (y[i-1] > 1 and y[i] < 1 ) or
+                        (y[i-1] < -1 and y[i] > -1 ) or
+                        (y[i-1] > -1 and y[i] < -1 )):
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate first derivative')
@@ -536,8 +536,9 @@ class Function:
     def _test_common_periods(self):
         debug('Trying some common periods to determine if '+\
                 'function is periodic')
-        period_list = [pi/4, pi/2, pi, 2*pi, 3*pi, 4*pi,
-                0.25, 0.5, 1, 2, 3, 4]
+        period_list = [pi/4, pi/2, 3*pi/4, pi, 2*pi/3,
+                2*pi, 3*pi, 4*pi,
+                0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]
         for period in period_list:
             if not self.periodic:
                 self._test_period(period)
