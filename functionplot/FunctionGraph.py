@@ -294,6 +294,7 @@ class FunctionGraph:
     def new(self):
         self.visible = True
         self.show_legend = True
+        self.legend_location = 1 # upper right
         self.show_poi = True
         
         self.outliers = False

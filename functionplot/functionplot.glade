@@ -1750,35 +1750,127 @@ Public License instead of this License.  But first, please read
       <action-widget response="0">button_confirm_quit_yes</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkFileChooserDialog" id="filechooserdialog_export">
+  <object class="GtkDialog" id="dialog_file_open_error">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="role">GtkFileChooserDialog</property>
+    <property name="title" translatable="yes">Error</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
-    <property name="icon_name">media-floppy</property>
+    <property name="icon_name">dialog-error</property>
     <property name="type_hint">dialog</property>
-    <property name="transient_for">functionplot</property>
-    <property name="action">save</property>
-    <signal name="delete-event" handler="on_filechooserdialog_export_delete_event" swapped="no"/>
+    <property name="transient_for">filechooserdialog_open</property>
+    <signal name="delete-event" handler="on_dialog_file_open_error_delete_event" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox17">
+      <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">10</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area17">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button_export_cancel">
+              <object class="GtkButton" id="button_file_open_error_close">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_file_open_error_close_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImage" id="image5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-error</property>
+                <property name="icon-size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">10</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_open_error">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">placeholder</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_file_open_error_close</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkFileChooserDialog" id="filechooserdialog_save">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Save as...</property>
+    <property name="role">GtkFileChooserDialog</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">document-save</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">functionplot</property>
+    <property name="action">save</property>
+    <signal name="delete-event" handler="on_filechooserdialog_save_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_filesave_cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_cancel_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_button_filesave_cancel_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1787,7 +1879,7 @@ Public License instead of this License.  But first, please read
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_export_yes">
+              <object class="GtkButton" id="button_filesave_save">
                 <property name="label">gtk-save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1797,7 +1889,7 @@ Public License instead of this License.  But first, please read
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_yes_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_button_filesave_save_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1819,11 +1911,102 @@ Public License instead of this License.  But first, please read
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button_export_cancel</action-widget>
-      <action-widget response="0">button_export_yes</action-widget>
+      <action-widget response="0">button_filesave_cancel</action-widget>
+      <action-widget response="0">button_filesave_save</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="dialog_export_overwrite">
+  <object class="GtkDialog" id="dialog_file_save_error">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Error</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">dialog-error</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">filechooserdialog_save</property>
+    <signal name="delete-event" handler="on_dialog_file_save_error_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">10</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_save_error_close">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_save_error_close_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkImage" id="image4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-error</property>
+                <property name="icon-size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Error saving file.</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_save_error_close</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="dialog_overwrite">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">File already exists</property>
@@ -1833,26 +2016,26 @@ Public License instead of this License.  But first, please read
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">dialog-question</property>
     <property name="type_hint">dialog</property>
-    <property name="transient_for">filechooserdialog_export</property>
-    <signal name="delete-event" handler="on_dialog_export_overwrite_delete_event" swapped="no"/>
+    <property name="transient_for">filechooserdialog_save</property>
+    <signal name="delete-event" handler="on_dialog_overwrite_delete_event" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox19">
+      <object class="GtkVBox" id="dialog-vbox11">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">10</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area19">
+          <object class="GtkHButtonBox" id="dialog-action_area11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button_export_overwrite_no">
+              <object class="GtkButton" id="button_overwrite_no">
                 <property name="label">gtk-no</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_overwrite_no_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_button_overwrite_no_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1861,13 +2044,13 @@ Public License instead of this License.  But first, please read
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_export_overwrite_cancel">
+              <object class="GtkButton" id="button_overwrite_cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_overwrite_cancel_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_button_overwrite_cancel_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1876,15 +2059,17 @@ Public License instead of this License.  But first, please read
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_export_overwrite_yes">
+              <object class="GtkButton" id="button_overwrite_yes">
                 <property name="label">gtk-yes</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_overwrite_yes_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_button_overwrite_yes_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1901,11 +2086,11 @@ Public License instead of this License.  But first, please read
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox12">
+          <object class="GtkHBox" id="hbox9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkImage" id="image9">
+              <object class="GtkImage" id="image6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="stock">gtk-dialog-question</property>
@@ -1919,7 +2104,7 @@ Public License instead of this License.  But first, please read
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label_overwrite1">
+              <object class="GtkLabel" id="label_overwrite">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">File already exists. Overwrite?</property>
@@ -1943,100 +2128,9 @@ Public License instead of this License.  But first, please read
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button_export_overwrite_no</action-widget>
-      <action-widget response="0">button_export_overwrite_cancel</action-widget>
-      <action-widget response="0">button_export_overwrite_yes</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="dialog_file_export_error">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Error</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon_name">dialog-error</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">filechooserdialog_export</property>
-    <signal name="delete-event" handler="on_dialog_file_export_error_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox21">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">10</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area21">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_export_error_close">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_export_error_close_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox13">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">10</property>
-            <child>
-              <object class="GtkImage" id="image10">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-error</property>
-                <property name="icon-size">6</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label8">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Error exporting file.</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_export_error_close</action-widget>
+      <action-widget response="0">button_overwrite_no</action-widget>
+      <action-widget response="0">button_overwrite_cancel</action-widget>
+      <action-widget response="0">button_overwrite_yes</action-widget>
     </action-widgets>
   </object>
   <object class="GtkWindow" id="functionplot">
@@ -2342,7 +2436,7 @@ Public License instead of this License.  But first, please read
                                 <property name="label" translatable="yes">Upper _Left</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_as_radio">True</property>
-                                <signal name="toggled" handler="on_menuitem_legend_location_changed" swapped="no"/>
+                                <signal name="toggled" handler="on_menuitem_legend_upper_left_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2354,7 +2448,7 @@ Public License instead of this License.  But first, please read
                                 <property name="active">True</property>
                                 <property name="draw_as_radio">True</property>
                                 <property name="group">menuitem_legend_upper_left</property>
-                                <signal name="toggled" handler="on_menuitem_legend_location_changed" swapped="no"/>
+                                <signal name="toggled" handler="on_menuitem_legend_upper_right_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2365,7 +2459,7 @@ Public License instead of this License.  But first, please read
                                 <property name="use_underline">True</property>
                                 <property name="draw_as_radio">True</property>
                                 <property name="group">menuitem_legend_upper_left</property>
-                                <signal name="toggled" handler="on_menuitem_legend_location_changed" swapped="no"/>
+                                <signal name="toggled" handler="on_menuitem_legend_lower_left_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2376,7 +2470,7 @@ Public License instead of this License.  But first, please read
                                 <property name="use_underline">True</property>
                                 <property name="draw_as_radio">True</property>
                                 <property name="group">menuitem_legend_upper_left</property>
-                                <signal name="toggled" handler="on_menuitem_legend_location_changed" swapped="no"/>
+                                <signal name="toggled" handler="on_menuitem_legend_lower_right_toggled" swapped="no"/>
                               </object>
                             </child>
                           </object>
@@ -4681,6 +4775,9 @@ Public License instead of this License.  But first, please read
                 <child>
                   <placeholder/>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="resize">True</property>
@@ -4696,6 +4793,295 @@ Public License instead of this License.  But first, please read
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="filechooserdialog_export">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="role">GtkFileChooserDialog</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="icon_name">media-floppy</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">functionplot</property>
+    <property name="action">save</property>
+    <signal name="delete-event" handler="on_filechooserdialog_export_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox17">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area17">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_export_cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_export_yes">
+                <property name="label">gtk-save</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_yes_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_export_cancel</action-widget>
+      <action-widget response="0">button_export_yes</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="dialog_export_overwrite">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">File already exists</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">dialog-question</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">filechooserdialog_export</property>
+    <signal name="delete-event" handler="on_dialog_export_overwrite_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox19">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">10</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area19">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_export_overwrite_no">
+                <property name="label">gtk-no</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_overwrite_no_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_export_overwrite_cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_overwrite_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_export_overwrite_yes">
+                <property name="label">gtk-yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_overwrite_yes_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox12">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImage" id="image9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-question</property>
+                <property name="icon-size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">10</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_overwrite1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">File already exists. Overwrite?</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_export_overwrite_no</action-widget>
+      <action-widget response="0">button_export_overwrite_cancel</action-widget>
+      <action-widget response="0">button_export_overwrite_yes</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="dialog_file_export_error">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Error</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">dialog-error</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">filechooserdialog_export</property>
+    <signal name="delete-event" handler="on_dialog_file_export_error_delete_event" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox21">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">10</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area21">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_export_error_close">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_export_error_close_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox13">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkImage" id="image10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-error</property>
+                <property name="icon-size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Error exporting file.</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_export_error_close</action-widget>
+    </action-widgets>
   </object>
   <object class="GtkFileChooserDialog" id="filechooserdialog_open">
     <property name="can_focus">True</property>
@@ -4769,389 +5155,6 @@ Public License instead of this License.  But first, please read
     <action-widgets>
       <action-widget response="0">button_fileopen_cancel</action-widget>
       <action-widget response="0">button_fileopen_open</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="dialog_file_open_error">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Error</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="icon_name">dialog-error</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">filechooserdialog_open</property>
-    <signal name="delete-event" handler="on_dialog_file_open_error_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox6">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">10</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_file_open_error_close">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_file_open_error_close_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox8">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkImage" id="image5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-error</property>
-                <property name="icon-size">6</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">10</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label_open_error">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label">placeholder</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_file_open_error_close</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkFileChooserDialog" id="filechooserdialog_save">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Save as...</property>
-    <property name="role">GtkFileChooserDialog</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon_name">document-save</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">functionplot</property>
-    <property name="action">save</property>
-    <signal name="delete-event" handler="on_filechooserdialog_save_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_filesave_cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_filesave_cancel_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_filesave_save">
-                <property name="label">gtk-save</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="is_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_filesave_save_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_filesave_cancel</action-widget>
-      <action-widget response="0">button_filesave_save</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="dialog_file_save_error">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Error</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon_name">dialog-error</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">filechooserdialog_save</property>
-    <signal name="delete-event" handler="on_dialog_file_save_error_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox5">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">10</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_save_error_close">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_save_error_close_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">10</property>
-            <child>
-              <object class="GtkImage" id="image4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-error</property>
-                <property name="icon-size">6</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Error saving file.</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_save_error_close</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="dialog_overwrite">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">File already exists</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon_name">dialog-question</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">filechooserdialog_save</property>
-    <signal name="delete-event" handler="on_dialog_overwrite_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox11">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">10</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area11">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_overwrite_no">
-                <property name="label">gtk-no</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_overwrite_no_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_overwrite_cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_overwrite_cancel_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_overwrite_yes">
-                <property name="label">gtk-yes</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="is_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_overwrite_yes_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox9">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkImage" id="image6">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-question</property>
-                <property name="icon-size">6</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">10</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label_overwrite">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">File already exists. Overwrite?</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_overwrite_no</action-widget>
-      <action-widget response="0">button_overwrite_cancel</action-widget>
-      <action-widget response="0">button_overwrite_yes</action-widget>
     </action-widgets>
   </object>
   <object class="GtkImage" id="image_10_p_x">

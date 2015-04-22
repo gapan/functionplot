@@ -148,8 +148,31 @@ class GUI:
         self.fg.logscale = self.checkmenuitem_logscale.get_active()
         self.graph_update()
 
-    # help menu
+    def on_menuitem_legend_lower_right_toggled(self, widget):
+        if widget.active:
+            self.fg.legend_location = 4
+            if self.fg.show_legend:
+                self.graph_update()
 
+    def on_menuitem_legend_upper_right_toggled(self, widget):
+        if widget.active:
+            self.fg.legend_location = 1
+            if self.fg.show_legend:
+                self.graph_update()
+
+    def on_menuitem_legend_lower_left_toggled(self, widget):
+        if widget.active:
+            self.fg.legend_location = 3
+            if self.fg.show_legend:
+                self.graph_update()
+
+    def on_menuitem_legend_upper_left_toggled(self, widget):
+        if widget.active:
+            self.fg.legend_location = 2
+            if self.fg.show_legend:
+                self.graph_update()
+
+    # help menu
     def on_imagemenuitem_about_activate(self, widget):
         self.aboutdialog.show()
 
@@ -430,8 +453,16 @@ class GUI:
                                 c='orange', linewidths=0)
         # show legend
         if self.fg.show_legend:
-            self.ax.legend(legend, loc='upper right',
-                    bbox_to_anchor=(1,1), fontsize=18)
+            if self.fg.legend_location == 1:
+                anchor = (1,1)
+            elif self.fg.legend_location == 2:
+                anchor = (0,1)
+            elif self.fg.legend_location == 3:
+                anchor = (0,0)
+            else:
+                anchor = (1,0)
+            self.ax.legend(legend, loc=self.fg.legend_location,
+                    bbox_to_anchor=anchor, fontsize=18)
         # show canvas
         self.ax.figure.canvas.draw()
         # check/uncheck the toolbutton for auto-adjustment
@@ -1021,7 +1052,7 @@ class GUI:
         self.changed = False 
         # we'll need this for panning
         self.mousebutton_press = None
-        
+
         # Load GUI from glade file
         builder = gtk.Builder()
         builder.add_from_file(os.path.join(here, 'functionplot.glade'))
@@ -1090,6 +1121,8 @@ class GUI:
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
         self.checkmenuitem_legend.set_active(self.fg.show_legend)
+        self.menuitem_legend_upper_left = \
+            builder.get_object('menuitem_legend_upper_left')
         self.checkmenuitem_logscale = \
             builder.get_object('checkmenuitem_logscale')
 
