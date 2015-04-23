@@ -536,8 +536,8 @@ class Function:
     def _test_common_periods(self):
         debug('Trying some common periods to determine if '+\
                 'function is periodic')
-        period_list = [pi/4, pi/2, 3*pi/4, pi, 2*pi/3,
-                2*pi, 3*pi, 4*pi,
+        period_list = [pi/4, pi/2, 2*pi/3, 3*pi/4, pi,
+                2*pi, 3*pi/2, 3*pi, 4*pi,
                 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]
         for period in period_list:
             if not self.periodic:
