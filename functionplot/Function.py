@@ -390,7 +390,7 @@ class Function:
             if 'oo' not in str(lr):
                 debug('Found a horizontal asymptote at y='+\
                         str(lr)+' as x->+oo.')
-                self.poi.append(POI(0, lr, 7))
+                poi.append(POI(0, lr, 7))
             if 'oo' not in str(ll):
                 if ll == lr:
                     debug('Same horizontal asymptote as x->-oo.')
