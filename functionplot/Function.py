@@ -336,7 +336,7 @@ class Function:
         q.put(poi)
 
     def _calc_slope45_manually(self, f1):
-        debug('Calculating inflection points manually')
+        debug('Calculating slope45 points manually')
         npexpr = self._get_np_expr(str(f1))
         x = np.linspace(-20,20,10000)
         sol = []
