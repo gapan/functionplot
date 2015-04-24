@@ -343,11 +343,11 @@ class Function:
         try:
             y = eval(npexpr)
             for i in xrange(1, len(y)-1):
-                if ((y[i] == 0.5) or (y[i] == -0.5) or
-                        (y[i-1] < 0.5 and y[i] > 0.5 ) or
-                        (y[i-1] > 0.5 and y[i] < 0.5 ) or
-                        (y[i-1] < -0.5 and y[i] > -0.5 ) or
-                        (y[i-1] > -0.5 and y[i] < -0.5 )):
+                if ((y[i] == 1) or (y[i] == -1) or
+                        (y[i-1] < 1 and y[i] > 1 ) or
+                        (y[i-1] > 1 and y[i] < 1 ) or
+                        (y[i-1] < -1 and y[i] > -1 ) or
+                        (y[i-1] > -1 and y[i] < -1 )):
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate first derivative')
