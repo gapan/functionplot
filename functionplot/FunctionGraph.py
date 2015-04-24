@@ -171,6 +171,16 @@ class FunctionGraph:
             if y_min == y_max:
                 y_min = y_min-1
                 y_max = y_min+1
+            # for some weird reason, setting all limits to defaults -1 and 1,
+            # slightly breaks the sampling algorithm. Shift them by a bit and
+            # everything works again. WIthout this f(x)=sin(1/x) is not plotted
+            # properly.
+            if x_min == -1 and x_max == 1:
+                x_min = -1.1
+                x_max = 1
+            if y_min == -1 and y_max == 1:
+                y_min = -1.1
+                y_max = 1.1
             # find the max period of all functions involved and check
             # if at least 2 periods are shown
             periods = []
