@@ -184,16 +184,19 @@ class FunctionGraph:
                 if x_range < 2*max_period:
                     x_min = float(x_middle - 1.2*max_period)
                     x_max = float(x_middle + 1.2*max_period)
-            # for some weird reason, setting all limits to defaults -1 and 1,
+            # for some weird reason, setting all limits to integers
             # slightly breaks the sampling algorithm. Shift them by a bit and
             # everything works again. WIthout this f(x)=sin(1/x) is not plotted
-            # properly.
-            if x_min == int(x_min) and x_max == int(x_max):
-                x_min = x_min - 0.01*x_range
-                x_max = x_max + 0.01*x_range
-            if y_min == int(y_min) and y_max == int(y_max):
-                y_min = y_min - 0.01*y_range
-                y_max = y_max + 0.01*y_range
+            # properly for example.
+            try:
+                if x_min == int(x_min) and x_max == int(x_max):
+                    x_min = x_min - 0.01*x_range
+                    x_max = x_max + 0.01*x_range
+                if y_min == int(y_min) and y_max == int(y_max):
+                    y_min = y_min - 0.01*y_range
+                    y_max = y_max + 0.01*y_range
+            except OverflowError:
+                pass
             debug('Setting X limits to '+\
                     str(x_min)+' and '+str(x_max))
             debug('Setting Y limits to '+\
