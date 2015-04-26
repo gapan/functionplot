@@ -174,7 +174,7 @@ def remove_outliers(plist):
     iqr = q3 - q1
     # This looks like a nice value. Decrease to make it easier for
     # a value to become an outlier, increase to make it harder.
-    k = 9
+    k = 18
     # this is the median
     m = percentile(plist, 50)
     # these are the limits we don't allow values to go under/over
