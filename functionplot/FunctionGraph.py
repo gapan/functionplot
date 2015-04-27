@@ -7,7 +7,8 @@ from sympy import simplify, pi
 from sympy.functions import Abs
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve, rfc, remove_outliers, euclidean, BreakLoop
+from helpers import fsolve, rfc, remove_outliers, euclidean,\
+    BreakLoop
 from logging import debug
 
 class FunctionGraph:
@@ -185,9 +186,9 @@ class FunctionGraph:
                     x_min = float(x_middle - 1.2*max_period)
                     x_max = float(x_middle + 1.2*max_period)
             # for some weird reason, setting all limits to integers
-            # slightly breaks the sampling algorithm. Shift them by a bit and
-            # everything works again. WIthout this f(x)=sin(1/x) is not plotted
-            # properly for example.
+            # slightly breaks the sampling algorithm. Shift them by
+            # a bit and everything works again. WIthout this
+            # f(x)=sin(1/x) is not plotted properly for example.
             try:
                 if x_min == int(x_min) and x_max == int(x_max):
                     x_min = x_min - 0.01*x_range
@@ -206,7 +207,8 @@ class FunctionGraph:
             self.y_min = y_min
             self.y_max = y_max
             # zoom out twice, gives better output
-            self._zoom(zoom_out=True, zoom_x=True, zoom_y=True, multiplier=2)
+            self._zoom(zoom_out=True, zoom_x=True, zoom_y=True,
+                    multiplier=2)
         if self.logscale:
             if self.x_min < 0:
                 self.x_min = 0
