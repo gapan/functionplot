@@ -140,8 +140,9 @@ def rfc(x):
         # another TypeError is raised if we have a function with
         # abs()
         # this is a hack but appears to work
-        # FIXME: This probably is not needed for abs() anymore. I'm keeping it
-        # to cover all cases, until it is tested 100%.
+        # FIXME: This probably is not needed for abs() anymore.
+        # I'm keeping it to cover all cases, until it is
+        # tested 100%.
         except TypeError:
             try:
                 xc = eval(str(xe))
@@ -206,14 +207,15 @@ def sample(npfunc, points, tol=0.001, min_points=16, max_level=32,
 
     Parameters
     ----------
-    npfunc : a string representing a numpy function. Example 'np.sin(x)'
+    npfunc : a string representing a numpy function.
+        Example 'np.sin(x)'
     points : array-like, 1D
         Initial points to sample, sorted in ascending order.
         These will determine also the bounds of sampling.
     tol : float, optional
-        Tolerance to sample to. The condition is roughly that the total
-        length of the curve on the (x, y) plane is computed up to this
-        tolerance.
+        Tolerance to sample to. The condition is roughly that the
+        total length of the curve on the (x, y) plane is computed
+        up to this tolerance.
     min_point : int, optional
         Minimum number of points to sample.
     max_level : int, optional
@@ -252,9 +254,10 @@ def sample(npfunc, points, tol=0.001, min_points=16, max_level=32,
 
     """
     func = _func(npfunc)
-    return _sample_function(func, points, values=None, mask=None, depth=0,
-                            tol=tol, min_points=min_points, max_level=max_level,
-                            sample_transform=sample_transform)
+    return _sample_function(func, points, values=None, mask=None,
+                depth=0, tol=tol, min_points=min_points,
+                max_level=max_level, 
+                sample_transform=sample_transform)
 
 def _sample_function(func, points, values=None, mask=None, tol=0.05,
                      depth=0, min_points=16, max_level=16,
@@ -289,7 +292,8 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
     if len(x_2) < min_points:
         mask = np.ones([len(x_2)-1], dtype=bool)
     else:
-        # represent the data as a path in N dimensions (scaled to unit box)
+        # represent the data as a path in N dimensions
+        # (scaled to unit box)
         if sample_transform is not None:
             y_2_val = sample_transform(x_2, y_2)
         else:
@@ -317,11 +321,12 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
 
         # compute the angle between consecutive line segments
         dp /= s
-        dcos = np.arccos(np.clip((dp[:,1:] * dp[:,:-1]).sum(axis=0), -1, 1))
+        dcos = np.arccos(np.clip((dp[:,1:] * dp[:,:-1]).sum(axis=0),
+            -1, 1))
 
         # determine where to subdivide: the condition is roughly that
-        # the total length of the path (in the scaled data) is computed
-        # to accuracy `tol`
+        # the total length of the path (in the scaled data) is
+        # computed to accuracy `tol`
         dp_piece = dcos * .5*(s[1:] + s[:-1])
         mask = (dp_piece > tol * s_tot)
 
@@ -332,9 +337,10 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
     # -- Refine, if necessary
 
     if mask.any():
-        return _sample_function(func, x_2, y_2, mask, tol=tol, depth=depth+1,
-                                min_points=min_points, max_level=max_level,
-                                sample_transform=sample_transform)
+        return _sample_function(func, x_2, y_2, mask, tol=tol,
+                depth=depth+1, min_points=min_points,
+                max_level=max_level,
+                sample_transform=sample_transform)
     else:
         return x_2, y_2
 
@@ -348,8 +354,8 @@ def _func(npexpr):
 
 def euclidean(p1, p2):
     """
-    Returns the euclidean distance between to instances of PointOfInterest,
-    p1 and p2.
+    Returns the euclidean distance between to instances of
+    PointOfInterest, p1 and p2.
     """
     dx = p1.x-p2.x
     dy = p1.y-p2.y
