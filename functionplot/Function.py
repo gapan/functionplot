@@ -20,8 +20,8 @@ class Function:
             x, y_arr = sample(self.np_expr, x_initial)
             y = y_arr[0]
         except IndexError:
-            # if f(x)=a, make sure that y is an array with the same size
-            # as x and with a constant value.
+            # if f(x)=a, make sure that y is an array with the
+            # same size as x and with a constant value.
             debug('This looks like a constant function: '+\
                     self.np_expr)
             self.constant = True
@@ -30,7 +30,8 @@ class Function:
             this_y = eval(self.np_expr)
             y = np.array([this_y, this_y])
         except Exception, e:
-            debug('Exception caught. This should not have happened here: '+e)
+            debug('Exception caught.'+\
+                    'This should not have happened here: '+e)
             return False
         # no need to calculate values that are off the displayed
         # scale. This fixes some trouble with asymptotes like in
@@ -144,7 +145,8 @@ class Function:
         #expr = expr.replace('sec(', 'scc(')
         #expr = expr.replace('e', '2.7183')
         #expr = expr.replace('scc(', 'sec(')
-        # log() in sympy is natural log. log10() is defined in helpers.py
+        # log() in sympy is natural log. log10() is defined
+        # in helpers.py
         expr = expr.replace('log(', 'log10(')
         expr = expr.replace('ln(', 'log(')
         
@@ -373,7 +375,8 @@ class Function:
                     ' vertical asymptotes.')
             self.check_periodic(x)
         if poi == []:
-            debug('Done calculating vertical asymptotes. None found.')
+            debug('Done calculating vertical asymptotes.'+\
+                    'None found.')
         else:
             debug('Done calculating vertical asymptotes')
         q.put(poi)
@@ -403,7 +406,8 @@ class Function:
             debug('NotImplementedError for finding limit of "'+\
                     str(expr)+'"')
         if poi == []:
-            debug('Done calculating horizontal asymptotes. None found.')
+            debug('Done calculating horizontal asymptotes.'+\
+                    'None found.')
         else:
             debug('Done calculating horizontal asymptotes')
 
@@ -414,7 +418,8 @@ class Function:
         # y intercept
         #
         q_y = mp.Queue()
-        p_y = mp.Process(target=self._calc_y_intercept, args=(q_y, expr,))
+        p_y = mp.Process(target=self._calc_y_intercept,
+                args=(q_y, expr,))
         p_y.start()
         if not self.constant:
             # calculate 1st and 2nd derivatives
@@ -442,13 +447,15 @@ class Function:
             # vertical asymptotes
             #
             q_vertical_asym = mp.Queue()
-            p_vertical_asym = mp.Process(target=self._calc_vertical_asym,
+            p_vertical_asym = \
+                    mp.Process(target=self._calc_vertical_asym,
                     args=(q_vertical_asym, expr,))
             #
             # horizontal asymptotes
             #
             q_horizontal_asym = mp.Queue()
-            p_horizontal_asym = mp.Process(target=self._calc_horizontal_asym,
+            p_horizontal_asym = \
+                    mp.Process(target=self._calc_horizontal_asym,
                     args=(q_horizontal_asym, expr,))
             #
             # points where the slope is 45 degrees
