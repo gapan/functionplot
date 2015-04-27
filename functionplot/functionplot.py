@@ -79,9 +79,11 @@ class GUI:
 
     # View menu
 
-    def on_checkmenuitem_function_intersections_toggled(self, widget):
+    def on_checkmenuitem_function_intersections_toggled(self,
+            widget):
         self.fg.point_type_enabled[1] = \
-                self.checkmenuitem_function_intersections.get_active()
+                self.checkmenuitem_function_intersections.\
+                    get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
@@ -361,7 +363,8 @@ class GUI:
                 self.ax.xaxis.set_ticks_position('bottom')
             elif y_min >= 0:
                 self.ax.spines['bottom'].set_color('black')
-                self.ax.spines['bottom'].set_position(('data', y_min))
+                self.ax.spines['bottom'].set_position(('data',
+                    y_min))
                 self.ax.spines['bottom'].set_smart_bounds(False)
                 self.ax.spines['top'].set_color('none')
                 self.ax.xaxis.set_ticks_position('bottom')
@@ -379,7 +382,8 @@ class GUI:
                 self.ax.xaxis.set_major_formatter(formatter)
                 self.ax.yaxis.set_major_formatter(formatter)
                 self.ax.annotate('(0,0)', (0, 0), xytext=(-4, -4),
-                        textcoords='offset points', ha='right', va='top')
+                        textcoords='offset points', ha='right',
+                        va='top')
         self.ax.set_xlim(float(x_min), float(x_max))
         self.ax.set_ylim(float(y_min), float(y_max))
         legend = []
@@ -419,27 +423,33 @@ class GUI:
             for p in grouped_poi:
                 if p.point_type >1 and p.point_type <9:
                     if p.function.visible:
-                        # don't plot vertical or horizontal asymptotes
-                        # here. We'll do it later
+                        # don't plot vertical or horizontal
+                        # asymptotes here. We'll do it later
                         if p.point_type < 6 or p.point_type > 7:
-                            if self.fg.point_type_enabled[p.point_type]:
+                            if self.fg.point_type_enabled\
+                                    [p.point_type]:
                                 self.ax.scatter([p.x], [p.y], s=80,
                                         c=p.color, linewidths=0)
                         # plot asymptotes now
                         elif p.point_type == 6:
-                            if self.fg.point_type_enabled[p.point_type]:
-                                # vertical asymptotes are plotted as 'x'
+                            if self.fg.point_type_enabled\
+                                    [p.point_type]:
+                                # vertical asymptotes are plotted
+                                # as 'x'
                                 self.ax.scatter([p.x], [0], s=80,
                                         marker='x', c=color,
                                         linewidths=2)
                         elif p.point_type == 7:
-                            if self.fg.point_type_enabled[p.point_type]:
-                                # horizontal asymptotes are plotted as '+'
+                            if self.fg.point_type_enabled\
+                                    [p.point_type]:
+                                # horizontal asymptotes are plotted
+                                # as '+'
                                 self.ax.scatter([0], [p.y], s=80,
                                         marker='+', c=color,
                                         linewidths=2)
                 elif p.point_type == 1:
-                    if p.function[0].visible and p.function[1].visible \
+                    if p.function[0].visible \
+                        and p.function[1].visible \
                         and self.fg.point_type_enabled[p.point_type]:
                         # plot function intercepts
                         self.ax.scatter([p.x], [p.y], s=80,
@@ -1055,7 +1065,8 @@ class GUI:
 
         # Load GUI from glade file
         builder = gtk.Builder()
-        builder.add_from_file(os.path.join(here, 'functionplot.glade'))
+        builder.add_from_file(os.path.join(here,
+            'functionplot.glade'))
         
         #
         # Main Window
@@ -1065,7 +1076,8 @@ class GUI:
         try:
             w = gtk.gdk.get_default_root_window()
             p = gtk.gdk.atom_intern('_NET_WORKAREA')
-            workarea_width, workarea_height = w.property_get(p)[2][2:4]
+            workarea_width, workarea_height = \
+                w.property_get(p)[2][2:4]
             width = int(workarea_width*0.8)
             height = int(workarea_height*0.8)
         except TypeError:
@@ -1077,8 +1089,8 @@ class GUI:
         self.imagemenuitem_quit = \
             builder.get_object('imagemenuitem_quit')
         
-        self.checkmenuitem_function_intersections = \
-            builder.get_object('checkmenuitem_function_intersections')
+        self.checkmenuitem_function_intersections = builder.\
+            get_object('checkmenuitem_function_intersections')
         self.checkmenuitem_function_intersections.\
                 set_active(self.fg.point_type_enabled[1])
         self.checkmenuitem_x_intercepts = \
