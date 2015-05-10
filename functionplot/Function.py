@@ -300,6 +300,9 @@ class Function:
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate second derivative')
+        except TypeError:
+            debug('Second derivative is probably constant. '+\
+                    'No inflection points found.')
         return sol
 
     def _calc_slope_45(self, q, f1, expr):
