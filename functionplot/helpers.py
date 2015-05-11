@@ -107,6 +107,8 @@ def fsolve(expr):
         xl = None
     finally:
         p.terminate()
+    if xl == []:
+        xl = None
     return xl
 
 def rfc(x):
