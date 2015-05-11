@@ -219,8 +219,8 @@ class FunctionGraph:
 
     def grouped_poi(self, points):
         # max distance for grouped points is graph diagonal size /100
-        dmax = euclidean(POI(self.x_min,self.y_min),
-                POI(self.x_max,self.y_max))/100
+        x_range = self.x_max - self.x_min
+        y_range = self.y_max - self.y_min
         # temp list of grouped points. Every group is a sublist
         c=[]
         for i in points:
@@ -234,7 +234,8 @@ class FunctionGraph:
                         if i != j:
                             for m in c[i]:
                                 for n in c[j]:
-                                    if euclidean(m,n) < dmax:
+                                    if abs(m.x - n.x) < x_range/100 and \
+                                            abs(m.y - n.y) < y_range/100:
                                         for k in c[j]:
                                             c[i].append(k)
                                         c.pop(j)
