@@ -37,7 +37,7 @@ gtk.glade.bindtextdomain("functionplot", "/usr/share/locale")
 gtk.glade.textdomain("functionplot")
 
 #Initializing the gtk's thread engine
-gtk.gdk.threads_init()
+gtk.threads_init()
 
 # Use the stix fonts for matplotlib mathtext.
 # They blend better with Times New Roman.
@@ -615,23 +615,23 @@ class GUI:
 
     @threaded
     def on_button_addf_ok_clicked(self, widget):
-        gtk.gdk.threads_enter()
+        gtk.threads_enter()
         self.window_calculating.show()
-        gtk.gdk.threads_leave()
+        gtk.threads_leave()
         expr = self.entry_function.get_text()
         f = self.fg.add_function(expr)
         if f:
-            gtk.gdk.threads_enter()
+            gtk.threads_enter()
             self.dialog_add_function.hide()
             self.window_calculating.hide()
             self.update_function_list()
             self.graph_update()
-            gtk.gdk.threads_leave()
+            gtk.threads_leave()
         else:
-            gtk.gdk.threads_enter()
+            gtk.threads_enter()
             self.window_calculating.hide()
             self.dialog_add_error.show()
-            gtk.gdk.threads_leave()
+            gtk.threads_leave()
 
     # Error while adding function dialog
     def on_dialog_add_error_delete_event(self, widget, event):
@@ -832,15 +832,15 @@ class GUI:
     @threaded
     def _add_example_function(self, expr):
         self.changed = True
-        gtk.gdk.threads_enter()
+        gtk.threads_enter()
         self.window_calculating.show()
-        gtk.gdk.threads_leave()
+        gtk.threads_leave()
         f = self.fg.add_function(expr)
-        gtk.gdk.threads_enter()
+        gtk.threads_enter()
         self.window_calculating.hide()
         self.update_function_list()
         self.graph_update()
-        gtk.gdk.threads_leave()
+        gtk.threads_leave()
 
     def on_button_add_2_clicked(self, widget):
         self._add_example_function('2')
