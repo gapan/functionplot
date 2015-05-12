@@ -356,6 +356,9 @@ class Function:
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate first derivative')
+        except TypeError:
+            debug('First derivative is probably constant. '+\
+                    'No slope45 points found.')
         return sol
 
     def _calc_vertical_asym(self, q, expr):
