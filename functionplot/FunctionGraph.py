@@ -110,12 +110,6 @@ class FunctionGraph:
                     point = [p.x, p.y]
                     if point not in points:
                         points.append([p.x, p.y])
-            # add default POIs (origin (0,0) etc)
-            for p in self.poi_defaults:
-                if self.point_type_enabled[p.point_type]:
-                    point = [p.x, p.y]
-                    if point not in points:
-                        points.append([p.x, p.y])
             # asymptotes
             # we need a trick to put asymptotes far away, but also
             # show them on the x axis. So, if there are any
@@ -138,6 +132,14 @@ class FunctionGraph:
                                 point = [0, p.y]
                                 if point not in points:
                                     points.append([p.x, 0])
+            # add default POIs (origin (0,0) etc)
+            # only if other POIs are less than 3
+            if len(points) < 3:
+                for p in self.poi_defaults:
+                    if self.point_type_enabled[p.point_type]:
+                        point = [p.x, p.y]
+                        if point not in points:
+                            points.append([p.x, p.y])
             # gather everything together
             for point in points:
                 xl.append(point[0])
