@@ -146,8 +146,8 @@ class FunctionGraph:
                 yl.append(point[1])
             # remove outliers
             if not self.outliers:
-                # we need at least 7 points to detect outliers
-                if len(xl) > 6:
+                # we need at least 9 points to detect outliers
+                if len(xl) > 8:
                     debug('Trying to find outliers in X axis.')
                     xl = remove_outliers(xl)
                     debug('Trying to find outliers in Y axis.')
