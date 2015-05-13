@@ -2,6 +2,7 @@
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
 import gtk
+import gobject
 import sys
 import threading
 import pickle
@@ -37,7 +38,7 @@ gtk.glade.bindtextdomain("functionplot", "/usr/share/locale")
 gtk.glade.textdomain("functionplot")
 
 #Initializing the gtk's thread engine
-gtk.threads_init()
+gobject.threads_init()
 
 # Use the stix fonts for matplotlib mathtext.
 # They blend better with Times New Roman.
@@ -615,23 +616,17 @@ class GUI:
 
     @threaded
     def on_button_addf_ok_clicked(self, widget):
-        gtk.threads_enter()
-        self.window_calculating.show()
-        gtk.threads_leave()
+        gobject.idle_add(self.window_calculating.show)
         expr = self.entry_function.get_text()
         f = self.fg.add_function(expr)
         if f:
-            gtk.threads_enter()
-            self.dialog_add_function.hide()
-            self.window_calculating.hide()
-            self.update_function_list()
-            self.graph_update()
-            gtk.threads_leave()
+            gobject.idle_add(self.dialog_add_function.hide)
+            gobject.idle_add(self.window_calculating.hide)
+            gobject.idle_add(self.update_function_list)
+            gobject.idle_add(self.graph_update)
         else:
-            gtk.threads_enter()
-            self.window_calculating.hide()
-            self.dialog_add_error.show()
-            gtk.threads_leave()
+            gobject.idle_add(self.window_calculating.hide)
+            gobject.idle_add(self.dialog_add_error.show)
 
     # Error while adding function dialog
     def on_dialog_add_error_delete_event(self, widget, event):
@@ -832,15 +827,11 @@ class GUI:
     @threaded
     def _add_example_function(self, expr):
         self.changed = True
-        gtk.threads_enter()
-        self.window_calculating.show()
-        gtk.threads_leave()
+        gobject.idle_add(self.window_calculating.show)
         f = self.fg.add_function(expr)
-        gtk.threads_enter()
-        self.window_calculating.hide()
-        self.update_function_list()
-        self.graph_update()
-        gtk.threads_leave()
+        gobject.idle_add(self.window_calculating.hide)
+        gobject.idle_add(self.update_function_list)
+        gobject.idle_add(self.graph_update)
 
     def on_button_add_2_clicked(self, widget):
         self._add_example_function('2')
