@@ -282,7 +282,8 @@ class FunctionGraph:
                     ds = simplify(d)
                     x = fsolve(ds)
                     if x is None:
-                        x = []
+                        dnp = str(f.np_expr)+'-('+str(g.np_expr)+')'
+                        x = self._calc_intersections_manually(dnp)
                     for i in x:
                         y = f.simp_expr.subs('x', i)
                         xc = rfc(i)
@@ -298,6 +299,18 @@ class FunctionGraph:
                 except ValueError:
                     debug('ValueError exception. Probably a '+\
                             'bug in sympy.')
+
+    def _calc_intersections_manually(self, npexpr):
+        debug('Calculating intersections manually')
+        x = np.linspace(-20,20,10000)
+        y = eval(npexpr)
+        sol = []
+        for i in xrange(1, len(y)-1):
+            if ((y[i] == 0) or
+                    (y[i-1] < 0 and y[i] > 0 ) or
+                    (y[i-1] > 0 and y[i] < 0 )):
+                sol.append(x[i])
+        return sol
 
     def clear(self):
         self.x_min = -1.2
