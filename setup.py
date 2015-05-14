@@ -2,7 +2,7 @@
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
 # setup.py Install script for simpleconfig.py
-# Copyright (C) 2011 George Vlahavas
+# Copyright (C) 2015 George Vlahavas
 # E-mail: vlahavas ~ at ~ gmail ~ dot ~ com
 
 # This software is licensed under the terms of the GPLv3 license.
