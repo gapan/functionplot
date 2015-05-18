@@ -10,7 +10,7 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon_name">document-page-setup</property>
+    <property name="icon_name">functionplot</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
@@ -695,7 +695,7 @@ Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.
 </property>
     <property name="translator_credits" translatable="yes">translator-credits</property>
-    <property name="logo_icon_name">document-page-setup</property>
+    <property name="logo_icon_name">functionplot</property>
     <signal name="delete-event" handler="on_aboutdialog_delete_event" swapped="no"/>
     <signal name="response" handler="on_aboutdialog_response" swapped="no"/>
     <child internal-child="vbox">
@@ -2138,7 +2138,7 @@ Public License instead of this License.  But first, please read
     <property name="height_request">500</property>
     <property name="can_focus">False</property>
     <property name="title">FunctionPlot</property>
-    <property name="icon_name">document-page-setup</property>
+    <property name="icon_name">functionplot</property>
     <signal name="delete-event" handler="on_functionplot_delete_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
