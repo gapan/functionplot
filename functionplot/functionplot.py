@@ -32,10 +32,14 @@ here = os.path.dirname(__file__)
 import locale
 import gettext
 import gtk.glade
-gettext.bindtextdomain("functionplot", "/usr/share/locale")
+if os.path.isdir('locale'):
+    localedir=('locale')
+else:
+    localedir=('/usr/share/locale')
+gettext.bindtextdomain("functionplot", localedir)
 gettext.textdomain("functionplot")
-gettext.install("functionplot", "/usr/share/locale", unicode=1)
-gtk.glade.bindtextdomain("functionplot", "/usr/share/locale")
+gettext.install("functionplot", localedir, unicode=1)
+gtk.glade.bindtextdomain("functionplot", localedir)
 gtk.glade.textdomain("functionplot")
 
 #Initializing the gtk's thread engine
