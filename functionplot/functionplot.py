@@ -7,6 +7,7 @@ import sys
 import threading
 import pickle
 import os
+import multiprocessing
 import matplotlib.ticker
 from matplotlib.figure import Figure
 # alternative GTK/GTKAgg/GTKCairo backends
@@ -1227,4 +1228,5 @@ def main():
     gtk.main()
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support() # needed for win32 bundles
     main()
