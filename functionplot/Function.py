@@ -420,6 +420,9 @@ class Function:
     def calc_poi(self):
         expr = self.simp_expr
         self.poi = []
+        # for trig functions, test common periods first
+        if self.trigonometric and not self.polynomial:
+            self._test_common_periods()
         #
         # y intercept
         #
@@ -503,11 +506,6 @@ class Function:
                 self.poi.append(i)
             for i in poi_slope_45:
                 self.poi.append(i)
-            # if the function was not found to be periodic yet, try
-            # some common periods
-            if self.trigonometric and not self.periodic and \
-                    not self.polynomial:
-                self._test_common_periods()
         # Add y intercept to POIs (if any)
         poi_y = q_y.get()
         p_y.join()
@@ -533,9 +531,13 @@ class Function:
         if period != 0:
             debug('Trying period: '+str(period))
             pf = self.simp_expr.subs('x', 'x+period')
-            pf = pf.subs('period', period)
-            g = self.simp_expr-pf
-            if g == 0:
+            # instead of testing if f(x)==f(x+period)
+            # we're testing if f(x+period)==f(x+2*period)
+            # solves problems like with sec(x) where otherwise it
+            # would not find the equality
+            f = pf.subs('period', period)
+            g = pf.subs('period', 2*period)
+            if f - g == 0:
                 debug('Function is periodic and has a period of '+\
                         str(period)+'. Smaller periods may exist.')
                 self.periodic = True
