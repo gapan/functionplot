@@ -211,7 +211,7 @@ class Function:
 
     def _calc_x_intercepts_manually(self):
         debug('Calculating x intercepts manually')
-        x = np.linspace(-20,20,10000)
+        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         y = eval(self.np_expr)
         sol = []
         for i in xrange(1, len(y)-1):
@@ -219,6 +219,10 @@ class Function:
                     (y[i-1] < 0 and y[i] > 0 ) or
                     (y[i-1] > 0 and y[i] < 0 )):
                 sol.append(x[i])
+        l = len(sol)
+        if l > 10:
+            debug('Too many x intercepts. Keeping only 3.')
+            sol = [sol[0],sol[int(l/2)],sol[-1]]
         return sol
 
     def _calc_min_max(self, q, f1, expr):
@@ -250,13 +254,17 @@ class Function:
 
     def _calc_min_max_manually(self):
         debug('Calculating local min/max manually')
-        x = np.linspace(-20,20,10000)
+        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         y = eval(self.np_expr)
         sol = []
         for i in xrange(1, len(y)-1):
             if (( y[i-1] > y[i] and y[i+1] > y[i]) or
                 ( y[i-1] < y[i] and y[i+1] < y[i] )):
                 sol.append(x[i])
+        l = len(sol)
+        if l > 10:
+            debug('Too many local min/max. Keeping only 3.')
+            sol = [sol[0],sol[int(l/2)],sol[-1]]
         return sol
 
     def _calc_inflection(self, q, f2, expr):
@@ -289,7 +297,7 @@ class Function:
     def _calc_inflection_manually(self, f2):
         debug('Calculating inflection points manually')
         npexpr = self._get_np_expr(str(f2))
-        x = np.linspace(-20,20,10000)
+        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         sol = []
         try:
             y = eval(npexpr)
@@ -303,6 +311,10 @@ class Function:
         except TypeError:
             debug('Second derivative is probably constant. '+\
                     'No inflection points found.')
+        l = len(sol)
+        if l > 10:
+            debug('Too many inflection points. Keeping only 3.')
+            sol = [sol[0],sol[int(l/2)],sol[-1]]
         return sol
 
     def _calc_slope_45(self, q, f1, expr):
@@ -343,7 +355,7 @@ class Function:
     def _calc_slope45_manually(self, f1):
         debug('Calculating slope45 points manually')
         npexpr = self._get_np_expr(str(f1))
-        x = np.linspace(-20,20,10000)
+        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         sol = []
         try:
             y = eval(npexpr)
@@ -359,6 +371,10 @@ class Function:
         except TypeError:
             debug('First derivative is probably constant. '+\
                     'No slope45 points found.')
+        l = len(sol)
+        if l > 10:
+            debug('Too many slope45 points. Keeping only 3.')
+            sol = [sol[0],sol[int(l/2)],sol[-1]]
         return sol
 
     def _calc_vertical_asym(self, q, expr):
@@ -542,6 +558,9 @@ class Function:
                         str(period)+'. Smaller periods may exist.')
                 self.periodic = True
                 self.period = period
+                margin = float(self.period*0.6)
+                self.x_min_manual = -margin
+                self.x_max_manual = margin
 
     # checks the functions for some common periods
     # multiples of 0.25 (up to 1)
@@ -581,6 +600,9 @@ class Function:
         self.periodic = False
         self.period = None
         self.expr = self._get_expr(expr)
+        # the min and max values to use for manual POI searching
+        self.x_min_manual = -20
+        self.x_max_manual = 20
        
         # simplifying helps with functions like y=x^2/x which is
         # actually just y=x. Doesn't hurt in any case.
