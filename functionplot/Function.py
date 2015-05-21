@@ -214,10 +214,10 @@ class Function:
         x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         y = eval(self.np_expr)
         sol = []
-        for i in xrange(1, len(y)-1):
+        for i in xrange(2, len(y)-1):
             if ((y[i] == 0) or
-                    (y[i-1] < 0 and y[i] > 0 ) or
-                    (y[i-1] > 0 and y[i] < 0 )):
+                    (y[i-2] < y[i-1] < 0 and y[i+1] > y[i] > 0 ) or
+                    (y[i-2] > y[i-1] > 0 and y[i+1] < y[i] < 0 )):
                 sol.append(x[i])
         l = len(sol)
         if l > 10:
@@ -257,10 +257,12 @@ class Function:
         x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
         y = eval(self.np_expr)
         sol = []
-        for i in xrange(1, len(y)-1):
-            if (( y[i-1] > y[i] and y[i+1] > y[i]) or
-                ( y[i-1] < y[i] and y[i+1] < y[i] )):
-                sol.append(x[i])
+        for i in xrange(2, len(y)-2):
+            print x[i],y[i]
+            if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2]:
+                    sol.append(x[i])
+            elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2]:
+                    sol.append(x[i])
         l = len(sol)
         if l > 10:
             debug('Too many local min/max. Keeping only 3.')
