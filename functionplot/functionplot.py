@@ -553,6 +553,12 @@ class GUI:
     def on_button_0_clicked(self, widget):
         self._entry_function_append_text('0')
 
+    def on_button_left_paren_clicked(self, widget):
+        self._entry_function_append_text('(')
+
+    def on_button_right_paren_clicked(self, widget):
+        self._entry_function_append_text(')')
+
     def on_button_x_clicked(self, widget):
         self._entry_function_append_text('x')
 
