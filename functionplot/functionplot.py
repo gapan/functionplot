@@ -422,12 +422,12 @@ class GUI:
         # group POI (only if there are less than 50)
         # otherwise a lot of processing power is needed to group
         # them and it takes forever to plot
-        if self.fg.grouped and len(ungrouped_poi) < 50:
-            grouped_poi = self.fg.grouped_poi(ungrouped_poi)
-        else:
-            grouped_poi = ungrouped_poi
-        # draw POI
         if self.fg.show_poi:
+            if self.fg.grouped and len(ungrouped_poi) < 50:
+                grouped_poi = self.fg.grouped_poi(ungrouped_poi)
+            else:
+                grouped_poi = ungrouped_poi
+        # draw POI
             for p in grouped_poi:
                 if p.point_type >1 and p.point_type <9:
                     if p.function.visible:
