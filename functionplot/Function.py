@@ -302,10 +302,10 @@ class Function:
         sol = []
         try:
             y = eval(npexpr)
-            for i in xrange(1, len(y)-1):
+            for i in xrange(2, len(y)-1):
                 if ((y[i] == 0) or
-                        (y[i-1] < 0 and y[i] > 0 ) or
-                        (y[i-1] > 0 and y[i] < 0 )):
+                        (y[i-2] < y[i-1] < 0 and y[i] > 0 ) or
+                        (y[i-2] > y[i-1] > 0 and y[i] < 0 )):
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate second derivative')
