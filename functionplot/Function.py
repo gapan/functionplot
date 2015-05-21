@@ -258,7 +258,6 @@ class Function:
         y = eval(self.np_expr)
         sol = []
         for i in xrange(2, len(y)-2):
-            print x[i],y[i]
             if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2]:
                     sol.append(x[i])
             elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2]:
