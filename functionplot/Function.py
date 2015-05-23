@@ -258,9 +258,13 @@ class Function:
         y = eval(self.np_expr)
         sol = []
         for i in xrange(2, len(y)-2):
-            if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2]:
+            dx = x[i-1]-x[i]
+            dy = y[i-1]-y[i]
+            if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2] and \
+                0.1 < dy/dx < 10:
                     sol.append(x[i])
-            elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2]:
+            elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2] and\
+                0.1 < dy/dx < 10:
                     sol.append(x[i])
         l = len(sol)
         if l > 10:
