@@ -161,12 +161,12 @@ class FunctionGraph:
             # take care of edge cases, where all poi in an axis have
             # the same coordinate.
             if x_min == x_max:
-                x_min = x_min-1
-                x_max = x_min+1
+                x_min = x_min-2
+                x_max = x_min+2
                 x_range = x_max - x_min
             if y_min == y_max:
-                y_min = y_min-1
-                y_max = y_min+1
+                y_min = y_min-2
+                y_max = y_min+2
                 y_range = y_max - y_min
             # asymptotes. Increase the axis size in case any are
             # found
