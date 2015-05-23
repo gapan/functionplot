@@ -23,7 +23,9 @@ optimal position and zoom scale for the graph.""",
     url="https://github.com/gapan/",
     license='GPLv3',
     package_data = {'': ['functionplot.glade', '*.png']},
-    data_files = [ ('share/applications', ['desktop/functionplot.desktop']) ],
+    data_files = [ ('share/applications', ['desktop/functionplot.desktop']),
+        ('share/icons/hicolor/scalable/apps', ['desktop/functionplot.svg']),
+        ('share/icons/hicolor/48x48/apps', ['desktop/functionplot.png'])],
     packages = find_packages(exclude="test"),
  
     entry_points = {
