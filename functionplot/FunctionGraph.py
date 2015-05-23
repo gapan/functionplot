@@ -158,22 +158,26 @@ class FunctionGraph:
             y_min = min(yl)
             y_max = max(yl)
             y_range = y_max - y_min
-            # asymptotes. Increase the axis size in case any are
-            # found
-            if vertical_asymptotes:
-                y_min = y_min - y_range
-                y_max = y_max + y_range
-            if horizontal_asymptotes:
-                x_min = x_min - x_range
-                x_max = x_max + x_range
             # take care of edge cases, where all poi in an axis have
             # the same coordinate.
             if x_min == x_max:
                 x_min = x_min-1
                 x_max = x_min+1
+                x_range = x_max - x_min
             if y_min == y_max:
                 y_min = y_min-1
                 y_max = y_min+1
+                y_range = y_max - y_min
+            # asymptotes. Increase the axis size in case any are
+            # found
+            if vertical_asymptotes:
+                y_min = y_min - y_range
+                y_max = y_max + y_range
+                y_range = y_max - y_min
+            if horizontal_asymptotes:
+                x_min = x_min - x_range
+                x_max = x_max + x_range
+                x_range = x_max - x_min
             # find the max period of all functions involved and check
             # if at least 2 periods are shown
             periods = []
@@ -182,11 +186,11 @@ class FunctionGraph:
                     periods.append(f.period)
             if len(periods) > 0:
                 max_period = float(max(periods))
-                x_range = x_max - x_min
                 x_middle = (x_max - x_min)/2
                 if x_range < 2*max_period:
                     x_min = float(x_middle - 1.2*max_period)
                     x_max = float(x_middle + 1.2*max_period)
+                    x_range = x_max - x_min
             # for some weird reason, setting all limits to integers
             # slightly breaks the sampling algorithm. Shift them by
             # a bit and everything works again. WIthout this
@@ -195,9 +199,11 @@ class FunctionGraph:
                 if x_min == int(x_min) and x_max == int(x_max):
                     x_min = x_min - 0.01*x_range
                     x_max = x_max + 0.01*x_range
+                    x_range = x_max - x_min
                 if y_min == int(y_min) and y_max == int(y_max):
                     y_min = y_min - 0.01*y_range
                     y_max = y_max + 0.01*y_range
+                    y_range = y_max - y_min
             except OverflowError:
                 pass
             debug('Setting X limits to '+\
