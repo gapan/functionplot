@@ -24,6 +24,11 @@ import logging
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
         format='(%(processName)-10s) %(message)s',)
 
+# on windows, import the winshell module
+import platform
+if platform.system == 'Windows':
+    import winshell
+
 # get location of this file. It will be used later for
 # loading resources
 here = os.path.dirname(__file__)
@@ -1190,7 +1195,10 @@ class GUI:
             builder.get_object('label_open_error')
         self.dialog_file_save_error = \
             builder.get_object('dialog_file_save_error')
-        self.folder = os.path.expanduser("~")
+        if platform.system() == 'Windows':
+            self.folder = winshell.my_documents()
+        else:
+            self.folder = os.path.expanduser("~")
         # overwrite dialog
         self.dialog_overwrite = \
             builder.get_object('dialog_overwrite')
