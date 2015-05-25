@@ -310,11 +310,16 @@ class FunctionGraph:
         x = np.linspace(-20,20,10000)
         y = eval(npexpr)
         sol = []
-        for i in xrange(1, len(y)-1):
+        for i in xrange(2, len(y)-1):
             if ((y[i] == 0) or
-                    (y[i-1] < 0 and y[i] > 0 ) or
-                    (y[i-1] > 0 and y[i] < 0 )):
+                    (y[i-2] < y[i-1] < 0 and y[i+1] > y[i] > 0 ) or
+                    (y[i-2] > y[i-1] > 0 and y[i+1] < y[i] < 0 )):
                 sol.append(x[i])
+        l = len(sol)
+        if l > 10:
+            debug('Too many intersections. Keeping only 6.')
+            sol = [sol[0],sol[int(l/6)],sol[int(l/3)],
+                    sol[int(l/2)], sol[int(2*l/3)],sol[-1]]
         return sol
 
     def clear(self):
