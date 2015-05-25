@@ -258,10 +258,10 @@ class Function:
             dx = x[i-1]-x[i]
             dy = y[i-1]-y[i]
             if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2] and \
-                0.1 < dy/dx < 10:
+                0 <= abs(dy/dx) < 10:
                     sol.append(x[i])
             elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2] and\
-                0.1 < dy/dx < 10:
+                0 <= abs(dy/dx) < 10:
                     sol.append(x[i])
         sol = keep10(sol)
         return sol
