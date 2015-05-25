@@ -227,48 +227,53 @@ class FunctionGraph:
                 self.y_max = 100*self.y_max
 
     def grouped_poi(self, points):
-        # max distance for grouped points is graph diagonal size /100
-        x_range = self.x_max - self.x_min
-        y_range = self.y_max - self.y_min
-        # temp list of grouped points. Every group is a sublist
-        c=[]
-        for i in points:
-            c.append([i])
-        done = False
-        while not done:
-            try:
-                l = len(c)
-                for i in xrange(0,l-1):
-                    for j in xrange(1,l):
-                        if i != j:
-                            for m in c[i]:
-                                for n in c[j]:
-                                    if abs(m.x - n.x) < x_range/100 and \
-                                            abs(m.y - n.y) < y_range/100:
-                                        for k in c[j]:
-                                            c[i].append(k)
-                                        c.pop(j)
-                                        raise BreakLoop
-                done = True
-            except BreakLoop:
-                pass
-        # final list of grouped points. For groups, return a single
-        # point with coordinates the mean values of the coordinates
-        # of the points that are grouped
-        grouped = []
-        for i in c:
-            l = len(i)
-            if l == 1:
-                grouped.append(i[0])
-            else:
-                x_sum = 0
-                y_sum = 0
-                for j in i:
-                    x_sum+=j.x
-                    y_sum+=j.y
-                x = x_sum/l
-                y = y_sum/l
-                grouped.append(POI(x,y,9,size=l))
+        l = len(points)
+        if l < 50:
+            # max distance for grouped points is graph diagonal size /100
+            x_range = self.x_max - self.x_min
+            y_range = self.y_max - self.y_min
+            # temp list of grouped points. Every group is a sublist
+            c=[]
+            for i in points:
+                c.append([i])
+            done = False
+            while not done:
+                try:
+                    l = len(c)
+                    for i in xrange(0,l-1):
+                        for j in xrange(1,l):
+                            if i != j:
+                                for m in c[i]:
+                                    for n in c[j]:
+                                        if abs(m.x - n.x) < x_range/100 and \
+                                                abs(m.y - n.y) < y_range/100:
+                                            for k in c[j]:
+                                                c[i].append(k)
+                                            c.pop(j)
+                                            raise BreakLoop
+                    done = True
+                except BreakLoop:
+                    pass
+            # final list of grouped points. For groups, return a single
+            # point with coordinates the mean values of the coordinates
+            # of the points that are grouped
+            grouped = []
+            for i in c:
+                l = len(i)
+                if l == 1:
+                    grouped.append(i[0])
+                else:
+                    x_sum = 0
+                    y_sum = 0
+                    for j in i:
+                        x_sum+=j.x
+                        y_sum+=j.y
+                    x = x_sum/l
+                    y = y_sum/l
+                    grouped.append(POI(x,y,9,size=l))
+        else:
+            debug('Too many POI ('+str(l)+'). Disabling grouping.')
+            grouped = points
         return grouped
 
     def calc_intersections(self):

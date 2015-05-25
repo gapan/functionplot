@@ -425,11 +425,9 @@ class GUI:
             if self.fg.point_type_enabled[p.point_type]:
                 p.color = 'black'
                 ungrouped_poi.append(p)
-        # group POI (only if there are less than 50)
-        # otherwise a lot of processing power is needed to group
-        # them and it takes forever to plot
+        # group POI
         if self.fg.show_poi:
-            if self.fg.grouped and len(ungrouped_poi) < 50:
+            if self.fg.grouped:
                 grouped_poi = self.fg.grouped_poi(ungrouped_poi)
             else:
                 grouped_poi = ungrouped_poi
