@@ -6,7 +6,7 @@ import numpy as np
 from sympy import diff, limit, simplify, latex, pi
 from sympy.functions import Abs
 from PointOfInterest import PointOfInterest as POI
-from helpers import pod, fsolve, rfc, log10, sample
+from helpers import pod, fsolve, rfc, log10, sample, keep10
 from logging import debug
 import re
 import multiprocessing as mp
@@ -219,10 +219,7 @@ class Function:
                     (y[i-2] < y[i-1] < 0 and y[i+1] > y[i] > 0 ) or
                     (y[i-2] > y[i-1] > 0 and y[i+1] < y[i] < 0 )):
                 sol.append(x[i])
-        l = len(sol)
-        if l > 10:
-            debug('Too many x intercepts. Keeping only 3.')
-            sol = [sol[0],sol[int(l/2)],sol[-1]]
+        sol = keep10(sol)
         return sol
 
     def _calc_min_max(self, q, f1, expr):
@@ -266,10 +263,7 @@ class Function:
             elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2] and\
                 0.1 < dy/dx < 10:
                     sol.append(x[i])
-        l = len(sol)
-        if l > 10:
-            debug('Too many local min/max. Keeping only 3.')
-            sol = [sol[0],sol[int(l/2)],sol[-1]]
+        sol = keep10(sol)
         return sol
 
     def _calc_inflection(self, q, f2, expr):
@@ -316,10 +310,7 @@ class Function:
         except TypeError:
             debug('Second derivative is probably constant. '+\
                     'No inflection points found.')
-        l = len(sol)
-        if l > 10:
-            debug('Too many inflection points. Keeping only 3.')
-            sol = [sol[0],sol[int(l/2)],sol[-1]]
+        sol = keep10(sol)
         return sol
 
     def _calc_slope_45(self, q, f1, expr):
@@ -376,10 +367,7 @@ class Function:
         except TypeError:
             debug('First derivative is probably constant. '+\
                     'No slope45 points found.')
-        l = len(sol)
-        if l > 10:
-            debug('Too many slope45 points. Keeping only 3.')
-            sol = [sol[0],sol[int(l/2)],sol[-1]]
+        sol = keep10(sol)
         return sol
 
     def _calc_vertical_asym(self, q, expr):

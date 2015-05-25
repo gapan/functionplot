@@ -363,3 +363,18 @@ def euclidean(p1, p2):
     dy = p1.y-p2.y
     d = sqrt(dx**2 + dy**2)
     return d
+
+def keep10(lst):
+    """
+    For a list that has more than 10 elements, keep only
+    10, with uniform distribution.
+    """
+    l = len(lst)
+    if l > 10:
+        debug('Too many POI in list ('+str(l)+'). Keeping only 10.')
+        lst = [lst[0],lst[int(l/10)],lst[int(l/5)],
+                lst[int(3*l/10)], lst[int(2*l/5)],
+                lst[int(l/2)], lst[int(3*l/5)],
+                lst[int(7*l/10)], lst[int(4*l/5)],
+                lst[-1]]
+    return lst

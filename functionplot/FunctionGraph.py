@@ -10,6 +10,7 @@ from PointOfInterest import PointOfInterest as POI
 from helpers import fsolve, rfc, remove_outliers, euclidean,\
     BreakLoop
 from logging import debug
+from helpers import keep10
 
 class FunctionGraph:
 
@@ -315,11 +316,7 @@ class FunctionGraph:
                     (y[i-2] < y[i-1] < 0 and y[i+1] > y[i] > 0 ) or
                     (y[i-2] > y[i-1] > 0 and y[i+1] < y[i] < 0 )):
                 sol.append(x[i])
-        l = len(sol)
-        if l > 10:
-            debug('Too many intersections. Keeping only 6.')
-            sol = [sol[0],sol[int(l/6)],sol[int(l/3)],
-                    sol[int(l/2)], sol[int(2*l/3)],sol[-1]]
+        sol = keep10(sol)
         return sol
 
     def clear(self):
