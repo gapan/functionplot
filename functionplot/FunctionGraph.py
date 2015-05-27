@@ -290,26 +290,42 @@ class FunctionGraph:
     def _calc_intersections_functions(self, f, g):
         debug('Looking for intersections between "'+f.expr+\
                 '" and "'+g.expr+'".')
-        #FIXME: maybe I can do away with simplify here?
-        d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
-        try:
-            ds = simplify(d)
-            x = fsolve(ds)
-            if x is None:
-                dnp = str(f.np_expr)+'-('+str(g.np_expr)+')'
-                x = self._calc_intersections_manually(dnp)
-            for i in x:
-                y = f.simp_expr.subs('x', i)
-                xc = rfc(i)
-                yc = rfc(y)
-                if xc is not None and yc is not None:
-                    p = POI(xc, yc, 1, function=[f,g])
-                    self.poi.append(p)
-                    debug('New intersection point: ('+\
-                            str(xc)+','+str(yc)+')')
-        except ValueError:
-            debug('ValueError exception. Probably a '+\
-                    'bug in sympy.')
+        stored = False
+        for i in self.intersections:
+            f1 = i[0]
+            f2 = i[1]
+            px = i[2]
+            py = i[3]
+            if (f1==f.simp_expr and f2==g.simp_expr) or \
+                    (f1==g.simp_expr and f2==f.simp_expr):
+                p = POI(px, py, 1, function=[f,g])
+                self.poi.append(p)
+                stored = True
+                debug('Stored intersection point: ('+\
+                    str(px)+','+str(py)+')')
+        if not stored:
+            #FIXME: maybe I can do away with simplify here?
+            d = str(f.simp_expr)+'-('+str(g.simp_expr)+')'
+            try:
+                ds = simplify(d)
+                x = fsolve(ds)
+                if x is None:
+                    dnp = str(f.np_expr)+'-('+str(g.np_expr)+')'
+                    x = self._calc_intersections_manually(dnp)
+                for i in x:
+                    y = f.simp_expr.subs('x', i)
+                    xc = rfc(i)
+                    yc = rfc(y)
+                    if xc is not None and yc is not None:
+                        p = POI(xc, yc, 1, function=[f,g])
+                        self.poi.append(p)
+                        self.intersections.append([f.simp_expr,
+                            g.simp_expr, xc, yc])
+                        debug('New intersection point: ('+\
+                                str(xc)+','+str(yc)+')')
+            except ValueError:
+                debug('ValueError exception. Probably a '+\
+                        'bug in sympy.')
 
     def _calc_intersections_manually(self, npexpr):
         debug('Calculating intersections manually')
@@ -367,4 +383,5 @@ class FunctionGraph:
                 True, # 8: slope is 45 or -45 degrees
                 True  # 9: grouped POIs
                 ]
+        self.intersections = []
         self.new()
