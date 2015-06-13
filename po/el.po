@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FunctionPlot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 20:47+0300\n"
-"PO-Revision-Date: 2015-04-22 20:49+0200\n"
+"POT-Creation-Date: 2015-06-13 22:44+0300\n"
+"PO-Revision-Date: 2015-06-13 22:45+0200\n"
 "Last-Translator: George Vlahavas <vlahavas~at~gmail~dot~com>\n"
 "Language-Team: Greek <vlahavas~at~gmail~dot~com>\n"
 "Language: Greek\n"
@@ -18,11 +18,11 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: functionplot/functionplot.glade:3966
+#: functionplot/functionplot.glade:3826
 msgid "-sin(x)"
 msgstr "-ημ(x)"
 
-#: functionplot/functionplot.glade:2674
+#: functionplot/functionplot.glade:2534
 msgid "<b>Example functions:</b>"
 msgstr "<b>Παραδείγματα συναρτήσεων:</b>"
 
@@ -30,24 +30,28 @@ msgstr "<b>Παραδείγματα συναρτήσεων:</b>"
 msgid "About FunctionPlot"
 msgstr "Σχετικά με το FunctionPlot"
 
-#: functionplot/functionplot.glade:728 functionplot/functionplot.glade:2499
-#: functionplot/functionplot.glade:2500
+#: functionplot/functionplot.glade:728 functionplot/functionplot.glade:2359
+#: functionplot/functionplot.glade:2360
 msgid "Add function"
 msgstr "Προσθήκη συνάρτησης"
 
 #: functionplot/functionplot.glade:20
-msgid "An intelligent mathematical function plotting application."
-msgstr "Μία έξυπνη εφαρμογή σχεδιασμού μαθηματικών συναρτήσεων"
+msgid ""
+"An intelligent mathematical function plotting application. Developed as a "
+"thesis project in Hellenic Open University."
+msgstr ""
+"Μία έξυπνη εφαρμογή σχεδιασμού μαθηματικών συναρτήσεων. Αναπτύχθηκε στα "
+"πλαίσια πτυχιακής εργασίας για το Ελληνικό Ανοιχτό Πανεπιστήμιο."
 
-#: functionplot/functionplot.glade:2569 functionplot/functionplot.glade:2570
+#: functionplot/functionplot.glade:2429 functionplot/functionplot.glade:2430
 msgid "Auto zoom"
 msgstr "Αυτόματη μεγέθυνση"
 
-#: functionplot/functionplot.glade:5550
+#: functionplot/functionplot.glade:5581
 msgid "Calculating"
 msgstr "Γίνονται υπολογισμοί"
 
-#: functionplot/functionplot.glade:4457
+#: functionplot/functionplot.glade:4317
 msgid "Category combinations:"
 msgstr "Συνδυασμοί κατηγοριών:"
 
@@ -55,7 +59,7 @@ msgstr "Συνδυασμοί κατηγοριών:"
 msgid "Copyright © 2015 George Vlahavas"
 msgstr "Copyright © 2015 George Vlahavas"
 
-#: functionplot/functionplot.glade:1428
+#: functionplot/functionplot.glade:1450
 msgid "Create new file?"
 msgstr "Δημιουργία νέου αρχείου;"
 
@@ -63,288 +67,288 @@ msgstr "Δημιουργία νέου αρχείου;"
 msgid "Enter the mathematical expression for the function:"
 msgstr "Εισάγετε τη μαθηματική έκφραση της συνάρτησης"
 
-#: functionplot/functionplot.glade:1337 functionplot/functionplot.glade:1954
-#: functionplot/functionplot.glade:4777 functionplot/functionplot.glade:4942
+#: functionplot/functionplot.glade:1359 functionplot/functionplot.glade:4770
+#: functionplot/functionplot.glade:4935 functionplot/functionplot.glade:5100
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: functionplot/functionplot.glade:2018
+#: functionplot/functionplot.glade:4834
 msgid "Error exporting file."
 msgstr "Σφάλμα κατά την εξαγωγή του αρχείου."
 
-#: functionplot/functionplot.py:643
+#: functionplot/functionplot.py:696
 msgid "Error reading file."
 msgstr "Σφάλμα κατά την ανάγνωση του αρχείου."
 
-#: functionplot/functionplot.glade:5006
+#: functionplot/functionplot.glade:5164
 msgid "Error saving file."
 msgstr "Σφάλμα κατά την αποθήκευση του αρχείου."
 
-#: functionplot/functionplot.glade:2115
+#: functionplot/functionplot.glade:1975
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: functionplot/functionplot.glade:1829 functionplot/functionplot.glade:5033
+#: functionplot/functionplot.glade:1778 functionplot/functionplot.glade:4645
 msgid "File already exists"
 msgstr "Το αρχείο υπάρχει ήδη"
 
-#: functionplot/functionplot.glade:1925 functionplot/functionplot.glade:5131
+#: functionplot/functionplot.glade:1876 functionplot/functionplot.glade:4741
 msgid "File already exists. Overwrite?"
 msgstr "Το αρχείο υπάρχει ήδη. Να γίνει αντικατάσταση;"
 
-#: functionplot/functionplot.py:640
+#: functionplot/functionplot.py:693
 msgid "File doesn't look like a FunctionPlot file."
 msgstr "Το αρχείο δεν μοιάζει να είναι αρχείο της εφαρμογής FunctionPlot."
 
-#: functionplot/functionplot.glade:1510 functionplot/functionplot.glade:1620
+#: functionplot/functionplot.glade:1532 functionplot/functionplot.glade:1642
 msgid "File has not been saved. Are you sure you want to open a new file?"
 msgstr ""
 "Το αρχείο δεν έχει αποθηκευτεί. Είστε σίγουροι ότι επιθυμείτε να ανοίξετε "
 "ένα νέο αρχείο;"
 
-#: functionplot/functionplot.glade:1728
+#: functionplot/functionplot.glade:1750
 msgid "File has not been saved. Are you sure you want to quit?"
 msgstr ""
 "Το αρχείο δεν έχει αποθηκευτεί. Είστε σίγουροι ότι επιθυμείτε να τερματίσετε "
 "την εφαρμογή;"
 
-#: functionplot/functionplot.glade:2635
+#: functionplot/functionplot.glade:2495
 msgid "Function"
 msgstr "Συνάρτηση"
 
-#: functionplot/functionplot.py:1133
+#: functionplot/functionplot.py:1186
 msgid "FunctionPlot files"
 msgstr "Αρχεία FunctionPlot"
 
-#: functionplot/functionplot.glade:4291
+#: functionplot/functionplot.glade:4151
 msgid "Functions with roots:"
 msgstr "Συναρτήσεις με ρίζες:"
 
-#: functionplot/functionplot.glade:3315
+#: functionplot/functionplot.glade:3175
 msgid "Higher degree polynomials:"
 msgstr "Πολυώνυμα μεγαλύτερου βαθμού:"
 
-#: functionplot/functionplot.glade:2375
+#: functionplot/functionplot.glade:2235
 msgid "L_ower Right"
 msgstr "Κάτω δε_ξιά"
 
-#: functionplot/functionplot.glade:2877
+#: functionplot/functionplot.glade:2737
 msgid "Linear functions:"
 msgstr "Γραμμικές συναρτήσεις:"
 
-#: functionplot/functionplot.glade:3914
+#: functionplot/functionplot.glade:3774
 msgid "Logarithmic functions:"
 msgstr "Λογαριθμικές συναρτήσεις"
 
-#: functionplot/functionplot.glade:2445
+#: functionplot/functionplot.glade:2305
 msgid "New"
 msgstr "Νέο"
 
-#: functionplot/functionplot.glade:2444
+#: functionplot/functionplot.glade:2304
 msgid "New graph"
 msgstr "Νέο γράφημα"
 
-#: functionplot/functionplot.glade:2460
+#: functionplot/functionplot.glade:2320
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: functionplot/functionplot.glade:1538
+#: functionplot/functionplot.glade:1560
 msgid "Open file?"
 msgstr "Άνοιγμα αρχείου;"
 
-#: functionplot/functionplot.glade:2459
+#: functionplot/functionplot.glade:2319
 msgid "Open graph"
 msgstr "Άνοιγμα γραφήματος"
 
-#: functionplot/functionplot.glade:4707
+#: functionplot/functionplot.glade:4865
 msgid "Open..."
 msgstr "Άνοιγμα..."
 
-#: functionplot/functionplot.py:1162
+#: functionplot/functionplot.py:1219
 msgid "PNG image files"
 msgstr "Αρχεία εικόνας PNG"
 
-#: functionplot/functionplot.glade:5584
+#: functionplot/functionplot.glade:5615
 msgid "Performing calculations. Please wait..."
 msgstr "Γίνονται υπολογισμοί. Παρακαλώ περιμένετε..."
 
-#: functionplot/functionplot.glade:3709
+#: functionplot/functionplot.glade:3569
 msgid "Power functions:"
 msgstr "Εκθετικές συναρτήσεις"
 
-#: functionplot/functionplot.glade:3032
+#: functionplot/functionplot.glade:2892
 msgid "Quadratic functions:"
 msgstr "Συναρτήσεις δευτέρου βαθμού:"
 
-#: functionplot/functionplot.glade:1648
+#: functionplot/functionplot.glade:1670
 msgid "Quit?"
 msgstr "Έξοδος;"
 
-#: functionplot/functionplot.glade:3512
+#: functionplot/functionplot.glade:3372
 msgid "Rational functions:"
 msgstr "Ρητές συναρτήσεις"
 
-#: functionplot/functionplot.glade:2514 functionplot/functionplot.glade:2515
+#: functionplot/functionplot.glade:2374 functionplot/functionplot.glade:2375
 msgid "Remove function"
 msgstr "Αφαίρεση συνάρτησης"
 
-#: functionplot/functionplot.glade:2475
+#: functionplot/functionplot.glade:2335
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: functionplot/functionplot.glade:4867
+#: functionplot/functionplot.glade:5025
 msgid "Save as..."
 msgstr "Αποθήκευση ως..."
 
-#: functionplot/functionplot.glade:2474
+#: functionplot/functionplot.glade:2334
 msgid "Save graph"
 msgstr "Αποθήκευση γραφήματος"
 
-#: functionplot/functionplot.glade:2327
+#: functionplot/functionplot.glade:2187
 msgid "Show _Legend"
 msgstr "Εμφάνιση _λεζάντας"
 
-#: functionplot/functionplot.glade:2298
+#: functionplot/functionplot.glade:2158
 msgid "Show _Points of Interest"
 msgstr "Εμφάνιση _σημείων ενδιαφέροντος"
 
-#: functionplot/functionplot.glade:1404
+#: functionplot/functionplot.glade:1426
 msgid "The function expression is not valid."
 msgstr "Η μαθηματική έκφραση δεν είναι έγκυρη"
 
-#: functionplot/functionplot.glade:4122
+#: functionplot/functionplot.glade:3982
 msgid "Trigonometric  functions:"
 msgstr "Τριγωνομετρικές συναρτήσεις:"
 
-#: functionplot/functionplot.glade:2342
+#: functionplot/functionplot.glade:2202
 msgid "Upper _Left"
 msgstr "Πάνω _αριστερά"
 
-#: functionplot/functionplot.glade:2352
+#: functionplot/functionplot.glade:2212
 msgid "Upper _Right"
 msgstr "Πάνω _δεξιά"
 
-#: functionplot/functionplot.glade:2622
+#: functionplot/functionplot.glade:2482
 msgid "Visible"
 msgstr "Εμφάνιση"
 
-#: functionplot/functionplot.glade:2539 functionplot/functionplot.glade:2540
+#: functionplot/functionplot.glade:2399 functionplot/functionplot.glade:2400
 msgid "Zoom in"
 msgstr "Μεγέθυνση"
 
-#: functionplot/functionplot.glade:2554 functionplot/functionplot.glade:2555
+#: functionplot/functionplot.glade:2414 functionplot/functionplot.glade:2415
 msgid "Zoom out"
 msgstr "Σμίκρυνση"
 
-#: functionplot/functionplot.glade:2256
+#: functionplot/functionplot.glade:2116
 msgid "_45 degrees slope"
 msgstr "Σημεία με κλίση _45 μοιρών"
 
-#: functionplot/functionplot.glade:2147
+#: functionplot/functionplot.glade:2007
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: functionplot/functionplot.glade:2061
+#: functionplot/functionplot.glade:1921
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: functionplot/functionplot.glade:2193
+#: functionplot/functionplot.glade:2053
 msgid "_Function intersections"
 msgstr "Σημεία _τομής συναρτήσεων"
 
-#: functionplot/functionplot.glade:2307
+#: functionplot/functionplot.glade:2167
 msgid "_Group points that are close"
 msgstr "_Ομαδοποίηση κοντινών σημείων"
 
-#: functionplot/functionplot.glade:2409
+#: functionplot/functionplot.glade:2269
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: functionplot/functionplot.glade:2247
+#: functionplot/functionplot.glade:2107
 msgid "_Horizontal asymptotes"
 msgstr "_Οριζόντιες ασύμπτωτες"
 
-#: functionplot/functionplot.glade:2229
+#: functionplot/functionplot.glade:2089
 msgid "_Inflection points"
 msgstr "Σημεία _καμπής"
 
-#: functionplot/functionplot.glade:2317
+#: functionplot/functionplot.glade:2177
 msgid "_Legend"
 msgstr "_Λεζάντα"
 
-#: functionplot/functionplot.glade:2220
+#: functionplot/functionplot.glade:2080
 msgid "_Local extrema"
 msgstr "_Τοπικά ακρότατα"
 
-#: functionplot/functionplot.glade:2396
+#: functionplot/functionplot.glade:2256
 msgid "_Logscale"
 msgstr "_Λογαριθμικοί άξονες"
 
-#: functionplot/functionplot.glade:2364
+#: functionplot/functionplot.glade:2224
 msgid "_Lower Left"
 msgstr "_Κάτω αριστερά"
 
-#: functionplot/functionplot.glade:2271
+#: functionplot/functionplot.glade:2131
 msgid "_Outliers"
 msgstr "_Απομακρυσμένες τιμές"
 
-#: functionplot/functionplot.glade:2183
+#: functionplot/functionplot.glade:2043
 msgid "_Points Of Interest"
 msgstr "_Σημεία ενδιαφέροντος"
 
-#: functionplot/functionplot.glade:2238
+#: functionplot/functionplot.glade:2098
 msgid "_Vertical asymptotes"
 msgstr "_Κάθετες ασύμπτωτες"
 
-#: functionplot/functionplot.glade:2288
+#: functionplot/functionplot.glade:2148
 msgid "_View"
 msgstr "Ε_μφάνιση"
 
-#: functionplot/functionplot.glade:2202
+#: functionplot/functionplot.glade:2062
 msgid "_X intercepts"
 msgstr "Σημεία τομής με τον άξονα _Χ"
 
-#: functionplot/functionplot.glade:2211
+#: functionplot/functionplot.glade:2071
 msgid "_Y intercepts"
 msgstr "Σημείο τομής με τον άξονα _Υ"
 
-#: functionplot/functionplot.glade:1085 functionplot/functionplot.glade:4030
+#: functionplot/functionplot.glade:1107 functionplot/functionplot.glade:3890
 msgid "cos(x)"
 msgstr "συν(x)"
 
-#: functionplot/functionplot.glade:1111 functionplot/functionplot.glade:4058
+#: functionplot/functionplot.glade:1133 functionplot/functionplot.glade:3918
 msgid "cot(x)"
 msgstr "σφ(x)"
 
-#: functionplot/functionplot.glade:1252 functionplot/functionplot.glade:4097
+#: functionplot/functionplot.glade:1274 functionplot/functionplot.glade:3957
 msgid "csc(x)"
 msgstr "στεμ(x)"
 
-#: functionplot/functionplot.glade:1239 functionplot/functionplot.glade:4083
+#: functionplot/functionplot.glade:1261 functionplot/functionplot.glade:3943
 msgid "sec(x)"
 msgstr "τεμ(x)"
 
-#: functionplot/functionplot.glade:3952
+#: functionplot/functionplot.glade:3812
 msgid "sin(2x)"
 msgstr "ημ(2x)"
 
-#: functionplot/functionplot.glade:4432
+#: functionplot/functionplot.glade:4292
 msgid "sin(log(x))"
 msgstr "ημ(log(x))"
 
-#: functionplot/functionplot.glade:1076 functionplot/functionplot.glade:3938
+#: functionplot/functionplot.glade:1098 functionplot/functionplot.glade:3798
 msgid "sin(x)"
 msgstr "ημ(x)"
 
-#: functionplot/functionplot.glade:4005
+#: functionplot/functionplot.glade:3865
 msgid "sin(x+1)"
 msgstr "ημ(x+1)"
 
-#: functionplot/functionplot.glade:3991
+#: functionplot/functionplot.glade:3851
 msgid "sin(x-1)"
 msgstr "ημ(x-1)"
 
-#: functionplot/functionplot.glade:1098 functionplot/functionplot.glade:4044
+#: functionplot/functionplot.glade:1120 functionplot/functionplot.glade:3904
 msgid "tan(x)"
 msgstr "εφ(x)"
 
@@ -352,6 +356,9 @@ msgstr "εφ(x)"
 msgid "translator-credits"
 msgstr "Γιώργος Βλαχάβας"
 
-#: functionplot/functionplot.glade:4315
+#: functionplot/functionplot.glade:4175
 msgid "x-cos(x)"
 msgstr "x-συν(x)"
+
+#~ msgid "An intelligent mathematical function plotting application."
+#~ msgstr "Μία έξυπνη εφαρμογή σχεδιασμού μαθηματικών συναρτήσεων"
