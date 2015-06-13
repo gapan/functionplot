@@ -449,7 +449,7 @@ class GUI:
                                 # vertical asymptotes are plotted
                                 # as 'x'
                                 self.ax.scatter([p.x], [0], s=80,
-                                        marker='x', c=color,
+                                        marker='x', c=p.color,
                                         linewidths=2)
                         elif p.point_type == 7:
                             if self.fg.point_type_enabled\
@@ -457,7 +457,7 @@ class GUI:
                                 # horizontal asymptotes are plotted
                                 # as '+'
                                 self.ax.scatter([0], [p.y], s=80,
-                                        marker='+', c=color,
+                                        marker='+', c=p.color,
                                         linewidths=2)
                 elif p.point_type == 1:
                     if p.function[0].visible \
