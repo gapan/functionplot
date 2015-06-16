@@ -14,6 +14,9 @@ from helpers import keep10
 
 class FunctionGraph:
 
+    def get_limits(self):
+        return ((self.x_min, self.x_max), (self.y_min, self.y_max))
+
     def zoom_default(self):
         self.auto = True
         self.update_graph_points()
