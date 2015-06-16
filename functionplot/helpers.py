@@ -350,8 +350,8 @@ def _func(npexpr):
     """
     Returns a numpy expression as a callable function
     """
-    funcstr = '''def f(x): return {e}'''.format(e=npexpr)
-    exec(funcstr)
+    def f(x):
+        return eval(npexpr)
     return f
 
 def euclidean(p1, p2):
