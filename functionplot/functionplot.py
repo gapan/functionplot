@@ -1238,6 +1238,8 @@ class GUI:
         # About dialog
         self.aboutdialog = \
             builder.get_object('aboutdialog')
+        self.logo = gtk.gdk.pixbuf_new_from_file('img/functionplot.png')
+        self.aboutdialog.set_logo(self.logo)
 
         # Connect all signals
         builder.connect_signals(self)
