@@ -237,8 +237,20 @@ class FunctionGraph:
             y_range = self.y_max - self.y_min
             # temp list of grouped points. Every group is a sublist
             c=[]
-            for i in points:
-                c.append([i])
+            for p in points:
+                # for intersection points, check for grouping only
+                # if their respective functions are both visible
+                # and only if the point type is enabled
+                if p.point_type == 1 and p.function[0].visible \
+                        and p.function[1].visible \
+                        and self.point_type_enabled[p.point_type]:
+                    c.append([p])
+                # for non-intersection points, check for grouping
+                # only if the respective function is visible and
+                # only if the point type is enabled
+                elif p.point_type != 1 and p.function.visible \
+                        and self.point_type_enabled[p.point_type]:
+                    c.append([p])
             done = False
             while not done:
                 try:
