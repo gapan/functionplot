@@ -469,7 +469,7 @@ class GUI:
                                 c='black', linewidths=0)
                 elif p.point_type == 9:
                     if self.fg.point_type_enabled[p.point_type]:
-                        # plot function intercepts
+                        # plot grouped poi
                         self.ax.scatter([p.x], [p.y], s=p.size*80,
                                 alpha=0.8,
                                 c='orange', linewidths=0)
