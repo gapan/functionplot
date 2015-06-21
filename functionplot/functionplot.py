@@ -1090,19 +1090,26 @@ class GUI:
         # Main Window
         #
         self.window = builder.get_object('functionplot')
-        # Adjust window size to 80% of working area
-        try:
-            w = gtk.gdk.get_default_root_window()
-            p = gtk.gdk.atom_intern('_NET_WORKAREA')
-            workarea_width, workarea_height = \
-                w.property_get(p)[2][2:4]
-            width = int(workarea_width*0.8)
-            height = int(workarea_height*0.8)
-        except TypeError:
-            width = 700
-            height= 500
-        self.window.set_default_size(width, height)
-        #self.window.maximize()
+        # on win32 just maximize the window. _NetWORKAREA
+        # doesn't work anyway
+        if win32:
+            self.window.maximize()
+        else:
+            # on non-win32 systems, get the size of the
+            # working area (if supported by the window
+            # manager) and set the window dimensions to
+            # 80% of that
+            try:
+                w = gtk.gdk.get_default_root_window()
+                p = gtk.gdk.atom_intern('_NET_WORKAREA')
+                workarea_width, workarea_height = \
+                    w.property_get(p)[2][2:4]
+                width = int(workarea_width*0.8)
+                height = int(workarea_height*0.8)
+            except TypeError:
+                width = 700
+                height= 500
+            self.window.set_default_size(width, height)
         # menus
         self.imagemenuitem_quit = \
             builder.get_object('imagemenuitem_quit')
