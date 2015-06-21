@@ -19,15 +19,23 @@ from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg \
 #    FigureCanvasGTKCairo as FigureCanvas
 from FunctionGraph import FunctionGraph
 
-import logging
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
-        format='(%(processName)-10s) %(message)s',)
-
 # on windows, import the winshell module
+win32 = True
 try:
     import winshell
 except ImportError:
-    pass
+    win32 = False
+
+import logging
+# on windows, we don't use multiprocessing because it's
+# terribly slow. We're using threading instead. So, log
+# the thread number instead of the process number.
+if win32:
+    logformatstring = '(%(threadName)-10s) %(message)s'
+else:
+    logformatstring = '(%(processName)-10s) %(message)s'
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
+        format=logformatstring,)
 
 # get location of this file. It will be used later for
 # loading resources
@@ -1197,9 +1205,9 @@ class GUI:
         self.dialog_file_save_error = \
             builder.get_object('dialog_file_save_error')
         # use the "My documents" dir in windows
-        try:
+        if win32:
             self.folder = winshell.my_documents()
-        except NameError:
+        else:
             self.folder = os.path.expanduser("~")
         # overwrite dialog
         self.dialog_overwrite = \
