@@ -673,6 +673,7 @@ class GUI:
 
     def on_button_fileopen_open_clicked(self, widget):
         filename = self.fcdialog_open.get_filename()
+        filename = filename.encode(sys.getfilesystemencoding())
         folder = self.fcdialog_open.get_current_folder()
         logging.debug('Loading file: '+filename)
         try:
@@ -712,6 +713,7 @@ class GUI:
 
     def on_button_filesave_save_clicked(self, widget):
         filename = self.fcdialog_save.get_filename()
+        filename = filename.encode(sys.getfilesystemencoding())
         try:
             if os.path.isdir(filename):
                 self.fcdialog_save.set_current_folder(filename)
@@ -775,6 +777,7 @@ class GUI:
 
     def on_button_export_yes_clicked(self, widget):
         filename = self.fcdialog_export.get_filename()
+        filename = filename.encode(sys.getfilesystemencoding())
         try:
             if os.path.isdir(filename):
                 self.fcdialog_export.set_current_folder(filename)
