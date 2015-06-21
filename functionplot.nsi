@@ -2,23 +2,25 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "functionplot"
-!define PRODUCT_VERSION "1.0"
+!define PRODUCT_VERSION "0.1"
 !define PRODUCT_PUBLISHER "George Vlahavas"
 !define PRODUCT_WEB_SITE "https://github.com/gapan/functionplot"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\functionplot.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
+SetCompressor lzma
+
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "Setup.exe"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Greek.nlf"
 InstallDir "$PROGRAMFILES\functionplot"
-Icon "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
+Icon "desktop\functionplot.ico"
 UninstallIcon "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
-DirText "Το πρόγραμμα εγκατάστασης θα εγκαταστήσει το $(^Name) στον παρακάτω φάκελο.$\r$\n$\r$\nΓια να το εγκαταστήσετε σε έναν άλλο φάκελο, κάντε κλικ στο Αναζήτηση και επιλέξτε κάποιον άλλο φάκελο."
-LicenseText "Εάν αποδέχεστε τους όρους της άδειας χρήσης, κάντε κλικ στο Συμφωνώ για να συνεχίσετε. Πρέπει να αποδεχθείτε τη συμφωνία για να εγκαταστήσετε το $(^Name)."
+DirText "Setup will install $(^Name) in the following folder.$\r$\n$\r$\nTo install in a different folder, click Browse and select another folder."
+LicenseText "If you accept all the terms of the agreement, choose I Agree to continue. You must accept the agreement to install $(^Name)."
 LicenseData "COPYING"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -28,7 +30,6 @@ FunctionEnd
 
 Section "functionplot" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite try
   File "dist\functionplot\atk.pyd"
   File "dist\functionplot\AUTHORS"
   File "dist\functionplot\bz2.pyd"
@@ -56,6 +57,7 @@ Section "functionplot" SEC01
   File "dist\functionplot\img\comb6.png"
   File "dist\functionplot\img\e.png"
   File "dist\functionplot\img\e_p_x.png"
+  File "dist\functionplot\img\functionplot.png"
   File "dist\functionplot\img\log1.png"
   File "dist\functionplot\img\log2.png"
   File "dist\functionplot\img\log3.png"
@@ -668,6 +670,7 @@ Section "functionplot" SEC01
   SetOutPath "$INSTDIR"
   File "dist\functionplot\unicodedata.pyd"
   File "dist\functionplot\win32api.pyd"
+  File "dist\functionplot\win32com.shell.shell.pyd"
   File "dist\functionplot\win32pdh.pyd"
   File "dist\functionplot\win32pipe.pyd"
   File "dist\functionplot\win32trace.pyd"
@@ -702,11 +705,11 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "Το $(^Name) απεγκαταστάθηκε επιτυχώς από τον υπολογιστή σας."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Είστε σίγουροι πως θέλετε να αφαιρέσετε εντελώς το $(^Name) και όλα τα στοιχεία του;" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
 FunctionEnd
 
@@ -725,6 +728,7 @@ Section Uninstall
   Delete "$INSTDIR\win32trace.pyd"
   Delete "$INSTDIR\win32pipe.pyd"
   Delete "$INSTDIR\win32pdh.pyd"
+  Delete "$INSTDIR\win32com.shell.shell.pyd"
   Delete "$INSTDIR\win32api.pyd"
   Delete "$INSTDIR\unicodedata.pyd"
   Delete "$INSTDIR\share\locale\zh_TW\LC_MESSAGES\gtk20.mo"
@@ -1219,6 +1223,7 @@ Section Uninstall
   Delete "$INSTDIR\img\log3.png"
   Delete "$INSTDIR\img\log2.png"
   Delete "$INSTDIR\img\log1.png"
+  Delete "$INSTDIR\img\functionplot.png"
   Delete "$INSTDIR\img\e_p_x.png"
   Delete "$INSTDIR\img\e.png"
   Delete "$INSTDIR\img\comb6.png"
