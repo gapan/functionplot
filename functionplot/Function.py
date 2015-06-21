@@ -9,7 +9,21 @@ from PointOfInterest import PointOfInterest as POI
 from helpers import pod, fsolve, rfc, log10, sample, keep10
 from logging import debug
 import re
-import multiprocessing as mp
+
+win32 = True
+try:
+    import winshell
+except ImportError:
+    win32 = False
+
+# don't use multiprocessing on win32. It causes huge slowdowns
+# because of the lack of os.fork()
+if win32:
+    from threading import Thread as fProcess
+    from Queue import Queue as fQueue
+else:
+    from multiprocessing import Process as fProcess
+    from multiprocessing import Queue as fQueue
 
 class Function:
     
@@ -435,8 +449,8 @@ class Function:
         #
         # y intercept
         #
-        q_y = mp.Queue()
-        p_y = mp.Process(target=self._calc_y_intercept,
+        q_y = fQueue()
+        p_y = fProcess(target=self._calc_y_intercept,
                 args=(q_y, expr,))
         p_y.start()
         if not self.constant:
@@ -446,40 +460,40 @@ class Function:
             #
             # x intercepts
             #
-            q_x = mp.Queue()
-            p_x = mp.Process(target=self._calc_x_intercepts,
+            q_x = fQueue()
+            p_x = fProcess(target=self._calc_x_intercepts,
                     args=(q_x, expr,))
             #
             # min/max
             #
-            q_min_max = mp.Queue()
-            p_min_max = mp.Process(target=self._calc_min_max,
+            q_min_max = fQueue()
+            p_min_max = fProcess(target=self._calc_min_max,
                     args=(q_min_max, f1, expr,))
             #
             # inflection points
             #
-            q_inflection = mp.Queue()
-            p_inflection = mp.Process(target=self._calc_inflection,
+            q_inflection = fQueue()
+            p_inflection = fProcess(target=self._calc_inflection,
                     args=(q_inflection, f2, expr,))
             #
             # vertical asymptotes
             #
-            q_vertical_asym = mp.Queue()
+            q_vertical_asym = fQueue()
             p_vertical_asym = \
-                    mp.Process(target=self._calc_vertical_asym,
+                    fProcess(target=self._calc_vertical_asym,
                     args=(q_vertical_asym, expr,))
             #
             # horizontal asymptotes
             #
-            q_horizontal_asym = mp.Queue()
+            q_horizontal_asym = fQueue()
             p_horizontal_asym = \
-                    mp.Process(target=self._calc_horizontal_asym,
+                    fProcess(target=self._calc_horizontal_asym,
                     args=(q_horizontal_asym, expr,))
             #
             # points where the slope is 45 degrees
             #
-            q_slope_45 = mp.Queue()
-            p_slope_45 = mp.Process(target=self._calc_slope_45,
+            q_slope_45 = fQueue()
+            p_slope_45 = fProcess(target=self._calc_slope_45,
                     args=(q_slope_45, f1, expr,))
             # start processes, different process for each POI type
             p_x.start()

@@ -8,15 +8,28 @@
 # sample function adapted from: http://goo.gl/Ue1r6K (CC0 licensed)
 #
 
-
 from __future__ import division
 from sympy import Wild, solve, simplify, log, exp, evalf, re, im
 from logging import debug
 import numpy as np
-import multiprocessing as mp
-import Queue
+from Queue import Empty as qEmpty
 import random
 from math import sqrt
+
+win32 = True
+try:
+    import winshell
+except ImportError:
+    win32 = False
+
+# don't use multiprocessing on win32. It causes huge slowdowns
+# because of the lack of os.fork()
+if win32:
+    from threading import Thread as fProcess
+    from Queue import Queue as fQueue
+else:
+    from multiprocessing import Process as fProcess
+    from multiprocessing import Queue as fQueue
 
 class BreakLoop(Exception):
     """
@@ -88,8 +101,8 @@ def mpsolve(q, expr):
 def fsolve(expr):
     xl = []
     try:
-        q = mp.Queue()
-        p = mp.Process(target=mpsolve, args=(q, expr,))
+        q = fQueue()
+        p = fProcess(target=mpsolve, args=(q, expr,))
         p.start()
         # timeout solving after 5 seconds
         x = q.get(True, 5)
@@ -102,11 +115,14 @@ def fsolve(expr):
                 if xc is not None:
                     xl.append(xc)
                     debug('Found solution: '+str(xc))
-    except Queue.Empty:
+    except qEmpty:
         debug('Solving timed out.')
         xl = None
     finally:
-        p.terminate()
+        # if we're on windows and using threading instead
+        # of multiprocessing, terminate() doesn't work
+        if not win32:
+            p.terminate()
     if xl == []:
         xl = None
     return xl
