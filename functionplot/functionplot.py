@@ -206,6 +206,7 @@ class GUI:
             self.filename = None
             self.export_filename = None
             self.fg.new()
+            self._restore_state()
             self.update_function_list()
             self.graph_update()
     
@@ -690,6 +691,7 @@ class GUI:
                 filehandler.close()
                 self.folder = folder
                 self.fg.update_xylimits()
+                self._restore_state()
                 self.update_function_list()
                 self.graph_update()
                 self.fcdialog_open.hide()
@@ -790,8 +792,8 @@ class GUI:
                 self.fcdialog_export.set_current_folder(filename)
                 self.folder = filename
             else:
-                if not filename.lower().endswith('.png'):
-                    filename = filename+'.png'
+                if not filename.lower().endswith('.eps'):
+                    filename = filename+'.eps'
                 self.export_filename = filename
                 folder = self.fcdialog_export.get_current_folder()
                 self.folder = folder
@@ -1052,6 +1054,44 @@ class GUI:
         except:
             self.dialog_file_export_error.show()
 
+    # restores the status of checkboxes when loading a graph
+    # from a file or creating a new graph
+    def _restore_state(self):
+        self.checkmenuitem_function_intersections.\
+                set_active(self.fg.point_type_enabled[1])
+        self.checkmenuitem_x_intercepts.\
+                set_active(self.fg.point_type_enabled[2])
+        self.checkmenuitem_y_intercepts.\
+                set_active(self.fg.point_type_enabled[3])
+        self.checkmenuitem_extrema.\
+                set_active(self.fg.point_type_enabled[4])
+        self.checkmenuitem_inflection.\
+                set_active(self.fg.point_type_enabled[5])
+        self.checkmenuitem_vertical_asym.\
+                set_active(self.fg.point_type_enabled[6])
+        self.checkmenuitem_horizontal_asym.\
+                set_active(self.fg.point_type_enabled[7])
+        self.checkmenuitem_slope45.\
+                set_active(self.fg.point_type_enabled[8])
+        self.checkmenuitem_outliers.set_active(self.fg.outliers)
+        self.checkmenuitem_show_poi.set_active(self.fg.show_poi)
+        self.checkmenuitem_grouped.set_active(self.fg.grouped)
+        self.checkmenuitem_legend.set_active(self.fg.show_legend)
+        self.menuitem_legend_upper_right.set_active(False)
+        self.menuitem_legend_upper_left.set_active(False)
+        self.menuitem_legend_lower_right.set_active(False)
+        self.menuitem_legend_lower_left.set_active(False)
+        if self.fg.legend_location == 2:
+            self.menuitem_legend_upper_left.set_active(True)
+        elif self.fg.legend_location == 3:
+            self.menuitem_legend_lower_left.set_active(True)
+        elif self.fg.legend_location == 4:
+            self.menuitem_legend_lower_right.set_active(True)
+        else:
+            self.menuitem_legend_upper_right.set_active(True)
+        self.checkmenuitem_logscale .set_active(self.fg.logscale)
+        self.btn_auto.set_active(self.fg.auto)
+
     def __init__(self):
         # Only a few colors defined. Hard to find more that will
         # stand out. If there are more functions, colors will cycle
@@ -1116,56 +1156,44 @@ class GUI:
         
         self.checkmenuitem_function_intersections = builder.\
             get_object('checkmenuitem_function_intersections')
-        self.checkmenuitem_function_intersections.\
-                set_active(self.fg.point_type_enabled[1])
         self.checkmenuitem_x_intercepts = \
             builder.get_object('checkmenuitem_x_intercepts')
-        self.checkmenuitem_x_intercepts.\
-                set_active(self.fg.point_type_enabled[2])
         self.checkmenuitem_y_intercepts = \
             builder.get_object('checkmenuitem_y_intercepts')
-        self.checkmenuitem_y_intercepts.\
-                set_active(self.fg.point_type_enabled[3])
         self.checkmenuitem_extrema = \
             builder.get_object('checkmenuitem_extrema')
-        self.checkmenuitem_extrema.\
-                set_active(self.fg.point_type_enabled[4])
         self.checkmenuitem_inflection = \
             builder.get_object('checkmenuitem_inflection')
-        self.checkmenuitem_inflection.\
-                set_active(self.fg.point_type_enabled[5])
         self.checkmenuitem_vertical_asym = \
             builder.get_object('checkmenuitem_vertical_asym')
-        self.checkmenuitem_vertical_asym.\
-                set_active(self.fg.point_type_enabled[6])
         self.checkmenuitem_horizontal_asym = \
             builder.get_object('checkmenuitem_horizontal_asym')
-        self.checkmenuitem_horizontal_asym.\
-                set_active(self.fg.point_type_enabled[7])
         self.checkmenuitem_slope45 = \
             builder.get_object('checkmenuitem_slope45')
-        self.checkmenuitem_slope45.\
-                set_active(self.fg.point_type_enabled[8])
         self.checkmenuitem_outliers = \
             builder.get_object('checkmenuitem_outliers')
-        self.checkmenuitem_outliers.set_active(self.fg.outliers)
         self.checkmenuitem_show_poi = \
             builder.get_object('checkmenuitem_show_poi')
-        self.checkmenuitem_show_poi.set_active(self.fg.show_poi)
         self.checkmenuitem_grouped = \
             builder.get_object('checkmenuitem_grouped')
-        self.checkmenuitem_grouped.set_active(self.fg.grouped)
         self.checkmenuitem_legend = \
             builder.get_object('checkmenuitem_legend')
-        self.checkmenuitem_legend.set_active(self.fg.show_legend)
         self.menuitem_legend_upper_left = \
             builder.get_object('menuitem_legend_upper_left')
+        self.menuitem_legend_upper_right = \
+            builder.get_object('menuitem_legend_upper_right')
+        self.menuitem_legend_lower_left = \
+            builder.get_object('menuitem_legend_lower_left')
+        self.menuitem_legend_lower_right = \
+            builder.get_object('menuitem_legend_lower_right')
         self.checkmenuitem_logscale = \
             builder.get_object('checkmenuitem_logscale')
 
         # main toolbar
         self.btn_auto = builder.get_object('btn_auto')
-        self.btn_auto.set_active(self.fg.auto)
+
+        # restore state of GUI widgets
+        self._restore_state()
 
         # graph in main window
         self.table = builder.get_object('table_graph')
