@@ -792,8 +792,8 @@ class GUI:
                 self.fcdialog_export.set_current_folder(filename)
                 self.folder = filename
             else:
-                if not filename.lower().endswith('.eps'):
-                    filename = filename+'.eps'
+                if not filename.lower().endswith('.png'):
+                    filename = filename+'.png'
                 self.export_filename = filename
                 folder = self.fcdialog_export.get_current_folder()
                 self.folder = folder
