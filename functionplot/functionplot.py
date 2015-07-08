@@ -1089,7 +1089,7 @@ class GUI:
             self.menuitem_legend_lower_right.set_active(True)
         else:
             self.menuitem_legend_upper_right.set_active(True)
-        self.checkmenuitem_logscale .set_active(self.fg.logscale)
+        self.checkmenuitem_logscale.set_active(self.fg.logscale)
         self.btn_auto.set_active(self.fg.auto)
 
     def __init__(self):
