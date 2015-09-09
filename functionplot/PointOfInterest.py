@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # vim:et:sta:sts=4:sw=4:ts=8:tw=79:
 
+
 class PointOfInterest:
 
     def __init__(self, x, y, point_type=None, size=1,
-            function=None, color=None):
+                 function=None, color=None):
         self.x = x
         self.y = y
         self.size = size
@@ -24,4 +25,3 @@ class PointOfInterest:
         # 9: POI group
 
         self.point_type = point_type
-
