@@ -15,7 +15,7 @@ from matplotlib.figure import Figure
 #    as FigureCanvas
 from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg \
     as FigureCanvas
-#from matplotlib.backends.backend_gtkcairo import \
+# from matplotlib.backends.backend_gtkcairo import \
 #    FigureCanvasGTKCairo as FigureCanvas
 from FunctionGraph import FunctionGraph
 
@@ -35,7 +35,7 @@ if win32:
 else:
     logformatstring = '(%(processName)-10s) %(message)s'
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
-        format=logformatstring,)
+                    format=logformatstring,)
 
 # get location of this file. It will be used later for
 # loading resources
@@ -46,21 +46,22 @@ import locale
 import gettext
 import gtk.glade
 if os.path.isdir('locale'):
-    localedir=('locale')
+    localedir = ('locale')
 else:
-    localedir=('/usr/share/locale')
+    localedir = ('/usr/share/locale')
 gettext.bindtextdomain("functionplot", localedir)
 gettext.textdomain("functionplot")
 gettext.install("functionplot", localedir, unicode=1)
 gtk.glade.bindtextdomain("functionplot", localedir)
 gtk.glade.textdomain("functionplot")
 
-#Initializing the gtk's thread engine
+# Initializing the gtk's thread engine
 gobject.threads_init()
 
 # Use the stix fonts for matplotlib mathtext.
 # They blend better with Times New Roman.
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
+
 
 def threaded(f):
     def wrapper(*args):
@@ -68,15 +69,18 @@ def threaded(f):
         t.start()
     return wrapper
 
+
 class CenteredFormatter(matplotlib.ticker.ScalarFormatter):
     """Acts exactly like the default Scalar Formatter, but yields an
     empty label for ticks at the origin."""
+
     def __call__(self, value, pos=None):
         if value == 0:
             return ''
         else:
             return matplotlib.ticker.ScalarFormatter.__call__(self,
-                    value, pos)
+                                                              value, pos)
+
 
 class GUI:
     #
@@ -99,52 +103,52 @@ class GUI:
     # View menu
 
     def on_checkmenuitem_function_intersections_toggled(self,
-            widget):
+                                                        widget):
         self.fg.point_type_enabled[1] = \
-                self.checkmenuitem_function_intersections.\
-                    get_active()
+            self.checkmenuitem_function_intersections.\
+            get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_x_intercepts_toggled(self, widget):
         self.fg.point_type_enabled[2] = \
-                self.checkmenuitem_x_intercepts.get_active()
+            self.checkmenuitem_x_intercepts.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_y_intercepts_toggled(self, widget):
         self.fg.point_type_enabled[3] = \
-                self.checkmenuitem_y_intercepts.get_active()
+            self.checkmenuitem_y_intercepts.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_extrema_toggled(self, widget):
         self.fg.point_type_enabled[4] = \
-                self.checkmenuitem_extrema.get_active()
+            self.checkmenuitem_extrema.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_inflection_toggled(self, widget):
         self.fg.point_type_enabled[5] = \
-                self.checkmenuitem_inflection.get_active()
+            self.checkmenuitem_inflection.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_vertical_asym_toggled(self, widget):
         self.fg.point_type_enabled[6] = \
-                self.checkmenuitem_vertical_asym.get_active()
+            self.checkmenuitem_vertical_asym.get_active()
         self.fg.update_xylimits()
         self.graph_update()
-    
+
     def on_checkmenuitem_horizontal_asym_toggled(self, widget):
         self.fg.point_type_enabled[7] = \
-                self.checkmenuitem_horizontal_asym.get_active()
+            self.checkmenuitem_horizontal_asym.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
     def on_checkmenuitem_slope45_toggled(self, widget):
         self.fg.point_type_enabled[8] = \
-                self.checkmenuitem_slope45.get_active()
+            self.checkmenuitem_slope45.get_active()
         self.fg.update_xylimits()
         self.graph_update()
 
@@ -209,7 +213,7 @@ class GUI:
             self._restore_state()
             self.update_function_list()
             self.graph_update()
-    
+
     def on_btn_open_clicked(self, widget):
         if self.changed:
             self.dialog_confirm_open.show()
@@ -224,7 +228,7 @@ class GUI:
         else:
             self._save()
             self.changed = False
-    
+
     def on_btn_add_clicked(self, widget):
         self.changed = True
         self.entry_function.set_text('')
@@ -246,7 +250,7 @@ class GUI:
         self.changed = True
         self.fg.zoom_x_in()
         self.graph_update()
-    
+
     def on_btn_zoom_x_out_clicked(self, widget):
         self.changed = True
         self.fg.zoom_x_out()
@@ -256,12 +260,12 @@ class GUI:
         self.changed = True
         self.fg.zoom_y_in()
         self.graph_update()
-    
+
     def on_btn_zoom_y_out_clicked(self, widget):
         self.changed = True
         self.fg.zoom_y_out()
         self.graph_update()
-    
+
     def on_btn_zoomin_clicked(self, widget):
         self.changed = True
         self.fg.zoom_in()
@@ -271,7 +275,7 @@ class GUI:
         self.changed = True
         self.fg.zoom_out()
         self.graph_update()
-   
+
     def on_btn_auto_toggled(self, widget):
         self.changed = True
         self.fg.auto = self.btn_auto.get_active()
@@ -310,9 +314,11 @@ class GUI:
     # pan handling
     # when pressing down the mouse button on the graph, record
     # the current mouse coordinates
+
     def pan_press(self, event):
         self.changed = True
-        if event.inaxes != self.ax: return
+        if event.inaxes != self.ax:
+            return
         self.mousebutton_press = event.xdata, event.ydata
 
     # when releasing the mouse button, stop recording the
@@ -326,8 +332,10 @@ class GUI:
     # possible) calculate how much the mouse has travelled and adjust
     # the graph accordingly
     def pan_motion(self, event):
-        if self.mousebutton_press is None: return
-        if event.inaxes != self.ax: return
+        if self.mousebutton_press is None:
+            return
+        if event.inaxes != self.ax:
+            return
         self.fg.auto = False
         old_x, old_y = self.mousebutton_press
         dx = event.xdata - old_x
@@ -342,12 +350,12 @@ class GUI:
     # update the graph
     def graph_update(self):
         self.ax.clear()
-        
+
         if self.fg.auto:
             self.fg.update_xylimits()
         x_min, x_max = self.fg.x_min, self.fg.x_max
         y_min, y_max = self.fg.y_min, self.fg.y_max
-        
+
         self.ax.grid(True)
         if self.fg.logscale:
             self.ax.set_xscale('log')
@@ -357,7 +365,7 @@ class GUI:
             self.ax.set_yscale('linear')
             # put axes in center instead of the sides
             # when axes are off screen, put them on the edges
-            if x_min < 0 and x_max >0:
+            if x_min < 0 and x_max > 0:
                 self.ax.spines['left'].set_color('black')
                 self.ax.spines['left'].set_position(('data', 0))
                 self.ax.spines['left'].set_smart_bounds(False)
@@ -375,7 +383,7 @@ class GUI:
                 self.ax.spines['right'].set_smart_bounds(False)
                 self.ax.spines['left'].set_color('none')
                 self.ax.yaxis.set_ticks_position('right')
-            if y_min < 0 and y_max >0:
+            if y_min < 0 and y_max > 0:
                 self.ax.spines['bottom'].set_color('black')
                 self.ax.spines['bottom'].set_position(('data', 0))
                 self.ax.spines['bottom'].set_smart_bounds(False)
@@ -384,7 +392,7 @@ class GUI:
             elif y_min >= 0:
                 self.ax.spines['bottom'].set_color('black')
                 self.ax.spines['bottom'].set_position(('data',
-                    y_min))
+                                                       y_min))
                 self.ax.spines['bottom'].set_smart_bounds(False)
                 self.ax.spines['top'].set_color('none')
                 self.ax.xaxis.set_ticks_position('bottom')
@@ -396,14 +404,14 @@ class GUI:
                 self.ax.xaxis.set_ticks_position('top')
 
             # we don't need the origin annotated in both axes
-            if x_min < 0 and x_max >0 and y_min < 0 and y_max > 0:
+            if x_min < 0 and x_max > 0 and y_min < 0 and y_max > 0:
                 formatter = CenteredFormatter(useMathText=True)
                 formatter.center = 0
                 self.ax.xaxis.set_major_formatter(formatter)
                 self.ax.yaxis.set_major_formatter(formatter)
                 self.ax.annotate('(0,0)', (0, 0), xytext=(-4, -4),
-                        textcoords='offset points', ha='right',
-                        va='top')
+                                 textcoords='offset points', ha='right',
+                                 va='top')
         self.ax.set_xlim(float(x_min), float(x_max))
         self.ax.set_ylim(float(y_min), float(y_max))
         legend = []
@@ -412,7 +420,7 @@ class GUI:
         for f in self.fg.functions:
             x, y = f.graph_points
             if f.visible:
-                color=self.color[len(legend) % len(self.color)]
+                color = self.color[len(legend) % len(self.color)]
                 self.ax.plot(x, y, linewidth=2, color=color)
                 # add function to legend
                 legend.append(f.mathtex_expr)
@@ -421,13 +429,13 @@ class GUI:
         ungrouped_poi = []
         for f in self.fg.functions:
             if f.visible:
-                color=self.color[color_index % len(self.color)]
+                color = self.color[color_index % len(self.color)]
                 # function POI
                 for p in f.poi:
                     if self.fg.point_type_enabled[p.point_type]:
                         p.color = color
                         ungrouped_poi.append(p)
-                color_index+=1
+                color_index += 1
         # add function intercepts POI to ungrouped list
         for p in self.fg.poi:
             if self.fg.point_type_enabled[p.point_type]:
@@ -441,7 +449,7 @@ class GUI:
                 grouped_poi = ungrouped_poi
         # draw POI
             for p in grouped_poi:
-                if p.point_type >1 and p.point_type <9:
+                if p.point_type > 1 and p.point_type < 9:
                     if p.function.visible:
                         # don't plot vertical or horizontal
                         # asymptotes here. We'll do it later
@@ -449,7 +457,7 @@ class GUI:
                             if self.fg.point_type_enabled\
                                     [p.point_type]:
                                 self.ax.scatter([p.x], [p.y], s=80,
-                                        c=p.color, linewidths=0)
+                                                c=p.color, linewidths=0)
                         # plot asymptotes now
                         elif p.point_type == 6:
                             if self.fg.point_type_enabled\
@@ -457,42 +465,42 @@ class GUI:
                                 # vertical asymptotes are plotted
                                 # as 'x'
                                 self.ax.scatter([p.x], [0], s=80,
-                                        marker='x', c=p.color,
-                                        linewidths=2)
+                                                marker='x', c=p.color,
+                                                linewidths=2)
                         elif p.point_type == 7:
                             if self.fg.point_type_enabled\
                                     [p.point_type]:
                                 # horizontal asymptotes are plotted
                                 # as '+'
                                 self.ax.scatter([0], [p.y], s=80,
-                                        marker='+', c=p.color,
-                                        linewidths=2)
+                                                marker='+', c=p.color,
+                                                linewidths=2)
                 elif p.point_type == 1:
                     if p.function[0].visible \
-                        and p.function[1].visible \
-                        and self.fg.point_type_enabled[p.point_type]:
+                            and p.function[1].visible \
+                            and self.fg.point_type_enabled[p.point_type]:
                         # plot function intercepts
                         self.ax.scatter([p.x], [p.y], s=80,
-                                alpha=0.5,
-                                c='black', linewidths=0)
+                                        alpha=0.5,
+                                        c='black', linewidths=0)
                 elif p.point_type == 9:
                     if self.fg.point_type_enabled[p.point_type]:
                         # plot grouped poi
-                        self.ax.scatter([p.x], [p.y], s=p.size*80,
-                                alpha=0.8,
-                                c='orange', linewidths=0)
+                        self.ax.scatter([p.x], [p.y], s=p.size * 80,
+                                        alpha=0.8,
+                                        c='orange', linewidths=0)
         # show legend
         if self.fg.show_legend:
             if self.fg.legend_location == 1:
-                anchor = (1,1)
+                anchor = (1, 1)
             elif self.fg.legend_location == 2:
-                anchor = (0,1)
+                anchor = (0, 1)
             elif self.fg.legend_location == 3:
-                anchor = (0,0)
+                anchor = (0, 0)
             else:
-                anchor = (1,0)
+                anchor = (1, 0)
             self.ax.legend(legend, loc=self.fg.legend_location,
-                    bbox_to_anchor=anchor, fontsize=18)
+                           bbox_to_anchor=anchor, fontsize=18)
         # show canvas
         self.ax.figure.canvas.draw()
         # check/uncheck the toolbutton for auto-adjustment
@@ -504,13 +512,13 @@ class GUI:
         index = 0
         for f in self.fg.functions:
             if f.visible:
-                color = self.color[visible_functions % \
-                        len(self.color)]
+                color = self.color[visible_functions %
+                                   len(self.color)]
                 visible_functions += 1
             else:
                 color = '#999999'
-            self.ls_functions.append([f.visible, f.expr.lower()+'',
-                gtk.gdk.Color(color), index])
+            self.ls_functions.append([f.visible, f.expr.lower() + '',
+                                      gtk.gdk.Color(color), index])
             index += 1
 
     def gtk_main_quit(self, widget, data=None):
@@ -531,7 +539,7 @@ class GUI:
 
     def _entry_function_append_text(self, text):
         t = self.entry_function.get_text()
-        t = t+text
+        t = t + text
         l = len(t)
         self.entry_function.set_text(t)
         self.entry_function.grab_focus()
@@ -596,10 +604,10 @@ class GUI:
 
     def on_button_tan_clicked(self, widget):
         self._entry_function_append_text('tan(x)')
-    
+
     def on_button_cot_clicked(self, widget):
         self._entry_function_append_text('cot(x)')
-    
+
     def on_button_sec_clicked(self, widget):
         self._entry_function_append_text('sec(x)')
 
@@ -626,7 +634,7 @@ class GUI:
 
     def on_button_power2_clicked(self, widget):
         self._entry_function_append_text('x^2')
-    
+
     def on_button_power3_clicked(self, widget):
         self._entry_function_append_text('x^3')
 
@@ -683,7 +691,7 @@ class GUI:
         filename = self.fcdialog_open.get_filename()
         filename = filename.encode(sys.getfilesystemencoding())
         folder = self.fcdialog_open.get_current_folder()
-        logging.debug('Loading file: '+filename)
+        logging.debug('Loading file: ' + filename)
         try:
             filehandler = open(filename, "rb")
             try:
@@ -699,13 +707,13 @@ class GUI:
                 self.filename = filename
             except:
                 self.label_open_error.\
-                    set_text(\
-                    _("File doesn't look like a FunctionPlot file."))
+                    set_text(
+                        _("File doesn't look like a FunctionPlot file."))
                 self.dialog_file_open_error.show()
         except:
             self.label_open_error.set_text(_('Error reading file.'))
             self.dialog_file_open_error.show()
-    
+
     def on_button_fileopen_cancel_clicked(self, widget):
         self.fcdialog_open.hide()
 
@@ -729,12 +737,12 @@ class GUI:
                 self.folder = filename
             else:
                 if not filename.lower().endswith('.functionplot'):
-                    filename = filename+'.functionplot'
+                    filename = filename + '.functionplot'
                 folder = self.fcdialog_save.get_current_folder()
                 self.filename = filename
                 self.folder = folder
                 if os.path.isfile(filename):
-                    logging.debug('File already exists: '+filename)
+                    logging.debug('File already exists: ' + filename)
                     self.dialog_overwrite.show()
                 else:
                     saved = self._save()
@@ -749,7 +757,7 @@ class GUI:
     def on_filechooserdialog_save_delete_event(self, widget, event):
         self.fcdialog_save.hide()
         return True
-    
+
     def on_button_save_error_close_clicked(self, widget):
         self.dialog_file_save_error.hide()
 
@@ -793,12 +801,12 @@ class GUI:
                 self.folder = filename
             else:
                 if not filename.lower().endswith('.png'):
-                    filename = filename+'.png'
+                    filename = filename + '.png'
                 self.export_filename = filename
                 folder = self.fcdialog_export.get_current_folder()
                 self.folder = folder
                 if os.path.isfile(filename):
-                    logging.debug('File already exists: '+filename)
+                    logging.debug('File already exists: ' + filename)
                     self.dialog_export_overwrite.show()
                 else:
                     saved = self._export()
@@ -821,7 +829,7 @@ class GUI:
         return True
 
     def on_filechooserdialog_export_delete_event(self, widget,
-            event):
+                                                 event):
         self.fcdialog_export.hide()
         return True
 
@@ -844,7 +852,7 @@ class GUI:
         self.dialog_file_export_error.hide()
 
     def on_dialog_file_export_error_delete_event(self, widget,
-            event):
+                                                 event):
         self.dialog_file_export_error.hide()
         return True
 
@@ -864,170 +872,253 @@ class GUI:
 
     def on_button_add_2_clicked(self, widget):
         self._add_example_function('2')
+
     def on_button_abs_xp2_m1_clicked(self, widget):
         self._add_example_function('abs(x+2)-1')
+
     def on_button_abs_x_p2_clicked(self, widget):
         self._add_example_function('abs(x)+2')
+
     def on_button_add_x_clicked(self, widget):
         self._add_example_function('x')
+
     def on_button_add_2x_clicked(self, widget):
         self._add_example_function('2x')
+
     def on_button_add_mx_clicked(self, widget):
         self._add_example_function('-x')
+
     def on_button_add_xm1_clicked(self, widget):
         self._add_example_function('x-1')
+
     def on_button_add_mxp3_clicked(self, widget):
         self._add_example_function('-x+3')
+
     def on_button_add_abs_x_clicked(self, widget):
         self._add_example_function('abs(x)')
+
     def on_button_abs_xp2_clicked(self, widget):
         self._add_example_function('abs(x+2)')
+
     def on_button_add_x_square_clicked(self, widget):
         self._add_example_function('x^2')
+
     def on_button_add_quad1_clicked(self, widget):
         self._add_example_function('2x^2')
+
     def on_button_add_quad2_clicked(self, widget):
         self._add_example_function('-x^2')
+
     def on_button_add_quad3_clicked(self, widget):
         self._add_example_function('3x^2+2x-4')
+
     def on_button_add_quad4_clicked(self, widget):
         self._add_example_function('(x-1)^2')
+
     def on_button_add_quad5_clicked(self, widget):
         self._add_example_function('(x+2)(x-1)')
+
     def on_button_add_quad6_clicked(self, widget):
         self._add_example_function('(x-2)^2')
+
     def on_button_add_x_cube_clicked(self, widget):
         self._add_example_function('x^3')
+
     def on_button_add_poly1_clicked(self, widget):
         self._add_example_function('2x^3')
+
     def on_button_add_poly2_clicked(self, widget):
         self._add_example_function('-x^3')
+
     def on_button_add_poly3_clicked(self, widget):
         self._add_example_function('3x^3-8x^2+2x-1')
+
     def on_button_add_poly4_clicked(self, widget):
         self._add_example_function('-(x-2)^3')
+
     def on_button_add_poly5_clicked(self, widget):
         self._add_example_function('(x+2)(x-1)(x-3)')
+
     def on_button_add_poly6_clicked(self, widget):
         self._add_example_function('x^4')
+
     def on_button_add_poly7_clicked(self, widget):
         self._add_example_function('x^4-3x^2+5x-3')
+
     def on_button_add_poly8_clicked(self, widget):
         self._add_example_function('x^5')
+
     def on_button_add_poly9_clicked(self, widget):
         self._add_example_function('-(x-5)^3 x^2')
+
     def on_button_add_poly10_clicked(self, widget):
         self._add_example_function('(x-1)^12')
+
     def on_button_add_poly11_clicked(self, widget):
         self._add_example_function('-(x+3)^13')
+
     def on_button_add_poly12_clicked(self, widget):
         self._add_example_function('abs(x^3)')
+
     def on_button_add_rat1_clicked(self, widget):
         self._add_example_function('1/x')
+
     def on_button_add_rat2_clicked(self, widget):
         self._add_example_function('-1/x')
+
     def on_button_add_rat3_clicked(self, widget):
         self._add_example_function('1/(x+2)')
+
     def on_button_add_rat4_clicked(self, widget):
         self._add_example_function('2/x')
+
     def on_button_add_rat5_clicked(self, widget):
         self._add_example_function('x/(2x+3)')
+
     def on_button_add_rat6_clicked(self, widget):
         self._add_example_function('(2x+1)/(x+1)')
+
     def on_button_add_rat7_clicked(self, widget):
         self._add_example_function('(x^2+1)/(x-1)')
+
     def on_button_add_rat8_clicked(self, widget):
         self._add_example_function('(x-1)/(x^2+1)')
+
     def on_button_add_rat9_clicked(self, widget):
         self._add_example_function('1/x^2')
+
     def on_button_add_rat10_clicked(self, widget):
         self._add_example_function('4/(x^2+1)')
+
     def on_button_add_pow1_clicked(self, widget):
         self._add_example_function('2^x')
+
     def on_button_add_pow2_clicked(self, widget):
         self._add_example_function('2^(-x)')
+
     def on_button_add_pow3_clicked(self, widget):
         self._add_example_function('-2^x')
+
     def on_button_add_pow4_clicked(self, widget):
         self._add_example_function('-2^(-x)')
+
     def on_button_add_pow5_clicked(self, widget):
         self._add_example_function('2^(x-1)')
+
     def on_button_add_pow6_clicked(self, widget):
         self._add_example_function('2^(x+1)')
+
     def on_button_add_pow7_clicked(self, widget):
         self._add_example_function('exp(x)')
+
     def on_button_add_pow8_clicked(self, widget):
         self._add_example_function('3^x')
+
     def on_button_add_pow9_clicked(self, widget):
         self._add_example_function('10^x')
+
     def on_button_add_pow10_clicked(self, widget):
         self._add_example_function('x^x')
+
     def on_button_add_log1_clicked(self, widget):
         self._add_example_function('log(x)')
+
     def on_button_add_log2_clicked(self, widget):
         self._add_example_function('log(x-1)')
+
     def on_button_add_log3_clicked(self, widget):
         self._add_example_function('log(x+1)')
+
     def on_button_add_log4_clicked(self, widget):
         self._add_example_function('log(2x)')
+
     def on_button_add_log5_clicked(self, widget):
         self._add_example_function('log(x)-2')
+
     def on_button_add_log6_clicked(self, widget):
         self._add_example_function('xlog(x)')
+
     def on_button_add_log7_clicked(self, widget):
         self._add_example_function('ln(x)')
+
     def on_button_add_log8_clicked(self, widget):
         self._add_example_function('log(x)ln(x)')
+
     def on_button_add_log9_clicked(self, widget):
         self._add_example_function('log(abs(x))')
+
     def on_button_add_trig1_clicked(self, widget):
         self._add_example_function('sin(x)')
+
     def on_button_add_trig2_clicked(self, widget):
         self._add_example_function('sin(2x)')
+
     def on_button_add_trig3_clicked(self, widget):
         self._add_example_function('-sin(x)')
+
     def on_button_add_trig4_clicked(self, widget):
         self._add_example_function('sin(x-1)')
+
     def on_button_add_trig5_clicked(self, widget):
         self._add_example_function('sin(x+1)')
+
     def on_button_add_trig6_clicked(self, widget):
         self._add_example_function('cos(x)')
+
     def on_button_add_trig7_clicked(self, widget):
         self._add_example_function('tan(x)')
+
     def on_button_add_trig8_clicked(self, widget):
         self._add_example_function('cot(x)')
+
     def on_button_add_trig9_clicked(self, widget):
         self._add_example_function('sec(x)')
+
     def on_button_add_trig10_clicked(self, widget):
         self._add_example_function('csc(x)')
+
     def on_button_add_root1_clicked(self, widget):
         self._add_example_function('sqrt(x)')
+
     def on_button_add_root2_clicked(self, widget):
         self._add_example_function('sqrt(2x)')
+
     def on_button_add_root3_clicked(self, widget):
         self._add_example_function('-sqrt(x)')
+
     def on_button_add_root4_clicked(self, widget):
         self._add_example_function('sqrt(-x)')
+
     def on_button_add_root5_clicked(self, widget):
         self._add_example_function('sqrt(x-1)')
+
     def on_button_add_root6_clicked(self, widget):
         self._add_example_function('sqrt(x^2+3)')
+
     def on_button_add_root7_clicked(self, widget):
         self._add_example_function('sqrt(1-x^2)')
+
     def on_button_add_root8_clicked(self, widget):
         self._add_example_function('xsqrt(x^2-4)')
+
     def on_button_add_comb1_clicked(self, widget):
         self._add_example_function('x-cos(x)')
+
     def on_button_add_comb2_clicked(self, widget):
         self._add_example_function('x^2/log(x)')
+
     def on_button_add_comb3_clicked(self, widget):
         self._add_example_function('x^3/abs(x(x-1))')
+
     def on_button_add_comb4_clicked(self, widget):
         self._add_example_function('x2^x')
+
     def on_button_add_comb5_clicked(self, widget):
         self._add_example_function('-4^x+x^4')
+
     def on_button_add_comb6_clicked(self, widget):
         self._add_example_function('(x^2+3)/sqrt(x-2)')
+
     def on_button_add_comb7_clicked(self, widget):
         self._add_example_function('sin(log(x))')
 
@@ -1037,7 +1128,7 @@ class GUI:
             filehandler = open(self.filename, "wb")
             pickle.dump(self.fg, filehandler)
             filehandler.close()
-            logging.debug('File saved: '+self.filename)
+            logging.debug('File saved: ' + self.filename)
             self.changed = False
             self.fcdialog_save.hide()
             return True
@@ -1058,21 +1149,21 @@ class GUI:
     # from a file or creating a new graph
     def _restore_state(self):
         self.checkmenuitem_function_intersections.\
-                set_active(self.fg.point_type_enabled[1])
+            set_active(self.fg.point_type_enabled[1])
         self.checkmenuitem_x_intercepts.\
-                set_active(self.fg.point_type_enabled[2])
+            set_active(self.fg.point_type_enabled[2])
         self.checkmenuitem_y_intercepts.\
-                set_active(self.fg.point_type_enabled[3])
+            set_active(self.fg.point_type_enabled[3])
         self.checkmenuitem_extrema.\
-                set_active(self.fg.point_type_enabled[4])
+            set_active(self.fg.point_type_enabled[4])
         self.checkmenuitem_inflection.\
-                set_active(self.fg.point_type_enabled[5])
+            set_active(self.fg.point_type_enabled[5])
         self.checkmenuitem_vertical_asym.\
-                set_active(self.fg.point_type_enabled[6])
+            set_active(self.fg.point_type_enabled[6])
         self.checkmenuitem_horizontal_asym.\
-                set_active(self.fg.point_type_enabled[7])
+            set_active(self.fg.point_type_enabled[7])
         self.checkmenuitem_slope45.\
-                set_active(self.fg.point_type_enabled[8])
+            set_active(self.fg.point_type_enabled[8])
         self.checkmenuitem_outliers.set_active(self.fg.outliers)
         self.checkmenuitem_show_poi.set_active(self.fg.show_poi)
         self.checkmenuitem_grouped.set_active(self.fg.grouped)
@@ -1097,19 +1188,19 @@ class GUI:
         # stand out. If there are more functions, colors will cycle
         # from the start.
         # colors were taken mostly from http://latexcolor.com/
-        self.color = ['#4F81BD', # blue
-                '#C0504D',# red
-                '#9BBB59',# green
-                '#8064A2',# purple
-                '#F79646',# orange
-                '#00B7EB',# cyan
-                '#3B444B',# charcoal
-                '#F0E130',# yellow
-                '#DE5D83',# pink (blush)
-                '#B87333',# copper
-                '#0047AB',# cobalt
-                '#614051',# eggplant
-                ]
+        self.color = ['#4F81BD',  # blue
+                      '#C0504D',  # red
+                      '#9BBB59',  # green
+                      '#8064A2',  # purple
+                      '#F79646',  # orange
+                      '#00B7EB',  # cyan
+                      '#3B444B',  # charcoal
+                      '#F0E130',  # yellow
+                      '#DE5D83',  # pink (blush)
+                      '#B87333',  # copper
+                      '#0047AB',  # cobalt
+                      '#614051',  # eggplant
+                      ]
         # filenames to save to/open from and export to
         self.filename = None
         self.export_filename = None
@@ -1117,15 +1208,15 @@ class GUI:
         self.fg = FunctionGraph()
         # we need this to keep track if the file has changed since
         # last save
-        self.changed = False 
+        self.changed = False
         # we'll need this for panning
         self.mousebutton_press = None
 
         # Load GUI from glade file
         builder = gtk.Builder()
         builder.add_from_file(os.path.join(here,
-            'functionplot.glade'))
-        
+                                           'functionplot.glade'))
+
         #
         # Main Window
         #
@@ -1144,16 +1235,16 @@ class GUI:
                 p = gtk.gdk.atom_intern('_NET_WORKAREA')
                 workarea_width, workarea_height = \
                     w.property_get(p)[2][2:4]
-                width = int(workarea_width*0.8)
-                height = int(workarea_height*0.8)
+                width = int(workarea_width * 0.8)
+                height = int(workarea_height * 0.8)
             except TypeError:
                 width = 700
-                height= 500
+                height = 500
             self.window.set_default_size(width, height)
         # menus
         self.imagemenuitem_quit = \
             builder.get_object('imagemenuitem_quit')
-        
+
         self.checkmenuitem_function_intersections = builder.\
             get_object('checkmenuitem_function_intersections')
         self.checkmenuitem_x_intercepts = \
@@ -1213,11 +1304,11 @@ class GUI:
         self.canvas.mpl_connect('scroll_event', self.wheel_zoom)
         # catch click and pan
         self.canvas.mpl_connect('button_press_event',
-                self.pan_press)
+                                self.pan_press)
         self.canvas.mpl_connect('button_release_event',
-                self.pan_release)
+                                self.pan_release)
         self.canvas.mpl_connect('motion_notify_event',
-                self.pan_motion)
+                                self.pan_motion)
         self.graph_update()
 
         #
@@ -1289,6 +1380,7 @@ class GUI:
         # Connect all signals
         builder.connect_signals(self)
         self.window.show_all()
+
 
 def main():
     app = GUI()
