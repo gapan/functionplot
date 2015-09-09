@@ -25,8 +25,9 @@ else:
     from multiprocessing import Process as fProcess
     from multiprocessing import Queue as fQueue
 
+
 class Function:
-    
+
     def update_graph_points(self, xylimits):
         x_min, x_max, y_min, y_max = xylimits
         x_initial = np.linspace(x_min, x_max, self.resolution)
@@ -36,30 +37,30 @@ class Function:
         except IndexError:
             # if f(x)=a, make sure that y is an array with the
             # same size as x and with a constant value.
-            debug('This looks like a constant function: '+\
-                    self.np_expr)
+            debug('This looks like a constant function: ' +
+                  self.np_expr)
             self.constant = True
             # 2 graph points are enough for a constant function
             x = np.array([x_min, x_max])
             this_y = eval(self.np_expr)
             y = np.array([this_y, this_y])
         except Exception, e:
-            debug('Exception caught.'+\
-                    'This should not have happened here: '+e)
+            debug('Exception caught.' +
+                  'This should not have happened here: ' + e)
             return False
         # no need to calculate values that are off the displayed
         # scale. This fixes some trouble with asymptotes like in
         # tan(x).
         if not self.constant:
-            y[y>y_max] = np.inf
-            y[y<y_min] = -np.inf
-        y_mean = (y_max+y_min)/2
+            y[y > y_max] = np.inf
+            y[y < y_min] = -np.inf
+        y_mean = (y_max + y_min) / 2
         # delete consecutive inf or -inf values
         delete = []
         for i in xrange(1, len(x)):
-            if y[i] == np.inf and y[i-1] == np.inf:
+            if y[i] == np.inf and y[i - 1] == np.inf:
                 delete.append(i)
-            if y[i] == -np.inf and y[i-1] == -np.inf:
+            if y[i] == -np.inf and y[i - 1] == -np.inf:
                 delete.append(i)
         x = np.delete(x, delete)
         y = np.delete(y, delete)
@@ -67,10 +68,10 @@ class Function:
         addyinf = []
         addx = []
         for i in xrange(1, len(x)):
-            if y[i] == np.inf and y[i-1] > y_mean:
+            if y[i] == np.inf and y[i - 1] > y_mean:
                 addyinf.append(i)
-                addx.append(x[i-1])
-            if y[i] > y_mean and y[i-1] == np.inf:
+                addx.append(x[i - 1])
+            if y[i] > y_mean and y[i - 1] == np.inf:
                 addyinf.append(i)
                 addx.append(x[i])
         x = np.insert(x, addyinf, addx)
@@ -78,17 +79,17 @@ class Function:
         addyinf = []
         addx = []
         for i in xrange(1, len(x)):
-            if y[i] == -np.inf and y[i-1] < y_mean:
+            if y[i] == -np.inf and y[i - 1] < y_mean:
                 addyinf.append(i)
-                addx.append(x[i-1])
-            if y[i] < y_mean and y[i-1] == -np.inf:
+                addx.append(x[i - 1])
+            if y[i] < y_mean and y[i - 1] == -np.inf:
                 addyinf.append(i)
                 addx.append(x[i])
         x = np.insert(x, addyinf, addx)
         y = np.insert(y, addyinf, y_min)
 
         self.graph_points = x, y
-        debug('Number of points calculated:'+str(len(x)))
+        debug('Number of points calculated:' + str(len(x)))
         return True
 
     def _get_expr(self, expr):
@@ -111,7 +112,7 @@ class Function:
         expr = expr.replace('\xce\xb5\xcf\x86(', 'tan(')
         expr = expr.replace('\xcf\x83\xcf\x86(', 'cot(')
         expr = expr.replace('\xcf\x83\xcf\x84\xce\xb5\xce\xbc(',
-                'csc(')
+                            'csc(')
         expr = expr.replace('\xcf\x84\xce\xb5\xce\xbc(', 'sec(')
         expr = expr.replace('\xcf\x87', 'x')
         expr = expr.replace('\xcf\x80', 'pi')
@@ -131,9 +132,9 @@ class Function:
         expr = expr.replace('sin(', 'np.sin(')
         expr = expr.replace('cos(', 'np.cos(')
         expr = expr.replace('tan(', 'np.tan(')
-        expr = expr.replace('cot(', '1/np.tan(') # no cot in numpy
-        expr = expr.replace('sec(', '1/np.cos(') # no sec,
-        expr = expr.replace('csc(', '1/np.sin(') # and no csc either
+        expr = expr.replace('cot(', '1/np.tan(')  # no cot in numpy
+        expr = expr.replace('sec(', '1/np.cos(')  # no sec,
+        expr = expr.replace('csc(', '1/np.sin(')  # and no csc either
         # correct log functions
         expr = expr.replace('log10(', 'np.log10(')
         expr = expr.replace('log(', 'np.log(')
@@ -148,7 +149,7 @@ class Function:
         # powers
         expr = expr.replace('^', '**')
         return expr
-    
+
     def _simplify_expr(self, expr):
         # sympy.functions.Abs is imported as Abs so we're using it
         # that way with sympy
@@ -163,12 +164,11 @@ class Function:
         # in helpers.py
         expr = expr.replace('log(', 'log10(')
         expr = expr.replace('ln(', 'log(')
-        
-        simp_expr = simplify(expr)
-        debug('"'+expr+'" has been simplified to "'+\
-                str(simp_expr)+'"')
-        return simp_expr
 
+        simp_expr = simplify(expr)
+        debug('"' + expr + '" has been simplified to "' +
+              str(simp_expr) + '"')
+        return simp_expr
 
     def _get_mathtex_expr(self, expr):
         # expr is a simplified sympy expression. Creates a LaTeX
@@ -178,11 +178,11 @@ class Function:
         e = e.replace('log_{10}', 'log')
         e = e.replace('\\lvert', '|')
         e = e.replace('\\rvert', '|')
-        e = '$'+e+'$'
+        e = '$' + e + '$'
         return e
 
     def _calc_y_intercept(self, q, expr):
-        debug('Looking for the y intercept for: '+str(expr))
+        debug('Looking for the y intercept for: ' + str(expr))
         y = expr.subs('x', 0)
         if str(y) == 'zoo' or str(y) == 'nan':
             # 'zoo' is imaginary infinity
@@ -192,14 +192,14 @@ class Function:
         else:
             yc = rfc(y)
             if yc is not None and 'inf' not in str(yc):
-                debug('Added y intercept at (0,'+str(yc)+')')
+                debug('Added y intercept at (0,' + str(yc) + ')')
                 q.put(POI(0, yc, 3))
             else:
                 q.put(None)
         debug('Done calculating y intercept')
 
     def _calc_x_intercepts(self, q, expr):
-        debug('Looking for x intercepts for: '+str(expr))
+        debug('Looking for x intercepts for: ' + str(expr))
         x = fsolve(expr)
         poi = []
         manual = False
@@ -208,13 +208,13 @@ class Function:
             x = self._calc_x_intercepts_manually()
         for xc in x:
             poi.append(POI(xc, 0, 2))
-            debug('Added x intercept at ('+str(xc)+',0)')
+            debug('Added x intercept at (' + str(xc) + ',0)')
         # try to find if the function is periodic using the
         # distance between the x intercepts
         if self.trigonometric and not self.periodic and \
                 not self.polynomial and not manual and x != []:
-            debug('Checking if function is periodic using'+\
-                    ' x intercepts.')
+            debug('Checking if function is periodic using' +
+                  ' x intercepts.')
             if not manual:
                 self.check_periodic(x)
         if poi == []:
@@ -225,19 +225,19 @@ class Function:
 
     def _calc_x_intercepts_manually(self):
         debug('Calculating x intercepts manually')
-        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
+        x = np.linspace(self.x_min_manual, self.x_max_manual, 10000)
         y = eval(self.np_expr)
         sol = []
-        for i in xrange(2, len(y)-1):
+        for i in xrange(2, len(y) - 1):
             if ((y[i] == 0) or
-                    (y[i-2] < y[i-1] < 0 and y[i+1] > y[i] > 0 ) or
-                    (y[i-2] > y[i-1] > 0 and y[i+1] < y[i] < 0 )):
+                    (y[i - 2] < y[i - 1] < 0 and y[i + 1] > y[i] > 0) or
+                    (y[i - 2] > y[i - 1] > 0 and y[i + 1] < y[i] < 0)):
                 sol.append(x[i])
         sol = keep10(sol)
         return sol
 
     def _calc_min_max(self, q, f1, expr):
-        debug('Looking for local min/max for: '+str(expr))
+        debug('Looking for local min/max for: ' + str(expr))
         x = fsolve(f1)
         poi = []
         manual = False
@@ -249,12 +249,12 @@ class Function:
             yc = rfc(y)
             if yc is not None:
                 poi.append(POI(xc, yc, 4))
-                debug('Added local min/max at ('+str(xc)+','+\
-                        str(yc)+')')
+                debug('Added local min/max at (' + str(xc) + ',' +
+                      str(yc) + ')')
         if self.trigonometric and not self.periodic and \
                 not self.polynomial and not manual and x != []:
-            debug('Checking if function is periodic using'+\
-                    ' min/max.')
+            debug('Checking if function is periodic using' +
+                  ' min/max.')
             if not manual:
                 self.check_periodic(x)
         if poi == []:
@@ -265,23 +265,23 @@ class Function:
 
     def _calc_min_max_manually(self):
         debug('Calculating local min/max manually')
-        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
+        x = np.linspace(self.x_min_manual, self.x_max_manual, 10000)
         y = eval(self.np_expr)
         sol = []
-        for i in xrange(2, len(y)-2):
-            dx = x[i-1]-x[i]
-            dy = y[i-1]-y[i]
-            if y[i-2] > y[i-1] > y[i] < y[i+1] < y[i+2] and \
-                0 <= abs(dy/dx) < 10:
-                    sol.append(x[i])
-            elif y[i-2] < y[i-1] < y[i] > y[i+1] > y[i+2] and\
-                0 <= abs(dy/dx) < 10:
-                    sol.append(x[i])
+        for i in xrange(2, len(y) - 2):
+            dx = x[i - 1] - x[i]
+            dy = y[i - 1] - y[i]
+            if y[i - 2] > y[i - 1] > y[i] < y[i + 1] < y[i + 2] and \
+                    0 <= abs(dy / dx) < 10:
+                sol.append(x[i])
+            elif y[i - 2] < y[i - 1] < y[i] > y[i + 1] > y[i + 2] and\
+                    0 <= abs(dy / dx) < 10:
+                sol.append(x[i])
         sol = keep10(sol)
         return sol
 
     def _calc_inflection(self, q, f2, expr):
-        debug('Looking for inflection points for: '+str(expr))
+        debug('Looking for inflection points for: ' + str(expr))
         x = fsolve(f2)
         poi = []
         manual = False
@@ -293,12 +293,12 @@ class Function:
             yc = rfc(y)
             if yc is not None:
                 poi.append(POI(xc, yc, 5))
-                debug('Added inflection point at ('+\
-                        str(xc)+','+str(yc)+')')
+                debug('Added inflection point at (' +
+                      str(xc) + ',' + str(yc) + ')')
         if self.trigonometric and not self.periodic and \
                 not self.polynomial and not manual and x != []:
-            debug('Checking if function is periodic using'+\
-                    ' inflection points.')
+            debug('Checking if function is periodic using' +
+                  ' inflection points.')
             if not manual:
                 self.check_periodic(x)
         if poi == []:
@@ -310,28 +310,28 @@ class Function:
     def _calc_inflection_manually(self, f2):
         debug('Calculating inflection points manually')
         npexpr = self._get_np_expr(str(f2))
-        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
+        x = np.linspace(self.x_min_manual, self.x_max_manual, 10000)
         sol = []
         try:
             y = eval(npexpr)
-            for i in xrange(2, len(y)-1):
+            for i in xrange(2, len(y) - 1):
                 if ((y[i] == 0) or
-                        (y[i-2] < y[i-1] < 0 and y[i] > 0 ) or
-                        (y[i-2] > y[i-1] > 0 and y[i] < 0 )):
+                        (y[i - 2] < y[i - 1] < 0 and y[i] > 0) or
+                        (y[i - 2] > y[i - 1] > 0 and y[i] < 0)):
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate second derivative')
         except TypeError:
-            debug('Second derivative is probably constant. '+\
-                    'No inflection points found.')
+            debug('Second derivative is probably constant. ' +
+                  'No inflection points found.')
         sol = keep10(sol)
         return sol
 
     def _calc_slope_45(self, q, f1, expr):
-        debug('Looking for points where slope is 45 degrees for: '+
-            str(expr))
-        x1 = fsolve(f1-1)
-        x2 = fsolve(f1+1)
+        debug('Looking for points where slope is 45 degrees for: ' +
+              str(expr))
+        x1 = fsolve(f1 - 1)
+        x2 = fsolve(f1 + 1)
         poi = []
         manual = False
         if x1 is None and x2 is None:
@@ -348,12 +348,12 @@ class Function:
             yc = rfc(y)
             if yc is not None:
                 poi.append(POI(xc, yc, 8))
-                debug('Added slope45 point at ('+\
-                        str(xc)+','+str(yc)+')')
+                debug('Added slope45 point at (' +
+                      str(xc) + ',' + str(yc) + ')')
         if self.trigonometric and not self.periodic and \
                 not self.polynomial and x != []:
-            debug('Checking if function is periodic using'+\
-                    ' slope45 points.')
+            debug('Checking if function is periodic using' +
+                  ' slope45 points.')
             if not manual:
                 self.check_periodic(x)
         if poi == []:
@@ -365,47 +365,47 @@ class Function:
     def _calc_slope45_manually(self, f1):
         debug('Calculating slope45 points manually')
         npexpr = self._get_np_expr(str(f1))
-        x = np.linspace(self.x_min_manual,self.x_max_manual,10000)
+        x = np.linspace(self.x_min_manual, self.x_max_manual, 10000)
         sol = []
         try:
             y = eval(npexpr)
-            for i in xrange(1, len(y)-1):
+            for i in xrange(1, len(y) - 1):
                 if ((y[i] == 1) or (y[i] == -1) or
-                        (y[i-1] < 1 and y[i] > 1 ) or
-                        (y[i-1] > 1 and y[i] < 1 ) or
-                        (y[i-1] < -1 and y[i] > -1 ) or
-                        (y[i-1] > -1 and y[i] < -1 )):
+                        (y[i - 1] < 1 and y[i] > 1) or
+                        (y[i - 1] > 1 and y[i] < 1) or
+                        (y[i - 1] < -1 and y[i] > -1) or
+                        (y[i - 1] > -1 and y[i] < -1)):
                     sol.append(x[i])
         except NameError:
             debug('Not possible to evaluate first derivative')
         except TypeError:
-            debug('First derivative is probably constant. '+\
-                    'No slope45 points found.')
+            debug('First derivative is probably constant. ' +
+                  'No slope45 points found.')
         sol = keep10(sol)
         return sol
 
     def _calc_vertical_asym(self, q, expr):
-        debug('Looking for vertical asymptotes for: '+str(expr))
+        debug('Looking for vertical asymptotes for: ' + str(expr))
         x = pod(expr, 'x')
         poi = []
         for i in x:
             y = expr.subs('x', i)
             xc = rfc(i)
-            #yc = float(y) # this returns inf.
+            # yc = float(y) # this returns inf.
             # we'll just put vertical asymptotes on the x axis
             if xc is not None:
                 yc = 0
                 poi.append(POI(xc, yc, 6))
-                debug('Added vertical asymptote ('+str(xc)+','+\
-                        str(yc)+')')
+                debug('Added vertical asymptote (' + str(xc) + ',' +
+                      str(yc) + ')')
         if self.trigonometric and not self.periodic and \
                 not self.polynomial and x != []:
-            debug('Checking if function is periodic using'+\
-                    ' vertical asymptotes.')
+            debug('Checking if function is periodic using' +
+                  ' vertical asymptotes.')
             self.check_periodic(x)
         if poi == []:
-            debug('Done calculating vertical asymptotes.'+\
-                    'None found.')
+            debug('Done calculating vertical asymptotes.' +
+                  'None found.')
         else:
             debug('Done calculating vertical asymptotes')
         q.put(poi)
@@ -413,30 +413,30 @@ class Function:
     def _calc_horizontal_asym(self, q, expr):
         # if the limit(x->+oo)=a, or limit(x->-oo)=a, then
         # y=a is a horizontal asymptote.
-        debug('Looking for horizontal asymptotes for: '+\
-                str(expr))
+        debug('Looking for horizontal asymptotes for: ' +
+              str(expr))
         try:
             poi = []
             lr = limit(expr, 'x', 'oo')
             ll = limit(expr, 'x', '-oo')
             if 'oo' not in str(lr):
-                debug('Found a horizontal asymptote at y='+\
-                        str(lr)+' as x->+oo.')
+                debug('Found a horizontal asymptote at y=' +
+                      str(lr) + ' as x->+oo.')
                 poi.append(POI(0, lr, 7))
             if 'oo' not in str(ll):
                 if ll == lr:
                     debug('Same horizontal asymptote as x->-oo.')
                 else:
-                    debug('Found a horizontal asymptote at y='+\
-                            str(ll)+' as x->-oo')
+                    debug('Found a horizontal asymptote at y=' +
+                          str(ll) + ' as x->-oo')
                     poi.append(POI(0, ll, 7))
             q.put(poi)
         except NotImplementedError:
-            debug('NotImplementedError for finding limit of "'+\
-                    str(expr)+'"')
+            debug('NotImplementedError for finding limit of "' +
+                  str(expr) + '"')
         if poi == []:
-            debug('Done calculating horizontal asymptotes.'+\
-                    'None found.')
+            debug('Done calculating horizontal asymptotes.' +
+                  'None found.')
         else:
             debug('Done calculating horizontal asymptotes')
 
@@ -451,7 +451,7 @@ class Function:
         #
         q_y = fQueue()
         p_y = fProcess(target=self._calc_y_intercept,
-                args=(q_y, expr,))
+                       args=(q_y, expr,))
         p_y.start()
         if not self.constant:
             # calculate 1st and 2nd derivatives
@@ -462,39 +462,39 @@ class Function:
             #
             q_x = fQueue()
             p_x = fProcess(target=self._calc_x_intercepts,
-                    args=(q_x, expr,))
+                           args=(q_x, expr,))
             #
             # min/max
             #
             q_min_max = fQueue()
             p_min_max = fProcess(target=self._calc_min_max,
-                    args=(q_min_max, f1, expr,))
+                                 args=(q_min_max, f1, expr,))
             #
             # inflection points
             #
             q_inflection = fQueue()
             p_inflection = fProcess(target=self._calc_inflection,
-                    args=(q_inflection, f2, expr,))
+                                    args=(q_inflection, f2, expr,))
             #
             # vertical asymptotes
             #
             q_vertical_asym = fQueue()
             p_vertical_asym = \
-                    fProcess(target=self._calc_vertical_asym,
-                    args=(q_vertical_asym, expr,))
+                fProcess(target=self._calc_vertical_asym,
+                         args=(q_vertical_asym, expr,))
             #
             # horizontal asymptotes
             #
             q_horizontal_asym = fQueue()
             p_horizontal_asym = \
-                    fProcess(target=self._calc_horizontal_asym,
-                    args=(q_horizontal_asym, expr,))
+                fProcess(target=self._calc_horizontal_asym,
+                         args=(q_horizontal_asym, expr,))
             #
             # points where the slope is 45 degrees
             #
             q_slope_45 = fQueue()
             p_slope_45 = fProcess(target=self._calc_slope_45,
-                    args=(q_slope_45, f1, expr,))
+                                  args=(q_slope_45, f1, expr,))
             # start processes, different process for each POI type
             p_x.start()
             p_min_max.start()
@@ -536,36 +536,36 @@ class Function:
             self.poi.append(poi_y)
         # assign all POI to the present function
         for i in self.poi:
-            i.function=self
+            i.function = self
 
     def check_periodic(self, x):
         l = len(x)
         if l > 1:
-            for i in xrange(0,l-1):
+            for i in xrange(0, l - 1):
                 if not self.periodic:
                     for j in xrange(1, l):
                         if not self.periodic:
-                            for n in xrange(1,11):
+                            for n in xrange(1, 11):
                                 if not self.periodic:
-                                    period = abs(n*(x[j] - x[i]))
+                                    period = abs(n * (x[j] - x[i]))
                                     self._test_period(period)
 
     def _test_period(self, period):
         if period != 0:
-            debug('Trying period: '+str(period))
+            debug('Trying period: ' + str(period))
             pf = self.simp_expr.subs('x', 'x+period')
             # instead of testing if f(x)==f(x+period)
             # we're testing if f(x+period)==f(x+2*period)
             # solves problems like with sec(x) where otherwise it
             # would not find the equality
             f = pf.subs('period', period)
-            g = pf.subs('period', 2*period)
+            g = pf.subs('period', 2 * period)
             if f - g == 0:
-                debug('Function is periodic and has a period of '+\
-                        str(period)+'. Smaller periods may exist.')
+                debug('Function is periodic and has a period of ' +
+                      str(period) + '. Smaller periods may exist.')
                 self.periodic = True
                 self.period = period
-                margin = float(self.period*0.6)
+                margin = float(self.period * 0.6)
                 self.x_min_manual = -margin
                 self.x_max_manual = margin
 
@@ -575,11 +575,11 @@ class Function:
     # multiples of pi/4 (up to 2*pi)
     # multiples of pi (up to 4*pi)
     def _test_common_periods(self):
-        debug('Trying some common periods to determine if '+\
-                'function is periodic')
-        period_list = [pi/4, pi/2, 2*pi/3, 3*pi/4, pi,
-                2*pi, 3*pi/2, 3*pi, 4*pi,
-                0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]
+        debug('Trying some common periods to determine if ' +
+              'function is periodic')
+        period_list = [pi / 4, pi / 2, 2 * pi / 3, 3 * pi / 4, pi,
+                       2 * pi, 3 * pi / 2, 3 * pi, 4 * pi,
+                       0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]
         for period in period_list:
             if not self.periodic:
                 self._test_period(period)
@@ -595,7 +595,7 @@ class Function:
             self.trigonometric = False
             debug('Function cannot be periodic.')
 
-    def __init__(self, expr, xylimits, logscale = False):
+    def __init__(self, expr, xylimits, logscale=False):
         # the number of points to calculate within the graph using
         # the function
         self.resolution = 1000
@@ -610,7 +610,7 @@ class Function:
         # the min and max values to use for manual POI searching
         self.x_min_manual = -20
         self.x_max_manual = 20
-       
+
         # simplifying helps with functions like y=x^2/x which is
         # actually just y=x. Doesn't hurt in any case.
         # Also throws an error in case there are syntax problems
@@ -625,9 +625,8 @@ class Function:
 
         if self.valid:
             self.mathtex_expr = \
-                    self._get_mathtex_expr(self.simp_expr)
+                self._get_mathtex_expr(self.simp_expr)
             self.polynomial = self.simp_expr.is_polynomial()
             if not self.polynomial:
                 self._check_trigonometric()
             self.calc_poi()
-
