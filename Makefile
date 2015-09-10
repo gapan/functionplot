@@ -53,4 +53,7 @@ install-mo: mo
 	mkdir -p $(DESTDIR)$(PACKAGE_LOCALE_DIR)
 	cp -r mo/* $(DESTDIR)$(PACKAGE_LOCALE_DIR)/
 
-.PHONY: all mo updatepo pot clean install mo install-mo
+test:
+	python -m unittest discover
+
+.PHONY: all mo updatepo pot clean install mo install-mo test
