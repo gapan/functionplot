@@ -15,7 +15,7 @@ of interest* of the functions that are entered. These include:
 * Inflection points
 * Discontinuities
 * Horizontal asymptotes
-* Points where the slope of the function is 45 or -45 degrees
+* Points where the slope of the function is ±45 degrees
 * Function intersections, if multiple functions are entered at the same time
 
 In addition, the plotting algorithm that is used is really good. It can cope
