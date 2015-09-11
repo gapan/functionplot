@@ -6,6 +6,9 @@ from functionplot.FunctionGraph import FunctionGraph as FG
 
 class PoiTest(unittest.TestCase):
 
+    def setUp(self):
+        self.fg = FG()
+
     def assertPoi(self, poi_test, poi_correct):
         '''
         assertPoi checks two lists of PointOfInterest against each other
@@ -50,13 +53,11 @@ class PoiTest(unittest.TestCase):
         return poi
 
     def test_x(self):
-        self.fg = FG()
         self.fg.add_function('x')
         poi = self.get_poi(self.fg)
         self.assertPoi(poi, [(0, 0, 2), (0, 0, 3)])
 
     def test_x_square(self):
-        self.fg = FG()
         self.fg.add_function('x^2')
         poi = self.get_poi(self.fg)
         correct = [(0, 0, 2), (0, 0, 4), (0.5, 0.25, 8), (-0.5, 0.25, 8),
@@ -64,7 +65,6 @@ class PoiTest(unittest.TestCase):
         self.assertPoi(poi, correct)
 
     def test_x_cubed(self):
-        self.fg = FG()
         self.fg.add_function('x^2')
         poi = self.get_poi(self.fg)
         correct = [(0, 0, 2), (0, 0, 4), (0.5, 0.25, 8), (-0.5, 0.25, 8),
@@ -72,7 +72,6 @@ class PoiTest(unittest.TestCase):
         self.assertPoi(poi, correct)
 
     def test_poly(self):
-        self.fg = FG()
         self.fg.add_function('x^4-3x^2+5x-3')
         poi = self.get_poi(self.fg)
         correct = [(1, 0, 2), (-2.37, 0, 2), (-1.52, -12.19, 4),
@@ -81,21 +80,18 @@ class PoiTest(unittest.TestCase):
         self.assertPoiApprox(poi, correct)
 
     def test_abs(self):
-        self.fg = FG()
         self.fg.add_function('abs(x+2)-4')
         poi = self.get_poi(self.fg)
         correct = [(-6, 0, 2), (2, 0, 2), (-2, -4, 4), (0, -2, 3)]
         self.assertPoiApprox(poi, correct)
 
     def test_rational1(self):
-        self.fg = FG()
         self.fg.add_function('1/(x+2)')
         poi = self.get_poi(self.fg)
         correct = [(-2, 0, 6), (0, 0, 7), (-3, -1, 8), (-1, 1, 8), (0, 0.5, 3)]
         self.assertPoi(poi, correct)
-    
+
     def test_rational2(self):
-        self.fg = FG()
         self.fg.add_function('4/(x^2+1)')
         poi = self.get_poi(self.fg)
         correct = [(0, 4, 4), (-0.5774, 3, 5), (0.5774, 3, 5),
@@ -104,14 +100,12 @@ class PoiTest(unittest.TestCase):
         self.assertPoiApprox(poi, correct, round_x=4, round_y=4)
 
     def test_power1(self):
-        self.fg = FG()
         self.fg.add_function('2^(x+1)')
         poi = self.get_poi(self.fg)
         correct = [(0, 0, 7), (-0.47, 1.44, 8), (0, 2, 3)]
         self.assertPoiApprox(poi, correct)
 
     def test_power2(self):
-        self.fg = FG()
         self.fg.add_function('x^x')
         poi = self.get_poi(self.fg)
         correct = [(0.3679, 0.6922, 4), (0.106, 0.7883, 8),
@@ -119,7 +113,6 @@ class PoiTest(unittest.TestCase):
         self.assertPoiApprox(poi, correct, round_x=4, round_y=4)
 
     def test_cos(self):
-        self.fg = FG()
         self.fg.add_function('cos(x)')
         poi = self.get_poi(self.fg)
         correct = [(1.57, 0, 2), (4.71, 0, 2), (0, 1, 4), (3.14, -1, 4),
@@ -128,7 +121,6 @@ class PoiTest(unittest.TestCase):
         self.assertPoiAtLeastApprox(poi, correct)
 
     def test_intersections(self):
-        self.fg = FG()
         self.fg.add_function('2x+5')
         self.fg.add_function('-(x-1)^3-2')
         self.fg.add_function('(x-2)^2-6')
