@@ -4,7 +4,7 @@
 import unittest
 from functionplot.FunctionGraph import FunctionGraph as FG
 
-class FunctionTest(unittest.TestCase):
+class PoiTest(unittest.TestCase):
 
     def assertPoi(self, poi_test, poi_correct):
         '''
