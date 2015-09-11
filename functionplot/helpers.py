@@ -31,11 +31,13 @@ else:
     from multiprocessing import Process as fProcess
     from multiprocessing import Queue as fQueue
 
+
 class BreakLoop(Exception):
     """
     An Exception class to help breaking out of nested loops
     """
     pass
+
 
 def pod(expr, sym):
     """
@@ -62,7 +64,7 @@ def pod(expr, sym):
         return []
     pods = []
     try:
-        pods = pods + solve(simplify(1/expr), sym)
+        pods = pods + solve(simplify(1 / expr), sym)
     except NotImplementedError:
         return []
     p = Wild("p")
@@ -70,7 +72,7 @@ def pod(expr, sym):
     r = Wild("r")
 
     # check the condition for log
-    expr_dict = expr.match(r*log(p) + q)
+    expr_dict = expr.match(r * log(p) + q)
     if not expr_dict[r].is_zero:
         pods += solve(expr_dict[p], sym)
         pods += pod(expr_dict[p], sym)
@@ -78,25 +80,27 @@ def pod(expr, sym):
 
     # check the condition for exp
     expr = expr.rewrite(exp)
-    expr_dict = expr.match(r*exp(p) + q)
+    expr_dict = expr.match(r * exp(p) + q)
     if not expr_dict[r].is_zero:
-        pods += solve(simplify(1/expr_dict[p]), sym)
+        pods += solve(simplify(1 / expr_dict[p]), sym)
         pods += pod(expr_dict[p], sym)
         pods += pod(expr_dict[r], sym)
 
-    return list(set(pods)) # remove duplicates
+    return list(set(pods))  # remove duplicates
+
 
 def mpsolve(q, expr):
     try:
         x = solve(expr, 'x')
         q.put(x)
     except NotImplementedError:
-        debug('NotImplementedError for solving "'+str(expr)+'"')
+        debug('NotImplementedError for solving "' + str(expr) + '"')
         q.put(None)
     except TypeError:
-        debug('TypeError exception. This was not supposed to '+\
-                'happen. Probably a bug in sympy.')
+        debug('TypeError exception. This was not supposed to ' +
+              'happen. Probably a bug in sympy.')
         q.put(None)
+
 
 def fsolve(expr):
     xl = []
@@ -114,7 +118,7 @@ def fsolve(expr):
                 xc = rfc(i)
                 if xc is not None:
                     xl.append(xc)
-                    debug('Found solution: '+str(xc))
+                    debug('Found solution: ' + str(xc))
     except qEmpty:
         debug('Solving timed out.')
         xl = None
@@ -126,6 +130,7 @@ def fsolve(expr):
     if xl == []:
         xl = None
     return xl
+
 
 def rfc(x):
     '''
@@ -145,13 +150,13 @@ def rfc(x):
         # so in cases where the imaginary part is really small,
         # keep only the real part as a solution
         xe = x.evalf()
-        debug('Checking if this is a complex number: '+str(xe))
+        debug('Checking if this is a complex number: ' + str(xe))
         real = re(xe)
         img = im(xe)
         try:
-            if abs(img) < 0.00000000000000001*abs(real):
-                debug(str(real)+' is actually a real.')
-                xc = round(float(real),15)
+            if abs(img) < 0.00000000000000001 * abs(real):
+                debug(str(real) + ' is actually a real.')
+                xc = round(float(real), 15)
             else:
                 debug('Yes, it is probably a complex.')
                 xc = None
@@ -164,12 +169,13 @@ def rfc(x):
         except TypeError:
             try:
                 xc = eval(str(xe))
-                debug('Looks like a solution for an abs() '+\
-                        'function: '+str(xc))
+                debug('Looks like a solution for an abs() ' +
+                      'function: ' + str(xc))
             except NameError:
                 debug('Cannot really tell. I give up.')
                 xc = None
     return xc
+
 
 def percentile(plist, perc):
     '''
@@ -177,11 +183,12 @@ def percentile(plist, perc):
     '''
     x = sorted(plist)
     n = len(x)
-    pos = (n+1)*perc/100
+    pos = (n + 1) * perc / 100
     k = int(np.floor(pos))
-    a = pos-k
-    p = x[k-1]+a*(x[k]-x[k-1])
+    a = pos - k
+    p = x[k - 1] + a * (x[k] - x[k - 1])
     return p
+
 
 def remove_outliers(plist):
     '''
@@ -197,25 +204,27 @@ def remove_outliers(plist):
     # this is the median
     m = percentile(plist, 50)
     # these are the limits we don't allow values to go under/over
-    min_lim = q1 - k*iqr
-    max_lim = q3 + k*iqr
+    min_lim = q1 - k * iqr
+    max_lim = q3 + k * iqr
     if min_lim < max_lim:
-        debug('Any values<'+str(min_lim)+' or >'+\
-                str(max_lim)+' are outliers.')
-        for i in xrange(0,len(plist)):
+        debug('Any values<' + str(min_lim) + ' or >' +
+              str(max_lim) + ' are outliers.')
+        for i in xrange(0, len(plist)):
             if plist[i] < min_lim or plist[i] > max_lim:
-                debug('Found outlier: '+str(plist[i]))
+                debug('Found outlier: ' + str(plist[i]))
                 # if outliers are detected, replace their values with
                 # the median. That way it's easier to just set the
                 # axis limits to the min/max of the remaining values.
                 plist[i] = m
     return plist
 
+
 def log10(f):
     return log(f, 10)
 
+
 def sample(npfunc, points, tol=0.001, min_points=16, max_level=32,
-                    sample_transform=None):
+           sample_transform=None):
     """
     Sample a 1D function to given tolerance by adaptive subdivision.
 
@@ -273,9 +282,10 @@ def sample(npfunc, points, tol=0.001, min_points=16, max_level=32,
     """
     func = _func(npfunc)
     return _sample_function(func, points, values=None, mask=None,
-                depth=0, tol=tol, min_points=min_points,
-                max_level=max_level, 
-                sample_transform=sample_transform)
+                            depth=0, tol=tol, min_points=min_points,
+                            max_level=max_level,
+                            sample_transform=sample_transform)
+
 
 def _sample_function(func, points, values=None, mask=None, tol=0.05,
                      depth=0, min_points=16, max_level=16,
@@ -292,23 +302,23 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
         # recursion limit
         return points, values
 
-    x_a = points[...,:-1][...,mask]
-    x_b = points[...,1:][...,mask]
+    x_a = points[..., :-1][..., mask]
+    x_b = points[..., 1:][..., mask]
 
-    x_c = .5*(x_a + x_b)
+    x_c = .5 * (x_a + x_b)
     y_c = np.atleast_2d(func(x_c))
 
     x_2 = np.r_[points, x_c]
     y_2 = np.r_['-1', values, y_c]
     j = np.argsort(x_2)
 
-    x_2 = x_2[...,j]
-    y_2 = y_2[...,j]
+    x_2 = x_2[..., j]
+    y_2 = y_2[..., j]
 
     # -- Determine the intervals at which refinement is necessary
 
     if len(x_2) < min_points:
-        mask = np.ones([len(x_2)-1], dtype=bool)
+        mask = np.ones([len(x_2) - 1], dtype=bool)
     else:
         # represent the data as a path in N dimensions
         # (scaled to unit box)
@@ -318,19 +328,19 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
             y_2_val = y_2
 
         p = np.r_['0',
-                  x_2[None,:],
+                  x_2[None, :],
                   y_2_val.real.reshape(-1, y_2_val.shape[-1]),
                   y_2_val.imag.reshape(-1, y_2_val.shape[-1])
                   ]
 
-        sz = (p.shape[0]-1)//2
+        sz = (p.shape[0] - 1) // 2
 
         xscale = x_2.ptp(axis=-1)
         yscale = abs(y_2_val.ptp(axis=-1)).ravel()
 
         p[0] /= xscale
-        p[1:sz+1] /= yscale[:,None]
-        p[sz+1:]  /= yscale[:,None]
+        p[1:sz + 1] /= yscale[:, None]
+        p[sz + 1:] /= yscale[:, None]
 
         # compute the length of each line segment in the path
         dp = np.diff(p, axis=-1)
@@ -339,28 +349,28 @@ def _sample_function(func, points, values=None, mask=None, tol=0.05,
 
         # compute the angle between consecutive line segments
         dp /= s
-        dcos = np.arccos(np.clip((dp[:,1:] * dp[:,:-1]).sum(axis=0),
-            -1, 1))
+        dcos = np.arccos(np.clip((dp[:, 1:] * dp[:, :-1]).sum(axis=0),
+                                 -1, 1))
 
         # determine where to subdivide: the condition is roughly that
         # the total length of the path (in the scaled data) is
         # computed to accuracy `tol`
-        dp_piece = dcos * .5*(s[1:] + s[:-1])
+        dp_piece = dcos * .5 * (s[1:] + s[:-1])
         mask = (dp_piece > tol * s_tot)
 
         mask = np.r_[mask, False]
         mask[1:] |= mask[:-1].copy()
 
-
     # -- Refine, if necessary
 
     if mask.any():
         return _sample_function(func, x_2, y_2, mask, tol=tol,
-                depth=depth+1, min_points=min_points,
-                max_level=max_level,
-                sample_transform=sample_transform)
+                                depth=depth + 1, min_points=min_points,
+                                max_level=max_level,
+                                sample_transform=sample_transform)
     else:
         return x_2, y_2
+
 
 def _func(npexpr):
     """
@@ -370,15 +380,17 @@ def _func(npexpr):
         return eval(npexpr)
     return f
 
+
 def euclidean(p1, p2):
     """
     Returns the euclidean distance between to instances of
     PointOfInterest, p1 and p2.
     """
-    dx = p1.x-p2.x
-    dy = p1.y-p2.y
+    dx = p1.x - p2.x
+    dy = p1.y - p2.y
     d = sqrt(dx**2 + dy**2)
     return d
+
 
 def keep10(lst):
     """
@@ -387,10 +399,10 @@ def keep10(lst):
     """
     l = len(lst)
     if l > 10:
-        debug('Too many POI in list ('+str(l)+'). Keeping only 10.')
-        lst = [lst[0],lst[int(l/10)],lst[int(l/5)],
-                lst[int(3*l/10)], lst[int(2*l/5)],
-                lst[int(l/2)], lst[int(3*l/5)],
-                lst[int(7*l/10)], lst[int(4*l/5)],
-                lst[-1]]
+        debug('Too many POI in list (' + str(l) + '). Keeping only 10.')
+        lst = [lst[0], lst[int(l / 10)], lst[int(l / 5)],
+               lst[int(3 * l / 10)], lst[int(2 * l / 5)],
+               lst[int(l / 2)], lst[int(3 * l / 5)],
+               lst[int(7 * l / 10)], lst[int(4 * l / 5)],
+               lst[-1]]
     return lst
