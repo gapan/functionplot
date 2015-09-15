@@ -120,6 +120,13 @@ class PoiTest(unittest.TestCase):
                    (4.71, 0, 8), (1.57, 0, 8), (0, 1, 3)]
         self.assertPoiAtLeastApprox(poi, correct)
 
+    def test_asymptotes(self):
+        self.fg.add_function('(2x+1)/(x+1)')
+        poi = self.get_poi(self.fg)
+        correct = [(-0.5, 0, 2), (-1, 0, 6), (0, 2, 7), (-2, 3, 8),
+                   (0, 1, 8), (0, 1, 3)]
+        self.assertPoi(poi, correct)
+
     def test_intersections(self):
         self.fg.add_function('2x+5')
         self.fg.add_function('-(x-1)^3-2')
