@@ -7,8 +7,7 @@ from sympy import simplify, pi
 from sympy.functions import Abs
 from Function import Function
 from PointOfInterest import PointOfInterest as POI
-from helpers import fsolve, rfc, remove_outliers, euclidean,\
-    BreakLoop
+from helpers import fsolve, rfc, remove_outliers, BreakLoop
 from logging import debug
 from helpers import keep10
 

@@ -366,17 +366,6 @@ def _func(npexpr):
     return f
 
 
-def euclidean(p1, p2):
-    """
-    Returns the euclidean distance between to instances of
-    PointOfInterest, p1 and p2.
-    """
-    dx = p1.x - p2.x
-    dy = p1.y - p2.y
-    d = sqrt(dx**2 + dy**2)
-    return d
-
-
 def keep10(lst):
     """
     For a list that has more than 10 elements, keep only
