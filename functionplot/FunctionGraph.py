@@ -74,7 +74,7 @@ class FunctionGraph:
     def update_graph_points(self):
         for f in self.functions:
             if f.visible:
-                f.update_graph_points([self.x_min, self.x_max,
+                f.update_function_points([self.x_min, self.x_max,
                                        self.y_min, self.y_max])
 
     def add_function(self, expr):
