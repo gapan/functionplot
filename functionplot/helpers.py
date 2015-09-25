@@ -153,27 +153,12 @@ def rfc(x):
         debug('Checking if this is a complex number: ' + str(xe))
         real = re(xe)
         img = im(xe)
-        try:
-            if abs(img) < 0.00000000000000001 * abs(real):
-                debug(str(real) + ' is actually a real.')
-                xc = round(float(real), 15)
-            else:
-                debug('Yes, it is probably a complex.')
-                xc = None
-        # another TypeError is raised if we have a function with
-        # abs()
-        # this is a hack but appears to work
-        # FIXME: This probably is not needed for abs() anymore.
-        # I'm keeping it to cover all cases, until it is
-        # tested 100%.
-        except TypeError:
-            try:
-                xc = eval(str(xe))
-                debug('Looks like a solution for an abs() ' +
-                      'function: ' + str(xc))
-            except NameError:
-                debug('Cannot really tell. I give up.')
-                xc = None
+        if abs(img) < 0.00000000000000001 * abs(real):
+            debug(str(real) + ' is actually a real.')
+            xc = round(float(real), 15)
+        else:
+            debug('Yes, it is probably a complex.')
+            xc = None
     return xc
 
 
