@@ -23,6 +23,9 @@ with functions that are very hard to plot and with which most other
 plotting applications fail miserably. The graphs that are produced are
 of very high quality.
 
+Here's a screenshot to see what it looks like:
+![Functionplot in action](screenshot.png)
+
 
 Dependencies
 ============
